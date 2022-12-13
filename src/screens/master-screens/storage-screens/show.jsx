@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 
-import LoadingHover from '../../../components/loading-hover-component';
 import InputDetail from '../../../components/input-detail-component';
 import { StorageApi } from '../../../services/api-master';
 import DeleteButton from '../../../components/delete-button-component';
@@ -14,7 +13,6 @@ function Screen(props) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
   const [dataStorageById, setDataStorageById] = useState([]);
 
   useEffect(() => {
@@ -22,14 +20,11 @@ function Screen(props) {
   }, []);
 
   const getDetailStorage = () => {
-    setLoading(true);
     StorageApi.find(id)
       .then(res => {
-        setLoading(false);
         setDataStorageById(res);
       })
       .catch(error => {
-        setLoading(false);
         Swal.fire({ text: error?.message, icon: 'error' });
       });
   };
@@ -63,7 +58,6 @@ function Screen(props) {
         />
         <InputDetail value={dataStorageById.bay} label="Bay" />
       </div>
-      {loading && <LoadingHover fixed />}
     </div>
   );
 }

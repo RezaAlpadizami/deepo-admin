@@ -23,7 +23,7 @@ function Screen(props) {
     bay: yup.string().nullable().max(2).required(),
     code: yup.string().nullable().max(7).required(),
     rack_number: yup.string().nullable().max(1).required(),
-    warehouse_id: yup.number().nullable().required(),
+    warehouse_id: yup.string().nullable().required(),
     level: yup.string().nullable().max(1).required(),
   });
 

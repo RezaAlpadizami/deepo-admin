@@ -29,7 +29,6 @@ function DataTable(props) {
     displayName,
     name,
     filters,
-    onSort = () => {},
     identifierProperties = 'id',
   } = props;
 
@@ -327,6 +326,16 @@ function DataTable(props) {
       };
     });
   };
+
+  const onSortChange = by => {
+    setFilterData(prev => {
+      return {
+        ...prev,
+        sort_order: by.sort_order,
+      };
+    });
+  };
+
   return (
     <>
       {download && (
@@ -443,32 +452,33 @@ function DataTable(props) {
           <thead className="text-xs text-black uppercase bg-thead">
             {headerGroups.map((headerGroup, idxgroup) => (
               <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, columnidx) => (
-                  <th key={columnidx} {...column.getHeaderProps(column.getSortByToggleProps())} className="py-3 px-6">
-                    <div
-                      className="flex"
-                      onClick={() =>
-                        onSort({
-                          sort_by: column.id,
-                          sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
-                        })
-                      }
-                    >
-                      {column.render('Header')}
-                      <span>
+                {headerGroup.headers.map((column, columnidx) => {
+                  return (
+                    <th key={columnidx} {...column.getHeaderProps(column.getSortByToggleProps())} className="py-3 px-6">
+                      <div
+                        className="flex"
+                        onClick={() => {
+                          onSortChange({
+                            sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
+                          });
+                        }}
+                      >
+                        {column.render('Header')}
                         {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <ArrowSmDownIcon className="ml-2 h-4" />
-                          ) : (
-                            <ArrowSmUpIcon className="ml-2 h-4" />
-                          )
+                          <span className="ml-2">
+                            {column.isSortedDesc === true ? (
+                              <ArrowSmDownIcon className="ml-2 h-4 bg-cyan-500" />
+                            ) : (
+                              <ArrowSmUpIcon className="ml-2 h-4 bg-green-300" />
+                            )}
+                          </span>
                         ) : (
-                          ''
+                          ' '
                         )}
-                      </span>
-                    </div>
-                  </th>
-                ))}
+                      </div>
+                    </th>
+                  );
+                })}
               </tr>
             ))}
           </thead>

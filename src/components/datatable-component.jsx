@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import XLSX from 'xlsx';
 import Moment from 'moment';
 import { saveAs } from 'file-saver';
-import { Link, Button } from '@chakra-ui/react';
+import { Link, Button, Skeleton, Stack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Toolbar from './action-toolbar-component';
 import { hasProperty } from '../utils/helper';
@@ -22,7 +22,6 @@ function DataTable(props) {
   const {
     columns: propsColumn = [],
     limit = 10,
-    loading = false,
     toolbar,
     noToolbar,
     to,
@@ -31,6 +30,7 @@ function DataTable(props) {
     name,
     filters,
     onSort = () => {},
+    identifierProperties = 'id',
   } = props;
 
   const {
@@ -46,6 +46,7 @@ function DataTable(props) {
   const [datas, setDatas] = useState([]);
   const [totalData, setTotalData] = useState([]);
   const [loadingHover, setLoadingHover] = useState(false);
+  const [loading, setLoading] = useState(false);
   const defaultSort = {
     sort_by: 'id',
     sort_order: 'desc',
@@ -71,7 +72,6 @@ function DataTable(props) {
           accessor: d.value,
           Cell: props => {
             const { value, row } = props;
-            console.log('row', row);
             if (d.type === 'date') {
               return Moment(value).format('DD MMM YYYY');
             }
@@ -80,7 +80,7 @@ function DataTable(props) {
                 <Link
                   type="button"
                   className="mr-4 text-blue-400"
-                  href={`${to}/${row.original.product_id ? row.original.product_id : row.original.id}/show`}
+                  href={`${to}/${row.original[identifierProperties]}/show`}
                 >
                   {value}
                 </Link>
@@ -127,16 +127,16 @@ function DataTable(props) {
   }, [filterData]);
 
   const getData = () => {
-    setLoadingHover(true);
+    setLoading(true);
     api
       .get({ ...filterData })
       .then(res => {
-        setLoadingHover(false);
+        setLoading(false);
         setDatas(res.data);
         setTotalData(res.query.total);
       })
       .catch(error => {
-        setLoadingHover(false);
+        setLoading(false);
         Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
       });
   };
@@ -244,7 +244,7 @@ function DataTable(props) {
       result.forEach(r => {
         if (r.status === 'fulfilled') {
           success.push(true);
-          setLoadingHover(false);
+          setLoading(false);
         } else {
           result.reason.data.error.api.map(m => failed.push(m));
         }
@@ -365,6 +365,7 @@ function DataTable(props) {
                           <Select
                             name={item.name}
                             label={item.label}
+                            placeholder={item.placeholder}
                             options={item.data}
                             register={register}
                             control={control}
@@ -487,35 +488,26 @@ function DataTable(props) {
             </tbody>
           )}
         </table>
+
         {loading && (
-          <div className="w-full">
-            <div className="">
-              <div className="flex p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-300 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-300  w-[95%] " />
-              </div>
+          <Stack>
+            <div className="flex p-3 gap-2">
+              <Skeleton height="20px" width="5%" />
+              <Skeleton height="20px" width="95%" />
             </div>
-          </div>
+            <div className="flex p-3 gap-2">
+              <Skeleton height="20px" width="5%" />
+              <Skeleton height="20px" width="95%" />
+            </div>
+            <div className="flex p-3 gap-2">
+              <Skeleton height="20px" width="5%" />
+              <Skeleton height="20px" width="95%" />
+            </div>
+            <div className="flex p-3 gap-2">
+              <Skeleton height="20px" width="5%" />
+              <Skeleton height="20px" width="95%" />
+            </div>
+          </Stack>
         )}
 
         <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">

@@ -1,67 +1,20 @@
-.css-kcf2wt .css-17ug9r4 {
-    @apply flex flex-row 
-}
-
-.css-17ug9r4 .css-4ixs5p {
-  @apply text-[18px]
-}
-
-.css-17ug9r4 .css-4ixs5p {
-    @apply mt-0.5 ml-6 
-}
-
-.css-17ug9r4 .css-n2fr4v {
-    @apply mt-0.5 ml-6 
-}
-
-.css-17ug9r4 .css-v0f33p {
-    @apply font-extrabold text-[20px]
-}
-
-.css-if6l71 {
-  @apply ml-2.5
-}
-
-.css-jqbi37[aria-current=step] {
-  @apply border-blue-500 bg-white
-}
-
-.css-62u96g {
-  @apply font-bold
-}
-
-.css-h78qna .css-kcf2wt .css-jqbi37 {
-  @apply bg-white text-black border-blue-500 
-}
-.css-h78qna .css-kcf2wt .css-jqbi37 {
-  @apply bg-white text-black border-blue-500 hover:border-blue-500
-}
-
-.css-455g1w .css-kcf2wt .css-jqbi37 {
-  @apply bg-white text-black border-blue-500 hover:border-blue-500
-}
-
-.css-k008qs > svg {
-  @apply text-blue-500
-}
-
 .css-h78qna .css-1qozmav {
   @apply border-blue-400 my-0
 }
 
-.css-i13cmg .css-455g1w .css-1qozmav {
-  @apply border-blue-400 my-0 
+.css-kcf2wt .css-1i7c82o[aria-current=step] {
+  @apply bg-white
+}
+.css-kcf2wt .css-1i7c82o[aria-current=step]:hover {
+  @apply border-blue-600
 }
 
-.css-1xyw0yv {
-  @apply ml-11 my-6
+.css-455g1w .css-kcf2wt .css-1i7c82o:hover {
+    @apply border-blue-600
 }
 
-.css-jqbi37 {
-    @apply mr-5
+.css-455g1w .css-1qozmav {
+    @apply border-blue-400 my-0
 }
 
-.css-jqbi37[aria-current=step] {
-  @apply mr-5
-}
-
+ 

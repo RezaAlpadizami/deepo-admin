@@ -2,13 +2,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react';
-import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
 import './index.css';
 import './assets/styles/custom.css';
 import Context from './context';
 import RootStore from './store/root-store';
 import reportWebVitals from './reportWebVitals';
+import CustomSteps from './assets/styles/stepper-custom';
 
 const App = React.lazy(() => import('./navigation/main'));
 
@@ -24,7 +24,7 @@ const colors = {
 };
 
 const components = {
-  Steps,
+  Steps: CustomSteps,
 };
 
 const theme = extendTheme({ colors, components });

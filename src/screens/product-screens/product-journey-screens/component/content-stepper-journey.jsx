@@ -4,7 +4,7 @@ import * as React from 'react';
 function Contents(props, { index, ...rest }) {
   const { dataWarehouse } = props;
   return (
-    <Flex height="100%" rounded="md" width="100%" {...rest} position="relative">
+    <Flex height="100%" rounded="md" width="100%" {...rest} position="relative" margin="0 0 2.5rem 2.2rem">
       <div className="flex flex-col text-left gap-y-4">
         <h2 className="text-gray-400">Warehouse</h2>
         <div className="flex gap-x-[19.5rem] font-bold">

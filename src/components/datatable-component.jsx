@@ -467,9 +467,9 @@ function DataTable(props) {
                         {column.isSorted ? (
                           <span className="ml-2">
                             {column.isSortedDesc === true ? (
-                              <ArrowSmDownIcon className="ml-2 h-4 bg-cyan-500" />
+                              <ArrowSmDownIcon className="ml-2 h-4" />
                             ) : (
-                              <ArrowSmUpIcon className="ml-2 h-4 bg-green-300" />
+                              <ArrowSmUpIcon className="ml-2 h-4" />
                             )}
                           </span>
                         ) : (

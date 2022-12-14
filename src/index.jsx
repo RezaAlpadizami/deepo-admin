@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react';
-
 import './index.css';
 import './assets/styles/custom.css';
 import Context from './context';

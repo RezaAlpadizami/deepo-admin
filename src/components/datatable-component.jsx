@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form';
 import Toolbar from './action-toolbar-component';
 import { hasProperty } from '../utils/helper';
 import TableComponent from './table-component';
-import LoadingHover from './loading-component';
 import Checkbox from './checkbox-component';
 import Select from './select-component';
 import Input from './input-component';
@@ -27,6 +26,7 @@ function DataTable(props) {
     to,
     api,
     checkbox,
+    displayName,
     name,
     filters,
     onSort = () => {},
@@ -75,7 +75,7 @@ function DataTable(props) {
             if (d.type === 'date') {
               return Moment(value).format('DD MMM YYYY');
             }
-            if (d.type === 'link') {
+            if (d.type === 'link' && to) {
               return (
                 <Link
                   type="button"
@@ -91,7 +91,7 @@ function DataTable(props) {
           },
         };
       }),
-    [JSON.stringify(propsColumn)]
+    [JSON.stringify(propsColumn), to]
   );
 
   const {
@@ -233,7 +233,7 @@ function DataTable(props) {
       selectedFlatRows.map(d => {
         return new Promise((resolve, reject) => {
           api
-            .delete(d.values.id)
+            .delete(d.original[identifierProperties])
             .then(r => resolve(r))
             .catch(e => reject(e));
         });
@@ -241,27 +241,35 @@ function DataTable(props) {
     ]).then(result => {
       const success = [];
       const failed = [];
-      result.forEach(r => {
-        if (r.status === 'fulfilled') {
-          success.push(true);
-          setLoading(false);
-        } else {
-          result.reason.data.error.api.map(m => failed.push(m));
-        }
-      });
-
+      if (result.value) {
+        result.forEach(r => {
+          if (r.status === 'fulfilled') {
+            success.push(true);
+            setLoadingHover(false);
+          } else {
+            result.reason.data.error.api.map(m => failed.push(m));
+            failed.push(true);
+          }
+        });
+      } else if (result.value === 'undefined') {
+        Swal.fire({ text: `Something When Wrong`, icon: 'error' });
+      }
       if (success.length > 0) {
         Swal.fire({ text: 'Data Deleted Successfully', icon: 'success' });
       } else if (failed.length > 0) {
-        Swal.fire({ text: 'Something Went Wrong', icon: 'success' });
+        Swal.fire({ text: 'Something Went Wrong', icon: 'error' });
       }
+      setFilterData(prev => ({
+        ...prev,
+        offset: 0,
+      }));
     });
   };
 
   const download = () => {
     setLoadingHover(true);
     const wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {
-      sheet: `${name}`,
+      sheet: `${displayName}`,
     });
     const wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
     function s2ab(data) {
@@ -274,9 +282,8 @@ function DataTable(props) {
     setTimeout(() => {
       setLoadingHover(false);
     }, 500);
-    return saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), `${name}.xlsx`);
+    return saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), `${displayName}.xlsx`);
   };
-
   const onReset = () => {
     reset();
     setFilterData({
@@ -323,7 +330,6 @@ function DataTable(props) {
   };
   return (
     <>
-      <LoadingHover visible={loadingHover} />
       {download && (
         <div style={{ display: 'none' }}>
           <TableComponent
@@ -338,12 +344,12 @@ function DataTable(props) {
       {filter && filter.length !== 0 && (
         <div className="">
           <div className="flex">
-            <h1 className="font-bold text-xl">{name}</h1>
+            <h1 className="font-bold text-xl">{displayName}</h1>
           </div>
           <div>
             <form>
               <div className="px-4">
-                <div className="grid grid-cols-3 gap-4 mt-4">
+                <div className="grid grid-cols-6 gap-4 mt-4">
                   {filter.map((item, idx) => {
                     if (item.type === 'date_picker') {
                       return (
@@ -421,6 +427,7 @@ function DataTable(props) {
           getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
           columns={allColumns}
           navTo={{ path: to, id: selectedFlatRows?.find(i => i)?.original.id }}
+          displayName={displayName}
           name={name}
           onAdd={enableAction('add')}
           onEdit={enableAction('edit')}
@@ -467,7 +474,8 @@ function DataTable(props) {
               </tr>
             ))}
           </thead>
-          {!loading && (
+
+          {!loadingHover && (
             <tbody {...getTableBodyProps()}>
               {rows.map((row, i) => {
                 prepareRow(row);

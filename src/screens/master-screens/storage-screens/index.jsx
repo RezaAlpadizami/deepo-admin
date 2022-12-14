@@ -76,7 +76,7 @@ function Screen(props) {
         }}
         api={StorageApi}
         to={route}
-        name={displayName}
+        displayName={displayName}
         checkbox
       />
     </div>

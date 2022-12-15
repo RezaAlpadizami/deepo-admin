@@ -23,6 +23,7 @@ function Screen(props) {
     setLoading(true);
     ProductJourney.find(id)
       .then(res => {
+        console.log('res id', res);
         setLoading(false);
         setDataJourneyById(res);
       })

@@ -7,7 +7,7 @@ import Contents from '../screens/product-screens/product-journey-screens/compone
 import '../assets/styles/custom.css';
 
 export default function ProgressStepBar(props) {
-  const { dataApi } = props;
+  const { dataApi, customStyleRequestNumber } = props;
 
   const { activeStep, setStep } = useSteps({
     initialStep: 0,
@@ -15,7 +15,20 @@ export default function ProgressStepBar(props) {
   return (
     <Steps orientation="vertical" activeStep={activeStep} col onClickStep={step => setStep(step)} fontSize="24px">
       {dataApi?.journey?.map(
-        ({ activity_name, warehouse_name, storage_bay, storage_level, storage_rack, created_at, id, qty }, index) => (
+        (
+          {
+            activity_name,
+            warehouse_name,
+            storage_bay,
+            storage_level,
+            storage_rack,
+            created_at,
+            id,
+            qty,
+            request_number,
+          },
+          index
+        ) => (
           <Step
             width="100%"
             fontSize="20px"
@@ -32,9 +45,9 @@ export default function ProgressStepBar(props) {
             key={id}
             position="relative"
           >
-            {/* <div className={customStyleRequestNumber}>
-            <p>{request_number}</p>
-          </div> */}
+            <div className={customStyleRequestNumber}>
+              <p>{request_number}</p>
+            </div>
             <Contents
               dataApi={dataApi}
               warehouseName={warehouse_name}

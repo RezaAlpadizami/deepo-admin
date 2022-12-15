@@ -1,11 +1,10 @@
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
-
 import { mode } from '@chakra-ui/theme-tools';
 
 const baseStyleLabel = props => {
   return {
     color: mode(`gray.900`, `gray.100`)(props),
-    fontWeight: 'medium',
+    fontWeight: 'bolder',
     textAlign: 'center',
     marginLeft: '15px',
     fontSize: 'lg',
@@ -14,7 +13,10 @@ const baseStyleLabel = props => {
 const baseStyleDescription = props => ({
   color: mode(`gray.500`, `gray.200`)(props),
   marginTop: '2px',
-  fontSize: 'xs',
+  fontWeight: 'medium',
+  marginLeft: '10px',
+  fontSize: 'sm',
+  // wordSpacing: '50px',
 });
 
 const baseStyleStepIconContainer = props => {
@@ -32,7 +34,7 @@ const baseStyleStepIconContainer = props => {
     transitionDuration: 'normal',
     _activeStep: {
       bg: 'white',
-      borderColor: 'blue.500',
+      borderColor: '#5081ED',
       _invalid: {
         bg: 'red.500',
         borderColor: 'red.500',
@@ -56,12 +58,19 @@ const CustomSteps = {
       label: baseStyleLabel(props),
       description: baseStyleDescription(props),
       stepIconContainer: baseStyleStepIconContainer(props),
+      labelContainer: {
+        ...Steps.baseStyle(props).labelContainer,
+        display: 'flex',
+        flexDirection: 'row',
+        marginLeft: '10px',
+      },
       icon: {
         ...Steps.baseStyle(props).icon,
-        colors: 'red.900',
+        color: 'rgb(59 130 246)',
         strokeWidth: '10px',
       },
     };
   },
 };
+
 export default CustomSteps;

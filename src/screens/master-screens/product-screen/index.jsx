@@ -28,14 +28,16 @@ function Screen(props) {
           {
             name: 'sku',
             label: 'SKU',
+            col: 2,
           },
           {
             name: 'name',
             label: 'Name',
+            col: 2,
           },
           {
-            name: 'product_desc',
-            label: 'Product Description',
+            name: 'category_id',
+            label: 'Category',
             type: 'select',
             data: category?.map(i => {
               return {
@@ -43,13 +45,14 @@ function Screen(props) {
                 label: `${i.code} - ${i.name}`,
               };
             }),
+            col: 2,
           },
         ]}
         columns={[
           { header: 'SKU', value: 'sku', copy: true, type: 'link' },
           { header: 'Name', value: 'product_name', copy: true },
           { header: 'Category', value: 'category_id', copy: true },
-          { header: 'Product Description', value: 'product_desc', copy: true },
+          { header: 'Product Description', value: 'product_desc', copy: true, width: 'auto' },
         ]}
         toolbar={{
           action: {

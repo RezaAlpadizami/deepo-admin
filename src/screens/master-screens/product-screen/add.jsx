@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { Button } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -12,10 +13,10 @@ import Select from '../../../components/select-component';
 import Input from '../../../components/input-component';
 
 const schema = yup.object().shape({
-  sku: yup.string().nullable().required(),
-  product_name: yup.string().nullable().required(),
+  sku: yup.string().max(15).required(),
+  product_name: yup.string().nullable().max(100).required(),
   category_id: yup.string().nullable().required(),
-  product_desc: yup.string(),
+  product_desc: yup.string().max(255),
 });
 
 function Screen(props) {
@@ -25,7 +26,6 @@ function Screen(props) {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -67,28 +67,36 @@ function Screen(props) {
     <div className="">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex mb-12">
+          <button type="button">
+            <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+          </button>
           <h1 className="font-bold text-3xl">{displayName}</h1>
           <div className="flex-1" />
           <div>
             <Button
-              onClick={() => reset()}
+              onClick={() => navigate(-1)}
               px={8}
               size="sm"
-              className="rounded-full bg-[#aaa] outline outline-offset-2 outline-[#1F2022] text-[#fff]"
+              className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
             >
               Cancel
             </Button>
-            <Button px={8} type="submit" className="ml-4 rounded-full bg-[#232323] text-[#fff]">
+            <Button
+              size="sm"
+              px={8}
+              type="submit"
+              className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+            >
               Save
             </Button>
           </div>
         </div>
-
-        <div className="grid items-start justify-items-center w-[80%] gap-4 gap-y-12 ml-6 mb-4 grid-cols-2 mt-4">
-          <Input name="sku" label="Sku" register={register} errors={errors} />
+        <div className="grid items-start justify-items-center gap-4 gap-y-12 pl-6 mb-4 grid-cols-2 mt-4">
+          <Input name="sku" label="Sku" maxLength="15" register={register} errors={errors} />
           <Select
             name="category_id"
             label="Category"
+            placeholder="Category"
             options={categoryData?.map(i => {
               return {
                 value: i?.id,
@@ -99,7 +107,7 @@ function Screen(props) {
             errors={errors}
           />
           <Input name="product_name" label="Name" register={register} errors={errors} />
-          <TextArea name="product_desc" label="Description" register={register} errors={errors} />
+          <TextArea name="product_desc" label="Description" register={register} errors={errors} maxLength="255" />
         </div>
       </form>
       {loading && <LoadingHover fixed />}

@@ -41,7 +41,7 @@ function DeleteButton(props) {
       onClick={deleteData}
       px={8}
       size="sm"
-      className="rounded-full bg-[#aaa] border-2 border-[#1F2022] text-[#fff] mr-6"
+      className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
     >
       Delete
     </Button>

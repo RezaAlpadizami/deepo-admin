@@ -10,19 +10,19 @@ import { saveAs } from 'file-saver';
 import { Link, Button } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Toolbar from './action-toolbar-component';
-import { hasProperty } from '../utils/helper';
+import { calculateText, hasProperty } from '../utils/helper';
 import TableComponent from './table-component';
 import Checkbox from './checkbox-component';
 import Select from './select-component';
 import Input from './input-component';
 import DatePicker from './datepicker-component';
+import LoadingHover from './loading-hover-component';
 
 function DataTable(props) {
   const {
     columns: propsColumn = [],
     limit = 10,
     toolbar,
-    noToolbar,
     to,
     api,
     checkbox,
@@ -44,6 +44,7 @@ function DataTable(props) {
   const [lastPage, setLastPage] = useState(1);
   const [datas, setDatas] = useState([]);
   const [totalData, setTotalData] = useState([]);
+  const [autoWidth, setAutoWidth] = useState();
   const [loadingHover, setLoadingHover] = useState(false);
   const defaultSort = {
     sort_by: 'id',
@@ -68,6 +69,7 @@ function DataTable(props) {
         return {
           Header: d.header,
           accessor: d.value,
+          width: d.width,
           Cell: props => {
             const { value, row } = props;
             if (d.type === 'date') {
@@ -83,6 +85,11 @@ function DataTable(props) {
                   {value}
                 </Link>
               );
+            }
+            if (d.width === 'auto') {
+              setAutoWidth(calculateText(value)[0] / 1.5);
+
+              return calculateText(value)[1];
             }
 
             return value;
@@ -212,7 +219,7 @@ function DataTable(props) {
     return false;
   };
   const renderToolbar = () => {
-    if (!noToolbar && toolbar) {
+    if (toolbar) {
       return (
         enableAction('view') ||
         enableAction('save-to-excel') ||
@@ -227,7 +234,7 @@ function DataTable(props) {
   };
 
   const deleteData = () => {
-    Promise.allSettled([
+    Promise.allSettled(
       selectedFlatRows.map(d => {
         return new Promise((resolve, reject) => {
           api
@@ -235,33 +242,35 @@ function DataTable(props) {
             .then(r => resolve(r))
             .catch(e => reject(e));
         });
-      }),
-    ]).then(result => {
-      const success = [];
-      const failed = [];
-      if (result.value) {
-        result.forEach(r => {
-          if (r.status === 'fulfilled') {
+      })
+    )
+      .then(res => {
+        const success = [];
+        const failed = [];
+        res.forEach(result => {
+          if (result.status === 'fulfilled') {
             success.push(true);
             setLoadingHover(false);
           } else {
             result.reason.data.error.api.map(m => failed.push(m));
             failed.push(true);
+            setLoadingHover(false);
           }
         });
-      } else if (result.value === 'undefined') {
-        Swal.fire({ text: `Something When Wrong`, icon: 'error' });
-      }
-      if (success.length > 0) {
-        Swal.fire({ text: 'Data Deleted Successfully', icon: 'success' });
-      } else if (failed.length > 0) {
-        Swal.fire({ text: 'Something Went Wrong', icon: 'error' });
-      }
-      setFilterData(prev => ({
-        ...prev,
-        offset: 0,
-      }));
-    });
+
+        if (failed.length > 0) {
+          Swal.fire({ text: 'There is some problem occured', icon: 'error' });
+        } else {
+          Swal.fire({ text: 'Data Deleted Successfully', icon: 'success' });
+        }
+        setFilterData(prev => ({
+          ...prev,
+          offset: 0,
+        }));
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || 'Something Went Wrong', icon: 'error' });
+      });
   };
 
   const download = () => {
@@ -282,6 +291,7 @@ function DataTable(props) {
     }, 500);
     return saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), `${displayName}.xlsx`);
   };
+
   const onReset = () => {
     reset();
     setFilterData({
@@ -379,6 +389,7 @@ function DataTable(props) {
                           <Select
                             name={item.name}
                             label={item.label}
+                            placeholder={item.label}
                             options={item.data}
                             register={register}
                             control={control}
@@ -403,20 +414,17 @@ function DataTable(props) {
                   <Button
                     type="button"
                     size="sm"
-                    width="24"
-                    className="mr-2 bg-[#E3E3E3] hover:text-gray-700 hover:bg-[#D9D9D9]"
+                    px={8}
+                    className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
                     onClick={() => onReset()}
-                    colorScheme="blackAlpha"
-                    variant="outline"
                   >
                     Reset
                   </Button>
                   <Button
                     type="submit"
                     size="sm"
-                    width="24"
-                    variant="solid"
-                    className="bg-[#232323] hover:bg-black text-white"
+                    px={8}
+                    className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
                     onClick={handleSubmit(onSubmit)}
                   >
                     Filter
@@ -427,7 +435,7 @@ function DataTable(props) {
           </div>
         </div>
       )}
-      {renderToolbar() && (
+      {renderToolbar() && filter.length !== 0 && (
         <Toolbar
           selectedData={selectedFlatRows}
           defaultShow={propsColumn}
@@ -446,198 +454,205 @@ function DataTable(props) {
           onShowHideColumn={enableAction('show-hide-column')}
         />
       )}
-
-      <div className="overflow-x-auto relative px-6 pb-11 bg-white rounded-b-3xl">
-        <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
-          <thead className="text-xs text-black uppercase bg-thead">
-            {headerGroups.map((headerGroup, idxgroup) => (
-              <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column, columnidx) => {
-                  return (
-                    <th key={columnidx} {...column.getHeaderProps(column.getSortByToggleProps())} className="py-3 px-6">
-                      <div
-                        className="flex"
-                        onClick={() => {
-                          onSortChange({
-                            sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
-                          });
-                        }}
+      {loadingHover && <LoadingHover text="Please Wait..." />}
+      {filter.length !== 0 && (
+        <div className="overflow-x-auto relative px-6 pb-11 bg-white rounded-b-3xl">
+          <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
+            <thead className="text-xs text-black uppercase bg-thead">
+              {headerGroups.map((headerGroup, idxgroup) => (
+                <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column, columnidx) => {
+                    return (
+                      <th
+                        key={columnidx}
+                        {...column.getHeaderProps(column.getSortByToggleProps())}
+                        className="py-3 px-6"
+                        width={column.width === 'auto' ? autoWidth : ''}
                       >
-                        {column.render('Header')}
-                        {column.isSorted ? (
-                          <span className="ml-2">
-                            {column.isSortedDesc === true ? (
-                              <ArrowSmDownIcon className="ml-2 h-4" />
-                            ) : (
-                              <ArrowSmUpIcon className="ml-2 h-4" />
-                            )}
-                          </span>
-                        ) : (
-                          ' '
-                        )}
-                      </div>
-                    </th>
+                        <div
+                          className="flex"
+                          onClick={() => {
+                            onSortChange({
+                              sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
+                            });
+                          }}
+                        >
+                          {column.render('Header')}
+                          {column.isSorted ? (
+                            <span className="ml-2">
+                              {column.isSortedDesc === true ? (
+                                <ArrowSmDownIcon className="ml-2 h-4" />
+                              ) : (
+                                <ArrowSmUpIcon className="ml-2 h-4" />
+                              )}
+                            </span>
+                          ) : (
+                            ' '
+                          )}
+                        </div>
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+
+            {!loadingHover && (
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row, i) => {
+                  prepareRow(row);
+                  return (
+                    <tr
+                      key={i}
+                      {...row.getRowProps()}
+                      className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
+                    >
+                      {row.cells.map((cell, idx) => (
+                        <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
+                          {cell.render('Cell')}
+                        </td>
+                      ))}
+                    </tr>
                   );
                 })}
-              </tr>
-            ))}
-          </thead>
+              </tbody>
+            )}
+          </table>
 
-          {!loadingHover && (
-            <tbody {...getTableBodyProps()}>
-              {rows.map((row, i) => {
-                prepareRow(row);
-                return (
-                  <tr
-                    key={i}
-                    {...row.getRowProps()}
-                    className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
-                  >
-                    {row.cells.map((cell, idx) => (
-                      <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          )}
-        </table>
-
-        {loadingHover && (
-          <div className="w-full">
-            <div className="bg-[#fff]">
-              <div className="flex p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-              </div>
-              <div className="flex mt-1 p-3">
-                <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+          {loadingHover && (
+            <div className="w-full">
+              <div className="bg-[#fff]">
+                <div className="flex p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
+                <div className="flex mt-1 p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
+                <div className="flex mt-1 p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
+                <div className="flex mt-1 p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
+                <div className="flex mt-1 p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
+                <div className="flex mt-1 p-3">
+                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
+                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
-          <span className="text-sm font-normal text-gray-500 ">
-            {totalData <= 0 ? null : (
-              <>
-                Showing <span className="font-semibold text-gray-900 ">{`${limit * (pages - 1) + 1} - `}</span>
-                <span className="font-semibold text-gray-900">
-                  {pages * limit > totalData ? totalData : pages * limit}
-                </span>{' '}
-                of <span className="font-semibold text-gray-900 ">{totalData}</span>
-              </>
-            )}
-          </span>
-          <ul className="inline-flex items-center text-sm -space-x-px py-4 mr-8">
-            <li>
-              <button
-                type="button"
-                disabled={pages === 1}
-                onClick={() => (pages === 1 ? {} : changePage(pages - 1))}
-                className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
-              >
-                <span className="sr-only">Previous</span>
-                <ChevronLeftIcon className="w-5 h-5" />
-              </button>
-            </li>
-            {lastPage > 7 && pages >= 4 && (
-              <>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => changePage(1)}
-                    className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 mr-1  hover:bg-gray-700 hover:text-white"
-                  >
-                    1
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    className="py-2 px-3 leading-tight text-black rounded-lg mr-0.5 bg-gray-100 hover:bg-gray-700 hover:text-white"
-                  >
-                    ...
-                  </button>
-                </li>
-              </>
-            )}
-            {Array(
-              lastPage > 7 && lastPage - pages < 3 ? 5 : lastPage > 7 && pages >= 4 ? 3 : lastPage > 7 ? 5 : lastPage
-            )
-              .fill('')
-              .map((_, i) => {
-                const p =
-                  lastPage > 7 && lastPage - pages < 3 ? lastPage - 4 : lastPage > 7 && pages >= 4 ? pages - 1 : 1;
-                return (
-                  <li key={i}>
+          <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
+            <span className="text-sm font-normal text-gray-500 ">
+              {totalData <= 0 ? null : (
+                <>
+                  Showing <span className="font-semibold text-gray-900 ">{`${limit * (pages - 1) + 1} - `}</span>
+                  <span className="font-semibold text-gray-900">
+                    {pages * limit > totalData ? totalData : pages * limit}
+                  </span>{' '}
+                  of <span className="font-semibold text-gray-900 ">{totalData}</span>
+                </>
+              )}
+            </span>
+            <ul className="inline-flex items-center text-sm -space-x-px py-4 mr-8">
+              <li>
+                <button
+                  type="button"
+                  disabled={pages === 1}
+                  onClick={() => (pages === 1 ? {} : changePage(pages - 1))}
+                  className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <span className="sr-only">Previous</span>
+                  <ChevronLeftIcon className="w-5 h-5" />
+                </button>
+              </li>
+              {lastPage > 7 && pages >= 4 && (
+                <>
+                  <li>
                     <button
                       type="button"
-                      disabled={pages === i + p}
-                      onClick={() => changePage(i + p)}
-                      className={`${
-                        pages === i + p ? 'bg-gray-700 text-white' : 'bg-white'
-                      } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-gray-700 hover:text-white disabled:text-white`}
+                      onClick={() => changePage(1)}
+                      className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 mr-1  hover:bg-gray-700 hover:text-white"
                     >
-                      {i + p}
+                      1
                     </button>
                   </li>
-                );
-              })}
-            {lastPage > 7 && lastPage - pages >= 3 && (
-              <>
-                <li>
-                  <button
-                    type="button"
-                    className="py-2 px-3 mr-1 ml-0.5 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
-                  >
-                    ...
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => changePage(lastPage)}
-                    className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
-                  >
-                    {lastPage}
-                  </button>
-                </li>
-              </>
-            )}
-            <li>
-              <button
-                type="button"
-                disabled={pages === lastPage}
-                onClick={() => (pages === lastPage ? {} : changePage(pages + 1))}
-                className="block py-2 px-3 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
-              >
-                <span className="sr-only">Next</span>
-                {totalData <= 0 ? null : <ChevronRightIcon className="w-5 h-5" />}
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div>
+                  <li>
+                    <button
+                      type="button"
+                      className="py-2 px-3 leading-tight text-black rounded-lg mr-0.5 bg-gray-100 hover:bg-gray-700 hover:text-white"
+                    >
+                      ...
+                    </button>
+                  </li>
+                </>
+              )}
+              {Array(
+                lastPage > 7 && lastPage - pages < 3 ? 5 : lastPage > 7 && pages >= 4 ? 3 : lastPage > 7 ? 5 : lastPage
+              )
+                .fill('')
+                .map((_, i) => {
+                  const p =
+                    lastPage > 7 && lastPage - pages < 3 ? lastPage - 4 : lastPage > 7 && pages >= 4 ? pages - 1 : 1;
+                  return (
+                    <li key={i}>
+                      <button
+                        type="button"
+                        disabled={pages === i + p}
+                        onClick={() => changePage(i + p)}
+                        className={`${
+                          pages === i + p ? 'bg-gray-700 text-white' : 'bg-white'
+                        } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-gray-700 hover:text-white disabled:text-white`}
+                      >
+                        {i + p}
+                      </button>
+                    </li>
+                  );
+                })}
+              {lastPage > 7 && lastPage - pages >= 3 && (
+                <>
+                  <li>
+                    <button
+                      type="button"
+                      className="py-2 px-3 mr-1 ml-0.5 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
+                    >
+                      ...
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => changePage(lastPage)}
+                      className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
+                    >
+                      {lastPage}
+                    </button>
+                  </li>
+                </>
+              )}
+              <li>
+                <button
+                  type="button"
+                  disabled={pages === lastPage}
+                  onClick={() => (pages === lastPage ? {} : changePage(pages + 1))}
+                  className="block py-2 px-3 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <span className="sr-only">Next</span>
+                  {totalData <= 0 ? null : <ChevronRightIcon className="w-5 h-5" />}
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
     </>
   );
 }

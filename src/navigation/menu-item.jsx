@@ -264,6 +264,7 @@ export default [
   {
     displayName: '404',
     name: '404',
+    role: '',
     showmenu: false,
     exact: false,
     route: '/*',

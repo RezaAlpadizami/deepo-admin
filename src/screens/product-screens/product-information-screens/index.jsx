@@ -59,10 +59,10 @@ function Screen(props) {
         columns={[
           { header: 'SKU', value: 'product_sku', copy: true, type: 'link' },
           { header: 'Name', value: 'product_name', copy: true },
-          { header: 'Category', value: 'product_category', copy: true },
+          { header: 'Category', value: 'category_name', copy: true },
           { header: 'Description', value: 'product_desc', copy: true },
           { header: 'Qty', value: 'qty', copy: true },
-          { header: 'warehouse', value: 'warehouse' },
+          { header: 'warehouse', value: 'warehouse_name' },
           { header: 'rack', value: 'rack' },
           { header: 'bay', value: 'bay' },
           { header: 'level', value: 'level' },

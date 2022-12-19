@@ -15,20 +15,6 @@ function Screen(props) {
   const [loading, setLoading] = useState(false);
   const [dataJourneyById, setDataJourneyById] = useState([]);
 
-  // const [productId, setProductId] = useState();
-  // console.log('product', productId);
-
-  // useEffect(() => {
-  //   ProductJourney.get()
-  //     .then(res => {
-  //       console.log('res', res);
-  //       setProductId(res.data.map);
-  //     })
-  //     .catch(error => {
-  //       Swal.fire({ text: error?.message || error?.data.title, icon: 'error' });
-  //     });
-  // }, []);
-
   useEffect(() => {
     getDetailJourney();
   }, []);
@@ -37,7 +23,6 @@ function Screen(props) {
     setLoading(true);
     ProductJourney.find(id)
       .then(res => {
-        console.log('ressss', res);
         setLoading(false);
         setDataJourneyById(res);
       })
@@ -91,7 +76,10 @@ function Screen(props) {
         <h1 className="font-bold text-[24px]">Product Journey</h1>
         <div className="flex gap-8 p-10 mt-6 bg-white rounded-[20px] w-full">
           <div>
-            <ProgressStepBar dataGet={dataJourneyById} />
+            <ProgressStepBar
+              dataApi={dataJourneyById}
+              customStyleRequestNumber="absolute -right-28 top-2 text-gray-400"
+            />
           </div>
         </div>
       </div>

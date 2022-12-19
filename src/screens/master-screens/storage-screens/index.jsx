@@ -50,9 +50,10 @@ function Screen(props) {
             data: warehouseData?.map(i => {
               return {
                 value: i.id,
-                label: `${i.name} ${i.location}`,
+                label: `${i.name} - ${i.location}`,
               };
             }),
+            placeholder: 'Select Warehouse',
           },
         ]}
         columns={[
@@ -78,7 +79,6 @@ function Screen(props) {
         displayName={displayName}
         checkbox
       />
-      {/* </div> */}
     </div>
   );
 }

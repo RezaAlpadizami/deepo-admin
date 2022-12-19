@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { Button } from '@chakra-ui/react';
 
 import DeleteButton from '../../../components/delete-button-component';
-import LoadingHover from '../../../components/loading-hover-component';
 import InputDetail from '../../../components/input-detail-component';
 import { WarehouseApi } from '../../../services/api-master';
 
@@ -14,7 +13,6 @@ function Screen(props) {
   const { displayName } = props;
   const { id } = useParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [dataWarehouseById, setDataWarehouseById] = useState([]);
 
   useEffect(() => {
@@ -22,14 +20,11 @@ function Screen(props) {
   }, []);
 
   const getDetailWarehouse = () => {
-    setLoading(true);
     WarehouseApi.find(id)
       .then(res => {
-        setLoading(false);
         setDataWarehouseById(res);
       })
       .catch(error => {
-        setLoading(false);
         Swal.fire({ text: error?.message, icon: 'error' });
       });
   };
@@ -47,7 +42,7 @@ function Screen(props) {
             navigate(`/master/warehouse/${id}/edit`);
           }}
           size="sm"
-          className="bg-white border border-gray-500 text-gray-500 rounded-full border-3 py-4 px-6 mr-60 hover:text-white hover:bg-black"
+          className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
         >
           Edit
         </Button>
@@ -65,7 +60,6 @@ function Screen(props) {
         />
         <InputDetail value={dataWarehouseById.location} label="Location" />
       </div>
-      {loading && <LoadingHover fixed />}
     </div>
   );
 }

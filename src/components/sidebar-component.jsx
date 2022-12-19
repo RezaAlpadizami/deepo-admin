@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { ChevronRightIcon } from '@heroicons/react/solid';
-
+import ArrowUpTray from '../assets/images/arrow-up-tray.svg';
 import Context from '../context';
 import menuItem from '../navigation/menu-item';
 import { findParent, findTree } from '../utils/navigation-utils';
@@ -27,10 +27,10 @@ function SidebarComponent() {
   return (
     <aside
       className={`${
-        store.isDrawerOpen ? 'w-64' : '-translate-x-64 w-0'
+        store.isDrawerOpen ? 'w-80' : '-translate-x-80 w-0'
       } bg-[#232323] transition-all ease-in-out delay-150 duration-300 `}
     >
-      <div className="">
+      <div className="relative h-full">
         <ul className="text-white">
           {menuParent?.routes?.map(
             (d, idx) =>
@@ -79,6 +79,12 @@ function SidebarComponent() {
               )
           )}
         </ul>
+        <button className="absolute inset-x-0 bottom-10 h-15 py-3 hover:bg-[#878787]" type="button" onClick={() => {}}>
+          <div className="flex pl-6">
+            <img src={ArrowUpTray} alt="arrow up" className="h-7 rotate-90" />
+            <h3 className="pt-0 pl-6 font-bold text-md text-[#fff]">Log out</h3>
+          </div>
+        </button>
       </div>
     </aside>
   );

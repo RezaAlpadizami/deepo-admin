@@ -18,17 +18,19 @@ function Screen(props) {
 
   const [loading, setLoading] = useState(false);
 
-  const phoneValidation =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
   const schema = yup.object().shape({
-    name: yup.string().nullable().required(),
-    code: yup.string().nullable().required(),
-    address: yup.string().nullable().required(),
-    phone: yup.string().matches(phoneValidation, 'Phone number is not valid'),
+    name: yup.string().nullable().max(100).required(),
+    code: yup.string().nullable().max(7).required(),
+    address: yup.string().nullable().max(255).required(),
+    phone: yup
+      .string()
+      .matches(
+        /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+        'Phone number is not valid'
+      ),
     capacity: yup.number().nullable().required(),
     last_stock_opname: yup.date().nullable().required(),
-    location: yup.string().nullable().required(),
+    location: yup.string().nullable().max(100).required(),
   });
 
   const {

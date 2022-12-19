@@ -45,6 +45,7 @@ function SelectComponent(props) {
                   placeholderText={placeholder}
                   selected={value}
                   value={value}
+                  autoComplete="off"
                   onChange={onChange}
                   id={name}
                   customInput={<InputElement errors={errors} />}

@@ -36,17 +36,17 @@ function Stepper(props) {
                     </div>
                     <div className="flex">
                       <div>
-                        <p className="text-[#000] text-base pl-2">{i.request_number}</p>
+                        <p className="text-[#000] text-sm pl-2">{i.request_number}</p>
                       </div>
                       <div className="flex-1" />
-                      <div className="text-base">{Moment(i.date).format('DD MMM YYYY')}</div>
+                      <div className="text-sm">{Moment(i.date).format('DD MMM YYYY')}</div>
                     </div>
                   </div>
                 </div>
               )}
               {counter < data.length && (
                 <div className="flex">
-                  <div className=" pr-6" />
+                  <div className="pr-6" />
                   <div className="border-l-2 border-l-[#3F73EB] h-16" />
                 </div>
               )}

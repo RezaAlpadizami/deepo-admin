@@ -105,8 +105,6 @@ function ShowScreen(props) {
       });
   }, []);
 
-  // const steps = dataJourney.length > 5 ? dataJourney.splice(-Number(`${dataJourney.length - 5}`)) : dataJourney;
-
   return (
     <>
       <div className="flex mb-12">

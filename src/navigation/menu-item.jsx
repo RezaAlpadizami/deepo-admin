@@ -245,7 +245,7 @@ export default [
         role: 'product',
         showmenu: true,
         exact: true,
-        route: '/product-journey',
+        route: 'product/product-journey',
         component: ProductJourneyScreens,
         routes: [
           {
@@ -254,7 +254,7 @@ export default [
             role: 'product',
             showmenu: false,
             exact: true,
-            route: '/product-journey/:id/show',
+            route: 'product/product-journey/:id/show',
             component: ProductJourneyShowScreen,
           },
         ],

@@ -44,7 +44,7 @@ function Screen(props) {
             label: 'Level',
           },
           {
-            name: 'warehouse',
+            name: 'warehouse_id',
             label: 'Warehouse',
             type: 'select',
             data: warehouseData?.map(i => {

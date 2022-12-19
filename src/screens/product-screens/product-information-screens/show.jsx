@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
-import { ChevronLeftIcon, ShoppingCartIcon, ArchiveIcon } from '@heroicons/react/outline';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 import Swal from 'sweetalert2';
-import Moment from 'moment';
-import { Steps, Step } from 'chakra-ui-steps';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductInfoApi, ProductJourney } from '../../../services/api-master';
 import InputDetail from '../../../components/input-detail-component';
-import RightLeftIcon from '../../../assets/images/right-left-arrow.svg';
-import LeftRightIcon from '../../../assets/images/left-right-arrow.svg';
 import LoadingComponent from '../../../components/loading-component';
+import Stepper from '../../../components/stepper-component';
 
 function ShowScreen(props) {
   const { displayName } = props;
@@ -85,7 +82,7 @@ function ShowScreen(props) {
             result[0].value.journey.map(i => {
               return {
                 activity_name: i.activity_name,
-                request_number: '001/DES/2002',
+                request_number: i.request_number,
                 date: i.activity_date,
               };
             })
@@ -108,7 +105,6 @@ function ShowScreen(props) {
       });
   }, []);
 
-  const steps = dataJourney.length > 5 ? dataJourney.splice(-Number(`${dataJourney.length - 5}`)) : dataJourney;
   return (
     <>
       <div className="flex mb-12">
@@ -198,41 +194,14 @@ function ShowScreen(props) {
           <strong>Product Journey</strong>
           <div className="bg-white h-[95%] rounded-3xl mt-2 pt-10 pl-3 pr-3">
             <LoadingComponent visible={loadingJourney} />
-            <div className="pl-5">
-              {steps.length > 0 && (
-                <Steps colorScheme="blue" size="lg" orientation="vertical">
-                  {steps.map(item => {
-                    return (
-                      <Step
-                        icon={() =>
-                          item.activity_name.toLowerCase() === 'inbound' ? (
-                            <ArchiveIcon className="h-8 stroke-[#5081ED]" />
-                          ) : item.activity_name.toLowerCase() === 'relocate - in' ? (
-                            <img className="h-8" style={{ transform: 'scaleX(-1)' }} alt="right" src={LeftRightIcon} />
-                          ) : item.activity_name.toLowerCase() === 'relocate - out' ? (
-                            <img className="h-8" alt="right" src={RightLeftIcon} />
-                          ) : (
-                            <ShoppingCartIcon className="h-8 stroke-[#5081ED]" />
-                          )
-                        }
-                        label={item.activity_name}
-                        description={`${item.request_number} ${Moment(item.date).format('DD-MMM-YYYY')}`}
-                        key={item.status}
-                      />
-                    );
-                  })}
-                </Steps>
-              )}
-            </div>
-            {steps.length >= 5 && (
+            <Stepper data={dataJourney} />
+            {dataJourney.length >= 5 && (
               <div className="flex justify-center">
                 <Button
                   type="button"
                   size="sm"
-                  onClick={() => navigate(`/product-journey/${id}/show`)}
-                  className={`${
-                    steps.length ? 'bg-[#232323] text-white ' : 'bg-gray-500 text-gray-200 '
-                  } border border-gray-500 text-md rounded-xl border-3 py-1 px-8 hover:bg-black mt-5`}
+                  onClick={() => navigate(`/product/product-journey/${id}/show`)}
+                  className="bg-[#232323] text-white  border border-gray-500 text-md rounded-xl border-3 py-1 px-8 hover:bg-black mt-5"
                 >
                   More
                 </Button>

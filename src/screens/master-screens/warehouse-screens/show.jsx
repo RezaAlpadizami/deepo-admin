@@ -42,7 +42,7 @@ function Screen(props) {
             navigate(`/master/warehouse/${id}/edit`);
           }}
           size="sm"
-          className="bg-white border border-gray-500 text-gray-500 rounded-full border-3 py-4 px-6 mr-60 hover:text-white hover:bg-black"
+          className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
         >
           Edit
         </Button>

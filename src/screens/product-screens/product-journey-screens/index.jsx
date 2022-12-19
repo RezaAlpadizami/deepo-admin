@@ -9,6 +9,7 @@ function Screen(props) {
   return (
     <div className="">
       <Datatable
+        identifierProperties="product_id"
         filters={[
           {
             name: 'request_number',
@@ -43,11 +44,23 @@ function Screen(props) {
           },
         ]}
         columns={[
-          { header: 'Request Number', value: 'request_number', copy: true, type: 'link' },
-          { header: 'SKU', value: 'product_sku', copy: true },
-          { header: 'Product Name', value: 'product_name', copy: true },
+          { header: 'Request Number', value: 'request_number', copy: true },
           { header: 'Activity Name', value: 'activity_name', copy: true },
-          { header: 'Activity Date', value: 'activity_data', copy: true, type: 'date' },
+          { header: 'Activity Date', value: 'activity_date', copy: true, type: 'date' },
+          { header: 'Notes', value: 'notes', copy: true },
+          { header: 'Product ID', value: 'product_id', copy: true },
+          { header: 'SKU', value: 'product_sku', copy: true, type: 'link' },
+          { header: 'Product Name', value: 'product_name', copy: true },
+          { header: 'Product Category', value: 'product_category', copy: true },
+          { header: 'QTY', value: 'qty', copy: true },
+          { header: 'Warehouse ID', value: 'warehouse_id', copy: true },
+          { header: 'Warehouse Code', value: 'warehouse_code', copy: true },
+          { header: 'Warehouse Name', value: 'warehouse_name', copy: true },
+          { header: 'Storage ID', value: 'storage_id', copy: true },
+          { header: 'Rack', value: 'rack', copy: true },
+          { header: 'Bay', value: 'bay', copy: true },
+          { header: 'Level', value: 'level', copy: true },
+          { header: 'Create at', value: 'create_at', copy: true, type: 'date' },
         ]}
         toolbar={{
           action: {

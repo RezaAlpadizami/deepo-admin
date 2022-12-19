@@ -19,7 +19,7 @@ function Screen(props) {
 
   const schema = yup.object().shape({
     code: yup.string().nullable().max(7).required(),
-    name: yup.string().nullable().required(),
+    name: yup.string().nullable().max(100).required(),
   });
 
   const {

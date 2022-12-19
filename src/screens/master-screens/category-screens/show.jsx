@@ -48,8 +48,9 @@ function Screen(props) {
             store.setIsLoadEdit(true);
           }}
           px={8}
+          size="sm"
           type="submit"
-          className="ml-4 rounded-full bg-[#232323] text-[#fff]"
+          className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
         >
           Edit
         </Button>

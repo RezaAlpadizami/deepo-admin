@@ -2,12 +2,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react';
-import CustomSteps from './assets/styles/chakra-ui-steps';
 import './index.css';
 import './assets/styles/custom.css';
 import Context from './context';
 import RootStore from './store/root-store';
 import reportWebVitals from './reportWebVitals';
+import CustomSteps from './assets/styles/chakra-ui-steps';
 
 const App = React.lazy(() => import('./navigation/main'));
 

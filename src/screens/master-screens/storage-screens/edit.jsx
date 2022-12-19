@@ -125,7 +125,7 @@ function Screen(props) {
             options={warehouseData?.map(i => {
               return {
                 value: i.id,
-                label: `${i.name} ${i.location}`,
+                label: `${i.name} - ${i.location}`,
               };
             })}
             placeholder=""

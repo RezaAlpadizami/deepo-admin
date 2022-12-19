@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import XLSX from 'xlsx';
 import Moment from 'moment';
 import { saveAs } from 'file-saver';
-import { Link, Button } from '@chakra-ui/react';
+import { Link, Button, Skeleton, Stack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import Toolbar from './action-toolbar-component';
 import { calculateText, hasProperty } from '../utils/helper';
@@ -46,6 +46,7 @@ function DataTable(props) {
   const [totalData, setTotalData] = useState([]);
   const [autoWidth, setAutoWidth] = useState();
   const [loadingHover, setLoadingHover] = useState(false);
+  const [loading, setLoading] = useState(false);
   const defaultSort = {
     sort_by: 'id',
     sort_order: 'desc',
@@ -132,16 +133,16 @@ function DataTable(props) {
   }, [filterData]);
 
   const getData = () => {
-    setLoadingHover(true);
+    setLoading(true);
     api
       .get({ ...filterData })
       .then(res => {
-        setLoadingHover(false);
+        setLoading(false);
         setDatas(res.data);
         setTotalData(res.query.total);
       })
       .catch(error => {
-        setLoadingHover(false);
+        setLoading(false);
         Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
       });
   };
@@ -519,35 +520,25 @@ function DataTable(props) {
             )}
           </table>
 
-          {loadingHover && (
-            <div className="w-full">
-              <div className="bg-[#fff]">
-                <div className="flex p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
-                <div className="flex mt-1 p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
-                <div className="flex mt-1 p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
-                <div className="flex mt-1 p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
-                <div className="flex mt-1 p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
-                <div className="flex mt-1 p-3">
-                  <div className="h-5 rounded-lg bg-gray-100 w-[5%]" />
-                  <div className="h-5 ml-3 rounded-lg bg-gray-100 w-[95%] " />
-                </div>
+          {loading && (
+            <Stack>
+              <div className="flex p-3 gap-2">
+                <Skeleton height="20px" width="5%" />
+                <Skeleton height="20px" width="95%" />
               </div>
-            </div>
+              <div className="flex p-3 gap-2">
+                <Skeleton height="20px" width="5%" />
+                <Skeleton height="20px" width="95%" />
+              </div>
+              <div className="flex p-3 gap-2">
+                <Skeleton height="20px" width="5%" />
+                <Skeleton height="20px" width="95%" />
+              </div>
+              <div className="flex p-3 gap-2">
+                <Skeleton height="20px" width="5%" />
+                <Skeleton height="20px" width="95%" />
+              </div>
+            </Stack>
           )}
 
           <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">

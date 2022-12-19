@@ -14,13 +14,20 @@ import DatePicker from '../../../components/datepicker-component';
 import LoadingHover from '../../../components/loading-hover-component';
 
 const schema = yup.object().shape({
-  name: yup.string().nullable().required(),
-  code: yup.string().nullable().required(),
-  address: yup.string().nullable().required(),
-  phone: yup.string().nullable().required(),
+  name: yup.string().nullable().max(100).required(),
+  code: yup.string().nullable().max(7).required(),
+  address: yup.string().nullable().max(255).required(),
+  phone: yup
+    .string()
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      'Phone number is not valid'
+    )
+    .max(13)
+    .required(),
   capacity: yup.number().nullable().required(),
   last_stock_opname: yup.string().nullable().required(),
-  location: yup.string().nullable().required(),
+  location: yup.string().nullable().max(100).required(),
 });
 
 function Screen(props) {
@@ -59,7 +66,6 @@ function Screen(props) {
   const onEditSaveWarehouse = data => {
     WarehouseApi.update(id, {
       name: data.name,
-      code: data.code,
       address: data.address,
       phone: data.phone,
       level: data.level,
@@ -101,7 +107,7 @@ function Screen(props) {
         </div>
 
         <div className="grid items-start justify-items-center w-[80%] gap-4 gap-y-12 ml-6 mb-4 grid-cols-2 mt-4">
-          <Input name="code" label="Code" register={register} errors={errors} />
+          <Input name="code" label="Code" register={register} errors={errors} disabled />
           <Input name="address" label="Address" register={register} errors={errors} />
           <Input name="name" label="Name" register={register} errors={errors} />
           <Input name="phone" label="Phone Number" register={register} errors={errors} />

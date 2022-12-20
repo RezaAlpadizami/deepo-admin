@@ -66,17 +66,17 @@ function Screen(props) {
           <div className="flex-1" />
           <Button
             onClick={() => navigate(-1)}
-            paddingX={12}
+            px={8}
             size="sm"
-            className="bg-[#E3E3E3] border border-gray-500 text-gray-500 rounded-full border-3 py-4 px-6 mr-2 hover:text-gray-700 hover:bg-[#D9D9D9]"
+            className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
           >
             Cancel
           </Button>
           <Button
-            paddingX={12}
-            type="submit"
             size="sm"
-            className="bg-[#232323] border border-gray-500 text-white rounded-full border-3 py-4 px-6 mr-60 hover:bg-black"
+            px={8}
+            type="submit"
+            className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
           >
             Save
           </Button>

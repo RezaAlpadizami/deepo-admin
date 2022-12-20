@@ -14,11 +14,13 @@ function Screen(props) {
             name: 'code',
             label: 'Code',
             placeholder: 'Input Code',
+            col: 2,
           },
           {
             name: 'name',
             label: 'Name',
             placeholder: 'Input Name',
+            col: 2,
           },
         ]}
         columns={[

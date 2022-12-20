@@ -45,7 +45,7 @@ const baseStyleStepIconContainer = props => {
       borderColor: activeColor,
     },
     '&[data-clickable]:hover': {
-      borderColor: activeColor,
+      borderColor: '#5081ED',
     },
   };
 };
@@ -66,7 +66,7 @@ const CustomSteps = {
       },
       icon: {
         ...Steps.baseStyle(props).icon,
-        color: 'rgb(59 130 246)',
+        color: '#5081ED',
         strokeWidth: '10px',
       },
     };

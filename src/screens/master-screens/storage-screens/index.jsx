@@ -30,18 +30,22 @@ function Screen(props) {
           {
             name: 'code',
             label: 'Code',
+            col: 2,
           },
           {
             name: 'rack_number',
             label: 'Rack',
+            col: 2,
           },
           {
             name: 'bay',
             label: 'Bay',
+            col: 2,
           },
           {
             name: 'level',
             label: 'Level',
+            col: 2,
           },
           {
             name: 'warehouse_id',
@@ -53,7 +57,7 @@ function Screen(props) {
                 label: `${i.name} - ${i.location}`,
               };
             }),
-            placeholder: 'Select Warehouse',
+            col: 2,
           },
         ]}
         columns={[

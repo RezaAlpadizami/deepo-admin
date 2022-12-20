@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
+import { Button } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import InputDetail from '../../../components/input-detail-component';
 import { StorageApi } from '../../../services/api-master';
@@ -32,6 +33,9 @@ function Screen(props) {
   return (
     <div className="">
       <div className="flex mb-12">
+        <button type="button">
+          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+        </button>
         <h1 className="font-bold text-3xl">{displayName}</h1>
         <div className="flex-1" />
         <DeleteButton api={StorageApi} id={id} redirectTo="master/storage" />

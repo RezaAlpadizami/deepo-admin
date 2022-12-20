@@ -1,10 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { ProductJourney } from '../../../services/api-master';
+import Swal from 'sweetalert2';
+
+import { ProductApi, ProductJourney, WarehouseApi } from '../../../services/api-master';
 import Datatable from '../../../components/datatable-component';
 
 function Screen(props) {
   const { displayName, route } = props;
+  const [warehouseData, setWarhouseData] = useState([]);
+  const [productData, setProductData] = useState([]);
+
+  const activityProduct = [
+    { activity_name: 'INBOUND' },
+    { activity_name: 'OUTBOUND' },
+    { activity_name: 'RELOCATE-IN' },
+    { activity_name: 'RELOCATE-OUT' },
+  ];
+
+  useEffect(() => {
+    getDataWarehouse();
+    getDataWProduct();
+  }, []);
+
+  const getDataWarehouse = () => {
+    WarehouseApi.get()
+      .then(res => {
+        setWarhouseData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  };
+
+  const getDataWProduct = () => {
+    ProductApi.get()
+      .then(res => {
+        setProductData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  };
 
   return (
     <div className="">
@@ -24,12 +60,25 @@ function Screen(props) {
           {
             name: 'product_name',
             label: 'Product Name',
+            type: 'select',
+            data: productData?.map(i => {
+              return {
+                value: i.product_name,
+                label: i.product_name,
+              };
+            }),
             col: 2,
           },
           {
             name: 'activity_name',
             label: 'Activity',
-            placeholder: 'Input Activity',
+            type: 'select',
+            data: activityProduct?.map(i => {
+              return {
+                value: i.activity_name,
+                label: i.activity_name,
+              };
+            }),
             col: 2,
           },
           {
@@ -41,6 +90,13 @@ function Screen(props) {
           {
             name: 'warehouse_name',
             label: 'Warehouse',
+            type: 'select',
+            data: warehouseData?.map(i => {
+              return {
+                value: i.id,
+                label: `${i.name} - ${i.location}`,
+              };
+            }),
             col: 2,
           },
         ]}

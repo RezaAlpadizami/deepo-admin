@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import Swal from 'sweetalert2';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import ProgressStepBar from '../../../components/stepper';
 import LoadingHover from '../../../components/loading-hover-component';
@@ -10,6 +11,7 @@ import InputDetail from '../../../components/input-detail-component';
 
 function Screen(props) {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { displayName } = props;
 
   const [loading, setLoading] = useState(false);
@@ -35,12 +37,15 @@ function Screen(props) {
   return (
     <div className="">
       <div className="flex mb-12">
+        <button type="button">
+          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+        </button>
         <h1 className="font-bold text-3xl">{displayName}</h1>
         <div className="flex-1" />
       </div>
 
       <div>
-        <h1 className="font-bold text-[24px]">Detail Product</h1>
+        <h1 className="font-bold text-[20px]">Detail Product</h1>
         <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full">
           <div>
             <InputDetail
@@ -73,7 +78,7 @@ function Screen(props) {
         </div>
       </div>
       <div className="mt-8">
-        <h1 className="font-bold text-[24px]">Product Journey</h1>
+        <h1 className="font-bold text-[20px]">Product Journey</h1>
         <div className="flex gap-8 p-10 mt-6 bg-white rounded-[20px] w-full">
           <div>
             <ProgressStepBar

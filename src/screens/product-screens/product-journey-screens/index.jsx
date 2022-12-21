@@ -19,7 +19,7 @@ function Screen(props) {
 
   useEffect(() => {
     getDataWarehouse();
-    getDataWProduct();
+    getDataProduct();
   }, []);
 
   const getDataWarehouse = () => {
@@ -32,7 +32,7 @@ function Screen(props) {
       });
   };
 
-  const getDataWProduct = () => {
+  const getDataProduct = () => {
     ProductApi.get()
       .then(res => {
         setProductData(res.data);

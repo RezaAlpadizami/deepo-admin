@@ -128,7 +128,7 @@ function Screen(props) {
                 label: `${i.name} - ${i.location}`,
               };
             })}
-            placeholder=""
+            placeholder="Warehouse"
             register={register}
             errors={errors}
           />

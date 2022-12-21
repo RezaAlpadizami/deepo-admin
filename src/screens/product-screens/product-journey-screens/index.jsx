@@ -1,10 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { ProductJourney } from '../../../services/api-master';
+import Swal from 'sweetalert2';
+
+import { ProductApi, ProductJourney, WarehouseApi } from '../../../services/api-master';
 import Datatable from '../../../components/datatable-component';
 
 function Screen(props) {
   const { displayName, route } = props;
+  const [warehouseData, setWarhouseData] = useState([]);
+  const [productData, setProductData] = useState([]);
+
+  const activityProduct = [
+    { activity_name: 'INBOUND' },
+    { activity_name: 'OUTBOUND' },
+    { activity_name: 'RELOCATE-IN' },
+    { activity_name: 'RELOCATE-OUT' },
+  ];
+
+  useEffect(() => {
+    getDataWarehouse();
+    getDataWProduct();
+  }, []);
+
+  const getDataWarehouse = () => {
+    WarehouseApi.get()
+      .then(res => {
+        setWarhouseData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  };
+
+  const getDataWProduct = () => {
+    ProductApi.get()
+      .then(res => {
+        setProductData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  };
 
   return (
     <div className="">
@@ -14,42 +50,63 @@ function Screen(props) {
           {
             name: 'request_number',
             label: 'Request Number',
-            placeholder: 'Input Request Number',
+            col: 2,
           },
           {
             name: 'product_sku',
             label: 'SKU',
-            placeholder: 'Input SKU',
+            col: 2,
           },
           {
             name: 'product_name',
             label: 'Product Name',
-            placeholder: 'Input Product Name',
+            type: 'select',
+            data: productData?.map(i => {
+              return {
+                value: i.product_name,
+                label: i.product_name,
+              };
+            }),
+            col: 2,
           },
           {
             name: 'activity_name',
             label: 'Activity',
-            placeholder: 'Input Activity',
+            type: 'select',
+            data: activityProduct?.map(i => {
+              return {
+                value: i.activity_name,
+                label: i.activity_name,
+              };
+            }),
+            col: 2,
           },
           {
             name: 'activity_date',
             label: 'Activity Date',
             type: 'date_picker',
-            placeholder: 'Select date',
+            col: 2,
           },
           {
             name: 'warehouse_name',
             label: 'Warehouse',
-            placeholder: 'Input Warehouse',
+            type: 'select',
+            data: warehouseData?.map(i => {
+              return {
+                value: i.id,
+                label: `${i.name} - ${i.location}`,
+              };
+            }),
+            col: 2,
           },
         ]}
         columns={[
-          { header: 'Request Number', value: 'request_number', copy: true },
+          { header: 'Request Number', value: 'request_number', copy: true, type: 'link' },
           { header: 'Activity Name', value: 'activity_name', copy: true },
           { header: 'Activity Date', value: 'activity_date', copy: true, type: 'date' },
           { header: 'Notes', value: 'notes', copy: true },
           { header: 'Product ID', value: 'product_id', copy: true },
-          { header: 'SKU', value: 'product_sku', copy: true, type: 'link' },
+          { header: 'SKU', value: 'product_sku', copy: true },
           { header: 'Product Name', value: 'product_name', copy: true },
           { header: 'Product Category', value: 'product_category', copy: true },
           { header: 'QTY', value: 'qty', copy: true },

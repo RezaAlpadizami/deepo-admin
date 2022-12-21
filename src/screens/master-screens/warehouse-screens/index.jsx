@@ -12,20 +12,23 @@ function Screen(props) {
           {
             name: 'code',
             label: 'Code',
+            col: 2,
           },
           {
             name: 'name',
             label: 'Name',
+            col: 2,
           },
           {
             name: 'location',
             label: 'Location',
+            col: 2,
           },
           {
             name: 'last_stock_opname',
             label: 'Last Stock Opname',
             type: 'date_picker',
-            placeholder: 'Select date',
+            col: 2,
           },
         ]}
         columns={[

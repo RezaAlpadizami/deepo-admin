@@ -97,13 +97,13 @@ function Screen(props) {
           <Select
             name="warehouse_id"
             label="Warehouse"
+            placeholder="Warehouse"
             options={warehouseData?.map(i => {
               return {
                 value: i.id,
                 label: `${i.name} ${i.location}`,
               };
             })}
-            placeholder=""
             register={register}
             errors={errors}
           />

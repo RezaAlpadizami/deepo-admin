@@ -31,7 +31,6 @@ function Screen(props) {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -73,18 +72,18 @@ function Screen(props) {
           <h1 className="font-bold text-3xl">{displayName}</h1>
           <div className="flex-1" />
           <Button
-            onClick={() => reset()}
-            paddingX={12}
+            onClick={() => navigate(-1)}
+            px={8}
             size="sm"
-            className="bg-white border border-gray-500 text-gray-500 rounded-full border-3 py-4 px-6 mr-2 hover:text-white hover:bg-black"
+            className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
           >
             Cancel
           </Button>
           <Button
-            paddingX={12}
-            type="submit"
             size="sm"
-            className="bg-gray-300 border border-gray-500 text-gray-700 rounded-full border-3 py-4 px-6 mr-60 hover:text-white hover:bg-black"
+            px={8}
+            type="submit"
+            className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
           >
             Save
           </Button>

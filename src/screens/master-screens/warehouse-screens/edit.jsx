@@ -25,7 +25,7 @@ const schema = yup.object().shape({
     )
     .max(13)
     .required(),
-  capacity: yup.number().nullable().required(),
+  capacity: yup.number().typeError('Must be Number').nullable().required(),
   last_stock_opname: yup.string().nullable().required(),
   location: yup.string().nullable().max(100).required(),
 });

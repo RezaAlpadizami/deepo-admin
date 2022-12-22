@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon, ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/solid';
 
-import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
-import { observer } from 'mobx-react-lite';
-import Swal from 'sweetalert2';
 import XLSX from 'xlsx';
 import Moment from 'moment';
+import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
-import { Link, Button, Skeleton, Stack } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import Toolbar from './action-toolbar-component';
-import { calculateText, hasProperty } from '../utils/helper';
-import TableComponent from './table-component';
-import Checkbox from './checkbox-component';
-import Select from './select-component';
+import { observer } from 'mobx-react-lite';
+import { Button, Skeleton, Stack } from '@chakra-ui/react';
+import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
+import { ChevronLeftIcon, ChevronRightIcon, ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/solid';
+
 import Input from './input-component';
+import Select from './select-component';
+import Checkbox from './checkbox-component';
+import TableComponent from './table-component';
 import DatePicker from './datepicker-component';
+import Toolbar from './action-toolbar-component';
 import LoadingHover from './loading-hover-component';
+import { calculateText, hasProperty } from '../utils/helper';
 
 function DataTable(props) {
   const {
@@ -81,7 +83,7 @@ function DataTable(props) {
                 <Link
                   type="button"
                   className="mr-4 text-blue-400"
-                  href={`${to}/${row.original[identifierProperties]}/show`}
+                  to={`${to}/${row.original[identifierProperties]}/show`}
                 >
                   {value}
                 </Link>

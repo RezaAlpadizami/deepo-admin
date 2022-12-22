@@ -28,7 +28,7 @@ function Screen(props) {
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
         'Phone number is not valid'
       ),
-    capacity: yup.number().nullable().required(),
+    capacity: yup.number().typeError('Must be Number').nullable().required(),
     last_stock_opname: yup.date().nullable().required(),
     location: yup.string().nullable().max(100).required(),
   });
@@ -49,7 +49,7 @@ function Screen(props) {
       code: data.code,
       address: data.address,
       phone: data.phone,
-      capacity: data.capacity,
+      capacity: Number(data.capacity),
       last_stock_opname: data.last_stock_opname,
       location: data.location,
     })

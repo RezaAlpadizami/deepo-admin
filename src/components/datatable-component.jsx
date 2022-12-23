@@ -457,89 +457,97 @@ function DataTable(props) {
       )}
       {loadingHover && <LoadingHover text="Please Wait..." />}
       {filter.length !== 0 && (
-        <div className="overflow-x-auto relative px-6 pb-11 bg-white rounded-b-3xl">
-          <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
-            <thead className="text-xs text-black uppercase bg-thead">
-              {headerGroups.map((headerGroup, idxgroup) => (
-                <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column, columnidx) => {
-                    return (
-                      <th
-                        key={columnidx}
-                        {...column.getHeaderProps(column.getSortByToggleProps())}
-                        className="py-3 px-6"
-                        width={column.width === 'auto' ? autoWidth : ''}
-                      >
-                        <div
-                          className="flex"
-                          onClick={() => {
-                            onSortChange({
-                              sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
-                            });
-                          }}
-                        >
-                          {column.render('Header')}
-                          {column.isSorted ? (
-                            <span className="ml-2">
-                              {column.isSortedDesc === true ? (
-                                <ArrowSmDownIcon className="ml-2 h-4" />
+        <div className="overflow-x-hidden relative px-6 pb-11 bg-white rounded-b-3xl">
+          <div
+            className={`${
+              !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
+            } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
+          >
+            <div className="scrollbar-x-auto ">
+              <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
+                <thead className="text-xs text-black uppercase bg-thead">
+                  {headerGroups.map((headerGroup, idxgroup) => (
+                    <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
+                      {headerGroup.headers.map((column, columnidx) => {
+                        return (
+                          <th
+                            key={columnidx}
+                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                            className="py-3 px-6"
+                            width={column.width === 'auto' ? autoWidth : ''}
+                          >
+                            <div
+                              className="flex"
+                              onClick={() => {
+                                onSortChange({
+                                  sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
+                                });
+                              }}
+                            >
+                              {column.render('Header')}
+                              {column.isSorted ? (
+                                <span className="ml-2">
+                                  {column.isSortedDesc === true ? (
+                                    <ArrowSmDownIcon className="ml-2 h-4" />
+                                  ) : (
+                                    <ArrowSmUpIcon className="ml-2 h-4" />
+                                  )}
+                                </span>
                               ) : (
-                                <ArrowSmUpIcon className="ml-2 h-4" />
+                                ' '
                               )}
-                            </span>
-                          ) : (
-                            ' '
-                          )}
-                        </div>
-                      </th>
-                    );
-                  })}
-                </tr>
-              ))}
-            </thead>
-
-            {!loadingHover && (
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row, i) => {
-                  prepareRow(row);
-                  return (
-                    <tr
-                      key={i}
-                      {...row.getRowProps()}
-                      className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
-                    >
-                      {row.cells.map((cell, idx) => (
-                        <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
-                          {cell.render('Cell')}
-                        </td>
-                      ))}
+                            </div>
+                          </th>
+                        );
+                      })}
                     </tr>
-                  );
-                })}
-              </tbody>
-            )}
-          </table>
+                  ))}
+                </thead>
 
-          {loading && (
-            <Stack>
-              <div className="flex p-3 gap-2">
-                <Skeleton height="20px" width="5%" />
-                <Skeleton height="20px" width="95%" />
-              </div>
-              <div className="flex p-3 gap-2">
-                <Skeleton height="20px" width="5%" />
-                <Skeleton height="20px" width="95%" />
-              </div>
-              <div className="flex p-3 gap-2">
-                <Skeleton height="20px" width="5%" />
-                <Skeleton height="20px" width="95%" />
-              </div>
-              <div className="flex p-3 gap-2">
-                <Skeleton height="20px" width="5%" />
-                <Skeleton height="20px" width="95%" />
-              </div>
-            </Stack>
-          )}
+                {!loadingHover && (
+                  <tbody {...getTableBodyProps()}>
+                    {rows.map((row, i) => {
+                      prepareRow(row);
+                      return (
+                        <tr
+                          key={i}
+                          {...row.getRowProps()}
+                          className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
+                        >
+                          {row.cells.map((cell, idx) => (
+                            <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
+                              {cell.render('Cell')}
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                )}
+              </table>
+
+              {loading && (
+                <Stack>
+                  <div className="flex p-3 gap-2">
+                    <Skeleton height="20px" width="5%" />
+                    <Skeleton height="20px" width="95%" />
+                  </div>
+                  <div className="flex p-3 gap-2">
+                    <Skeleton height="20px" width="5%" />
+                    <Skeleton height="20px" width="95%" />
+                  </div>
+                  <div className="flex p-3 gap-2">
+                    <Skeleton height="20px" width="5%" />
+                    <Skeleton height="20px" width="95%" />
+                  </div>
+                  <div className="flex p-3 gap-2">
+                    <Skeleton height="20px" width="5%" />
+                    <Skeleton height="20px" width="95%" />
+                  </div>
+                </Stack>
+              )}
+            </div>
+          </div>
 
           <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
             <span className="text-sm font-normal text-gray-500 ">
@@ -553,7 +561,7 @@ function DataTable(props) {
                 </>
               )}
             </span>
-            <ul className="inline-flex items-center text-sm -space-x-px py-4 mr-8">
+            <ul className="inline-flex items-center text-sm -space-x-px py-4">
               <li>
                 <button
                   type="button"

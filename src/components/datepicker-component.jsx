@@ -15,12 +15,13 @@ function InputElement(props) {
         bg="white"
         size="sm"
         width="auto"
+        focusBorderColor="primarydeepo"
         type="text"
         isInvalid={errors[name]}
         className="w-full text-sm border-gray-400 py-5 rounded-full px-8"
       />
-      <InputRightElement className="rounded-r-full w-14 bg-gray-400 h-full">
-        <CalendarIcon className="w-5 h-5 mt-0.5" />
+      <InputRightElement className="rounded-r-full w-14 bg-[#184D47] h-full">
+        <CalendarIcon color="white" className="w-5 h-5 mt-0.5" />
       </InputRightElement>
     </InputGroup>
   );

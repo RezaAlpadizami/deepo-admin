@@ -12,7 +12,7 @@ function Header() {
   const location = useLocation();
 
   return (
-    <header className="flex p-5 border-b">
+    <header className="flex p-5 border-b bg-[#fff] drop-shadow-sm">
       <div className="mx-3 mt-0.5 cursor-pointer" onClick={() => store.toggleDrawer()}>
         <img src={logo} alt="logo" />
       </div>
@@ -23,7 +23,7 @@ function Header() {
             if (v.routes && !isShouldDisplay(v.routes)) return null;
             return (
               <li className="px-2" key={i}>
-                <Link to={v.route} className={findTree([v], location).length > 0 ? 'font-bold' : ''}>
+                <Link to={v.route} className={findTree([v], location).length > 0 ? 'font-bold text-[#184D47]' : ''}>
                   {v.displayName}
                 </Link>
               </li>

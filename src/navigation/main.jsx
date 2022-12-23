@@ -14,7 +14,7 @@ function MainNavigation() {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Header />
-      <div className="flex">
+      <div className="flex bg-[#F3F3F3]">
         <Sidebar />
         <div className="p-6 bg-container min-h-screen flex-auto transition-width ease-in-out delay-150 duration-300 w-5/6 ">
           <Breadcrumb />

@@ -6,6 +6,7 @@ import { Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import LoadingHover from '../../../components/loading-hover-component';
 import { CategoryApi } from '../../../services/api-master';
@@ -51,13 +52,16 @@ function Screen(props) {
     <div className="">
       <form onSubmit={handleSubmit(onAddCategory)}>
         <div className="flex mb-12">
-          <h1 className="font-bold text-3xl">{displayName}</h1>
+          <button type="button">
+            <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
+          </button>
+          <h1 className="font-bold pb-1 text-xl">{displayName}</h1>
           <div className="flex-1" />
           <Button
             onClick={() => navigate(-1)}
             px={8}
             size="sm"
-            className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
+            className="rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold"
           >
             Cancel
           </Button>
@@ -65,7 +69,7 @@ function Screen(props) {
             size="sm"
             px={8}
             type="submit"
-            className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+            className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
           >
             Save
           </Button>

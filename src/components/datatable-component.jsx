@@ -82,7 +82,7 @@ function DataTable(props) {
               return (
                 <Link
                   type="button"
-                  className="mr-4 text-blue-400"
+                  className="mr-4 text-blue-500"
                   to={`${to}/${row.original[identifierProperties]}/show`}
                 >
                   {value}
@@ -415,19 +415,31 @@ function DataTable(props) {
               <div className="col-md-3 offset-md-9 px-0">
                 <div className="flex justify-end mt-3 px-4 py-3">
                   <Button
+                    _hover={{
+                      shadow: 'md',
+                      transform: 'translateY(-5px)',
+                      transitionDuration: '0.2s',
+                      transitionTimingFunction: 'ease-in-out',
+                    }}
                     type="button"
                     size="sm"
                     px={8}
-                    className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
+                    className="rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold"
                     onClick={() => onReset()}
                   >
                     Reset
                   </Button>
                   <Button
+                    _hover={{
+                      shadow: 'md',
+                      transform: 'translateY(-5px)',
+                      transitionDuration: '0.2s',
+                      transitionTimingFunction: 'ease-in-out',
+                    }}
                     type="submit"
                     size="sm"
                     px={8}
-                    className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+                    className="ml-4 rounded-full bg-primarydeepo drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold"
                     onClick={handleSubmit(onSubmit)}
                   >
                     Filter
@@ -459,7 +471,7 @@ function DataTable(props) {
       )}
       {loadingHover && <LoadingHover text="Please Wait..." />}
       {filter.length !== 0 && (
-        <div className="overflow-x-hidden relative px-6 pb-11 bg-white rounded-b-3xl">
+        <div className="overflow-x-hidden relative px-6 pb-11 bg-white drop-shadow-md rounded-b-3xl">
           <div
             className={`${
               !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
@@ -610,8 +622,8 @@ function DataTable(props) {
                         disabled={pages === i + p}
                         onClick={() => changePage(i + p)}
                         className={`${
-                          pages === i + p ? 'bg-gray-700 text-white' : 'bg-white'
-                        } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-gray-700 hover:text-white disabled:text-white`}
+                          pages === i + p ? 'bg-secondarydeepo text-white' : 'bg-[#F3F3F3]'
+                        } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-[#184D47] hover:text-white disabled:text-white`}
                       >
                         {i + p}
                       </button>

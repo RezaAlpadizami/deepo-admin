@@ -28,7 +28,7 @@ function SidebarComponent() {
     <aside
       className={`${
         store.isDrawerOpen ? 'w-80' : '-translate-x-80 w-0'
-      } bg-[#232323] transition-all ease-in-out delay-150 duration-300 `}
+      } bg-primarydeepo transition-all ease-in-out delay-150 duration-300`}
     >
       <div className="relative h-full">
         <ul className="text-white">
@@ -39,7 +39,9 @@ function SidebarComponent() {
                 <Link to={d.route} key={idx}>
                   <li
                     className={`${
-                      findTree([d], location).length > 0 ? 'bg-[#606060] hover:font-bold' : 'hover:bg-[#878787]'
+                      findTree([d], location).length > 0
+                        ? 'bg-secondarydeepo hover:font-bold active:text-secondarydeepo]'
+                        : 'hover:bg-secondarydeepo'
                     } flex px-5 py-3 items-center`}
                   >
                     <d.icon className="w-5 h-5" />
@@ -54,7 +56,7 @@ function SidebarComponent() {
                   </li>
                   {d.routes?.length > 0 && (
                     <ul
-                      className={`transition-all ease-in-out duration-300 bg-slate-800 overflow-hidden ${
+                      className={`transition-all ease-in-out duration-300 bg-secondarydeepo overflow-hidden ${
                         findTree([d], location).length > 0 ? 'max-h-96' : 'max-h-0'
                       }`}
                     >
@@ -66,7 +68,7 @@ function SidebarComponent() {
                               <li
                                 className={`${
                                   findTree([r], location).length > 0 ? 'font-bold' : ''
-                                } pl-12 pr-5 py-3 hover:bg-slate-900`}
+                                } pl-12 pr-5 py-3 hover:bg-secondarydeepo`}
                               >
                                 {r.displayName}
                               </li>
@@ -79,10 +81,14 @@ function SidebarComponent() {
               )
           )}
         </ul>
-        <button className="absolute inset-x-0 bottom-10 h-15 py-3 hover:bg-[#878787]" type="button" onClick={() => {}}>
+        <button
+          className="absolute inset-x-0 bottom-10 h-15 py-3 hover:bg-hoversidebar"
+          type="button"
+          onClick={() => {}}
+        >
           <div className="flex pl-6">
-            <img src={ArrowUpTray} alt="arrow up" className="h-7 rotate-90" />
-            <h3 className="pt-0 pl-6 font-bold text-md text-[#fff]">Log out</h3>
+            <img src={ArrowUpTray} alt="arrow up" className="h-7 rotate-90 text-black" />
+            <h3 className="pt-0 pl-6 transition-all ease-in-out duration-300 font-bold text-md text-[#fff]">Log out</h3>
           </div>
         </button>
       </div>

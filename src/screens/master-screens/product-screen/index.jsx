@@ -31,7 +31,7 @@ function Screen(props) {
             col: 2,
           },
           {
-            name: 'name',
+            name: 'product_name',
             label: 'Name',
             col: 2,
           },

@@ -7,8 +7,9 @@ import ShowHide from './show-hide-component';
 import DeletedList from './delete-list-component';
 import { getNestedObject } from '../utils/helper';
 
-const button =
-  'bg-white outline outline-offset-0 outline-1 outline-black text-sm rounded-xl px-3 hover:bg-black hover:text-white';
+const button = `hover:bg-secondarydeepo hover:outline-none text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-sm rounded-xl px-4 text-black hover:text-white`;
+const disableButton =
+  'text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-sm rounded-xl px-4 text-black';
 
 function ActionToolbar(props) {
   const {
@@ -76,12 +77,12 @@ function ActionToolbar(props) {
   };
 
   return (
-    <div className="flex gap-4 bg-white py-3 px-6 rounded-t-3xl">
+    <div className="flex gap-4 bg-white py-6 px-6 rounded-t-3xl">
       {onAdd && (
         <Button
           type="button"
           onClick={() => navigate(`${navTo?.path}/add`)}
-          className="bg-[#232323] outline outline-offset-0 outline-1 outline-black text-sm rounded-xl px-4 text-white hover:bg-black"
+          className="hover:bg-secondarydeepo hover:outline-none text-black outline outline-offset-0 outline-[#aaa] bg-[#fff] text-sm rounded-xl px-4 text-black hover:text-white"
         >
           + Add {displayName}
         </Button>
@@ -93,7 +94,7 @@ function ActionToolbar(props) {
       )}
       {onEdit && (
         <Button
-          className={button}
+          className={`${selectedData.length !== 1 ? disableButton : button}`}
           onClick={() => navigate(`${navTo?.path}/${selectedData?.find(i => i).original.id}/edit`)}
           disabled={selectedData.length !== 1}
         >
@@ -101,13 +102,21 @@ function ActionToolbar(props) {
         </Button>
       )}
       {onDelete && (
-        <Button className={button} onClick={() => setOnOpen(!onOpen)} disabled={selectedData.length === 0}>
+        <Button
+          className={`${selectedData.length === 0 ? disableButton : button}`}
+          onClick={() => setOnOpen(!onOpen)}
+          disabled={selectedData.length === 0}
+        >
           Delete
         </Button>
       )}
 
       {copyClipboard && (
-        <Button className={button} onClick={onCopy} disabled={selectedData.length === 0}>
+        <Button
+          className={`${selectedData.length === 0 ? disableButton : button}`}
+          onClick={onCopy}
+          disabled={selectedData.length === 0}
+        >
           Copy to Clipboard
         </Button>
       )}
@@ -143,7 +152,7 @@ function ActionToolbar(props) {
                   Cancel
                 </Button>
                 <Button
-                  className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+                  className="ml-4 rounded-full outline outline-offset-0 outline-[#A6A9B6] bg-[#232323] text-[#fff] font-bold"
                   px={8}
                   size="sm"
                   onClick={() => {

@@ -31,12 +31,12 @@ function Screen(props) {
   };
 
   return (
-    <div className="">
-      <div className="flex mb-12">
+    <div className="mt-6">
+      <div className="flex mb-6">
         <button type="button">
-          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+          <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-3xl">{displayName}</h1>
+        <h1 className="font-bold text-xl">{displayName}</h1>
         <div className="flex-1" />
         <DeleteButton api={WarehouseApi} id={id} redirectTo="master/warehouse" />
         <Button
@@ -46,23 +46,55 @@ function Screen(props) {
             navigate(`/master/warehouse/${id}/edit`);
           }}
           size="sm"
-          className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
         >
           Edit
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-[80%] gap-4 gap-y-12 ml-6 mb-4 grid-cols-2 mt-4">
-        <InputDetail value={dataWarehouseById.code} label="Code" />
-        <InputDetail value={dataWarehouseById.address} label="Address" />
-        <InputDetail value={dataWarehouseById.name} label="Name" />
-        <InputDetail value={dataWarehouseById.phone} label="Phone Number" />
-        <InputDetail value={dataWarehouseById.capacity} label="Capacity" />
+      <div className="grid items-start justify-items-center w-[50%] gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
+        <InputDetail
+          value={dataWarehouseById.code}
+          label="Code"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
+        <InputDetail
+          value={dataWarehouseById.address}
+          label="Address"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
+        <InputDetail
+          value={dataWarehouseById.name}
+          label="Name"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
+        <InputDetail
+          value={dataWarehouseById.phone}
+          label="Phone Number"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
+        <InputDetail
+          value={dataWarehouseById.capacity}
+          label="Capacity"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
         <InputDetail
           value={Moment(dataWarehouseById.last_stock_opname).format('DD MMM, YYYY')}
           label="Last Stock Opname"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
         />
-        <InputDetail value={dataWarehouseById.location} label="Location" />
+        <InputDetail
+          value={dataWarehouseById.location}
+          label="Location"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+        />
       </div>
     </div>
   );

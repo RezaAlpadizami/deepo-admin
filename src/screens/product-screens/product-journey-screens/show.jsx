@@ -6,7 +6,7 @@ import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import ProgressStepBar from '../../../components/stepper';
 import LoadingHover from '../../../components/loading-hover-component';
-import { ProductJourney } from '../../../services/api-master';
+import { ProductJourney, ProductApi } from '../../../services/api-master';
 import InputDetail from '../../../components/input-detail-component';
 
 function Screen(props) {
@@ -16,6 +16,7 @@ function Screen(props) {
 
   const [loading, setLoading] = useState(false);
   const [dataJourneyById, setDataJourneyById] = useState([]);
+  const [dataDetailProduct, setDataDetailProduct] = useState([]);
 
   useEffect(() => {
     getDetailJourney();
@@ -28,63 +29,77 @@ function Screen(props) {
         setLoading(false);
         setDataJourneyById(res);
       })
-      .catch(error => {
+      .catch(() => {
         setLoading(false);
-        Swal.fire({ text: error?.message, icon: 'error' });
       });
   };
 
+  useEffect(() => {
+    ProductApi.find(id)
+      .then(res => {
+        setDataDetailProduct(res);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message, icon: 'error' });
+      });
+  }, []);
+
   return (
-    <div className="">
-      <div className="flex mb-12">
+    <div className="mt-6">
+      <div className="flex mb-6">
         <button type="button">
-          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+          <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-3xl">{displayName}</h1>
+        <h1 className="font-bold pb-1 text-xl">{displayName}</h1>
         <div className="flex-1" />
       </div>
 
       <div>
-        <h1 className="font-bold text-[20px]">Detail Product</h1>
-        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full">
+        <h1 className="font-bold text-md">Detail Product</h1>
+        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full drop-shadow-md">
           <div>
             <InputDetail
-              value={dataJourneyById.product_name}
+              value={dataDetailProduct.product_name}
               label="Name"
-              customStyleLabel="text-gray-400 text-xl"
-              customStyleSpan="font-bold text-xl"
+              customStyleLabel="text-gray-400 text-md"
+              customStyleSpan="font-bold text-md"
             />
             <InputDetail
-              value={dataJourneyById.sku}
+              value={dataDetailProduct.sku}
               label="SKU"
-              customStyleLabel="text-gray-400 text-xl"
-              customStyleSpan="font-bold text-xl"
+              customStyleLabel="text-gray-400 text-md"
+              customStyleSpan="font-bold text-md"
             />
           </div>
-          <div>
+          <div className="w-[30%]">
             <InputDetail
-              value={dataJourneyById.product_category}
+              value={dataDetailProduct.category_id}
               label="Category"
-              customStyleLabel="text-gray-400 text-xl"
-              customStyleSpan="font-bold text-xl"
+              customStyleLabel="text-gray-400 text-md"
+              customStyleSpan="font-bold text-md"
             />
             <InputDetail
-              value={dataJourneyById.id}
+              value={dataDetailProduct.product_desc}
               label="Desc"
-              customStyleLabel="text-gray-400 text-xl"
-              customStyleSpan="font-bold text-xl"
+              customStyleLabel="text-gray-400 text-md"
+              customStyleSpan="font-bold text-md"
             />
           </div>
         </div>
       </div>
       <div className="mt-8">
-        <h1 className="font-bold text-[20px]">Product Journey</h1>
-        <div className="flex gap-8 p-10 mt-6 bg-white rounded-[20px] w-full">
-          <div>
-            <ProgressStepBar
-              dataApi={dataJourneyById}
-              customStyleRequestNumber="absolute -right-28 top-2 text-gray-400"
-            />
+        <h1 className="font-bold text-md">Product Journey</h1>
+        <div
+          className={`flex gap-8 mt-6 bg-white rounded-[20px] w-full drop-shadow-md ${
+            dataJourneyById.length === 0 ? 'justify-center py-[9%]' : 'p-10'
+          }`}
+        >
+          <div className="items-center text-center flex justify-center">
+            {dataJourneyById.length === 0 ? (
+              <p className="text-xl font-bold">Product Journey is Empty</p>
+            ) : (
+              <ProgressStepBar dataApi={dataJourneyById} customStyleRequestNumber="absolute -right-28 top-2" />
+            )}
           </div>
         </div>
       </div>

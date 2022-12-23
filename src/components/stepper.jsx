@@ -10,10 +10,10 @@ export default function ProgressStepBar(props) {
   const { dataApi, customStyleRequestNumber } = props;
 
   const { activeStep, setStep } = useSteps({
-    initialStep: 0,
+    initialStep: [dataApi?.journey].length,
   });
   return (
-    <Steps orientation="vertical" activeStep={activeStep} col onClickStep={step => setStep(step)} fontSize="24px">
+    <Steps orientation="vertical" activeStep={activeStep} onClickStep={step => setStep(step)} fontSize="24px">
       {dataApi?.journey?.map(
         (
           {

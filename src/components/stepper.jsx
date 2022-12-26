@@ -8,9 +8,8 @@ import '../assets/styles/custom.css';
 
 export default function ProgressStepBar(props) {
   const { dataApi, customStyleRequestNumber } = props;
-
   const { activeStep, setStep } = useSteps({
-    initialStep: [dataApi?.journey].length,
+    initialStep: dataApi.journey.length - 1,
   });
   return (
     <Steps orientation="vertical" activeStep={activeStep} onClickStep={step => setStep(step)} fontSize="24px">

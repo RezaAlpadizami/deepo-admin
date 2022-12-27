@@ -521,7 +521,7 @@ function DataTable(props) {
                   ))}
                 </thead>
 
-                {!loadingHover && (
+                {!loading && (
                   <tbody {...getTableBodyProps()}>
                     {rows.map((row, i) => {
                       prepareRow(row);

@@ -73,7 +73,7 @@ function Screen(props) {
           </div>
           <div className="w-[30%]">
             <InputDetail
-              value={dataDetailProduct.category_id}
+              value={dataDetailProduct?.category?.name}
               label="Category"
               customStyleLabel="text-gray-400 text-md"
               customStyleSpan="font-bold text-md"

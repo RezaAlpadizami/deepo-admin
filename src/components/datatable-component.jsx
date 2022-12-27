@@ -478,7 +478,10 @@ function DataTable(props) {
             } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
           >
             <div className="scrollbar-x-auto ">
-              <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
+              <table
+                {...getTableProps()}
+                className="table-auto w-full text-sm text-left border border-gray-200 text-gray-500 border-t"
+              >
                 <thead className="text-xs text-black uppercase bg-thead">
                   {headerGroups.map((headerGroup, idxgroup) => (
                     <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
@@ -526,7 +529,9 @@ function DataTable(props) {
                         <tr
                           key={i}
                           {...row.getRowProps()}
-                          className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
+                          className={`${
+                            i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                          } border border-gray-200 hover:bg-slate-100`}
                         >
                           {row.cells.map((cell, idx) => (
                             <td key={idx} {...cell.getCellProps()} className="py-2 px-6">

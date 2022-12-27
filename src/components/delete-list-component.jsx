@@ -9,11 +9,11 @@ function DeletedList(props) {
 
   return (
     <table className="table-auto w-full">
-      <thead className=" bg-thead dark:bg-gray-700 dark:text-gray-400">
+      <thead className=" bg-[#d3e8ea] dark:bg-gray-700 dark:text-gray-400">
         <tr>
           {data.map((col, idx) => {
             return (
-              <th key={idx} className="uppercase text-base px-5">
+              <th key={idx} className="uppercase text-sm px-5">
                 {col.Header}
               </th>
             );

@@ -17,8 +17,8 @@ function Stepper(props) {
             <>
               {counter <= 5 && (
                 <div className=" flex">
-                  <div className="h-[52px] w-[60px]">
-                    <div className="rounded-full bg-white h-full border border-[3px] border-[#3F73EB] grid place-content-center">
+                  <div className="h-[52px] w-[64px]">
+                    <div className="rounded-full bg-white h-full border border-[2px] border-[#3F73EB] grid place-content-center">
                       {i.activity_name.toLowerCase() === 'inbound' ? (
                         <ArchiveIcon className="h-8 stroke-[#3F73EB]" />
                       ) : i.activity_name.toLowerCase() === 'relocate - in' ? (
@@ -36,10 +36,10 @@ function Stepper(props) {
                     </div>
                     <div className="flex">
                       <div>
-                        <p className="text-[#000] text-sm pl-2">{i.request_number}</p>
+                        <p className="text-[#000] text-sm pl-2">{i.request_number || '-'}</p>
                       </div>
                       <div className="flex-1" />
-                      <div className="text-sm">{Moment(i.date).format('DD MMM YYYY')}</div>
+                      <div className="text-sm">{i.date ? Moment(i.date).format('DD MMM YYYY') : null}</div>
                     </div>
                   </div>
                 </div>

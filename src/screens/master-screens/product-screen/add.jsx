@@ -77,7 +77,7 @@ function Screen(props) {
               onClick={() => navigate(-1)}
               px={8}
               size="sm"
-              className="rounded-full bg-[#aaa] outline outline-offset-0 outline-[#1F2022] text-[#fff] font-bold"
+              className="rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold"
             >
               Cancel
             </Button>
@@ -85,7 +85,7 @@ function Screen(props) {
               size="sm"
               px={8}
               type="submit"
-              className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+              className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
             >
               Save
             </Button>

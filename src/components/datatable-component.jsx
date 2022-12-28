@@ -405,7 +405,13 @@ function DataTable(props) {
                     } else {
                       return (
                         <div className={item.col ? `col-span-${item.col}` : ''} key={`component${idx}`}>
-                          <Input name={item.name} label={item.label} register={register} control={control} />
+                          <Input
+                            name={item.name}
+                            label={item.label}
+                            maxLength={item.max}
+                            register={register}
+                            control={control}
+                          />
                         </div>
                       );
                     }

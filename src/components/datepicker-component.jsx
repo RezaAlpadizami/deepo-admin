@@ -60,7 +60,7 @@ function SelectComponent(props) {
         </div>
       </div>
       {errors[name] && (
-        <span className="text-red-700 text-xs ml-1">{errors[name]?.message.replace(name, label.toLowerCase())}</span>
+        <span className="text-red-700 ml-1">{errors[name]?.message.replace(name, label.toLowerCase())}</span>
       )}
     </div>
   );

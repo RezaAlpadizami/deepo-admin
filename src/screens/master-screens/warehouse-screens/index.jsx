@@ -12,6 +12,7 @@ function Screen(props) {
           {
             name: 'code',
             label: 'Code',
+            max: '7',
             col: 2,
           },
           {
@@ -25,8 +26,14 @@ function Screen(props) {
             col: 2,
           },
           {
-            name: 'last_stock_opname',
-            label: 'Last Stock Opname',
+            name: 'last_stock_opname_from',
+            label: 'Last Stock Opname From',
+            type: 'date_picker',
+            col: 2,
+          },
+          {
+            name: 'last_stock_opname_to',
+            label: 'Last Stock Opname To',
             type: 'date_picker',
             col: 2,
           },

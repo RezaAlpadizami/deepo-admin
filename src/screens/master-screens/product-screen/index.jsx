@@ -28,6 +28,7 @@ function Screen(props) {
           {
             name: 'sku',
             label: 'SKU',
+            max: '15',
             col: 2,
           },
           {

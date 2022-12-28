@@ -13,6 +13,7 @@ function Screen(props) {
           {
             name: 'code',
             label: 'Code',
+            max: '7',
             placeholder: 'Input Code',
             col: 2,
           },

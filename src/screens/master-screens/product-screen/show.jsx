@@ -28,12 +28,12 @@ function ShowScreen(props) {
   }, []);
 
   return (
-    <div className="">
-      <div className="flex mb-12">
+    <div className="mt-6">
+      <div className="flex mb-6">
         <button type="button">
-          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+          <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-3xl">{displayName}</h1>
+        <h1 className="font-bold text-xl">{displayName}</h1>
         <div className="flex-1" />
         <div>
           <DeleteButton api={ProductApi} id={id} redirectUrl="master/product" />

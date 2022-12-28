@@ -13,7 +13,7 @@ function DeletedList(props) {
         <tr>
           {data.map((col, idx) => {
             return (
-              <th key={idx} className="uppercase text-sm px-5">
+              <th key={idx} className="uppercase text-sm px-5 py-1.5">
                 {col.Header}
               </th>
             );

@@ -17,9 +17,9 @@ import ShowHide from './show-hide-component';
 import DeletedList from './delete-list-component';
 import { getNestedObject } from '../utils/helper';
 
-const button = `hover:bg-secondarydeepo hover:outline-none text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-sm rounded-xl px-4 text-black hover:text-white`;
+const button = `hover:bg-secondarydeepo hover:outline-none text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-xs rounded-xl px-3 hover:text-white ml-3`;
 const disableButton =
-  'text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-sm rounded-xl px-4 text-black';
+  'text-black outline outline-offset-0 outline-[#A6A9B6] bg-[#fff] text-sm rounded-xl px-2 text-black ml-3';
 
 function ActionToolbar(props) {
   const {
@@ -87,12 +87,13 @@ function ActionToolbar(props) {
   };
 
   return (
-    <div className="flex gap-4 bg-white py-6 px-6 rounded-t-3xl">
+    <div className="flex bg-white py-6 px-6 rounded-t-3xl">
       {onAdd && (
         <Button
           type="button"
+          size="sm"
           onClick={() => navigate(`${navTo?.path}/add`)}
-          className="hover:bg-secondarydeepo hover:outline-none outline outline-offset-0 outline-[#aaa] bg-[#fff] text-sm rounded-xl px-4 text-black hover:text-white"
+          className="hover:bg-secondarydeepo hover:outline-none outline outline-offset-0 outline-[#aaa] bg-[#fff] text-xs rounded-xl px-2 text-black hover:text-white"
         >
           <div className="hover:text-red-200 h-4 w-4 mr-2">
             <img src={addIcon} alt="add icon" className="mr-2 drop-shadow-md" />
@@ -101,7 +102,7 @@ function ActionToolbar(props) {
         </Button>
       )}
       {onDownload && (
-        <Button className={button} onClick={onDownload}>
+        <Button size="sm" className={button} onClick={onDownload}>
           <div className="hover:text-red-200 h-3.5 w-3.5 mr-2">
             <img src={saveExcelIcon} alt="add icon" className="mr-2 drop-shadow-md" />
           </div>
@@ -110,6 +111,7 @@ function ActionToolbar(props) {
       )}
       {onEdit && (
         <Button
+          size="sm"
           className={`${selectedData.length !== 1 ? disableButton : button}`}
           onClick={() => navigate(`${navTo?.path}/${selectedData?.find(i => i).original.id}/edit`)}
           disabled={selectedData.length !== 1}
@@ -122,6 +124,7 @@ function ActionToolbar(props) {
       )}
       {onDelete && (
         <Button
+          size="sm"
           className={`${selectedData.length === 0 ? disableButton : button}`}
           onClick={() => setOnOpen(!onOpen)}
           disabled={selectedData.length === 0}
@@ -135,6 +138,7 @@ function ActionToolbar(props) {
 
       {copyClipboard && (
         <Button
+          size="sm"
           className={`${selectedData.length === 0 ? disableButton : button}`}
           onClick={onCopy}
           disabled={selectedData.length === 0}
@@ -148,7 +152,7 @@ function ActionToolbar(props) {
       )}
       {onShowHideColumn && (
         <>
-          <Button className={button} onClick={() => setShowHide(!showHide)}>
+          <Button size="sm" className={button} onClick={() => setShowHide(!showHide)}>
             <div className="hover:text-red-200 h-5 w-5 mr-2">
               <img src={showHideTableIcon} alt="add icon" className="mr-2 drop-shadow-md" />
             </div>
@@ -197,7 +201,7 @@ function ActionToolbar(props) {
                   type="submit"
                   size="sm"
                   px={8}
-                  className="ml-4 rounded-full bg-[#eb6058] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold"
+                  className="ml-4 rounded-full bg-[#eb6058] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] hover:bg-[#b74b44] font-bold"
                   onClick={() => {
                     onDelete();
                     setOnOpen(!onOpen);

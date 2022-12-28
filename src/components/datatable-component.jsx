@@ -7,7 +7,7 @@ import { saveAs } from 'file-saver';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
-import { Button, Skeleton, Stack } from '@chakra-ui/react';
+import { Button, Skeleton, Stack, Fade } from '@chakra-ui/react';
 import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
 import { ChevronLeftIcon, ChevronRightIcon, ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/solid';
 
@@ -350,7 +350,7 @@ function DataTable(props) {
   };
 
   return (
-    <>
+    <Fade in={filters.length > 0}>
       {download && (
         <div style={{ display: 'none' }}>
           <TableComponent
@@ -477,7 +477,7 @@ function DataTable(props) {
               !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
             } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
           >
-            <div className="scrollbar-x-auto ">
+            <div className="scrollbar-x-auto">
               <table
                 {...getTableProps()}
                 className="table-auto w-full text-sm text-left border border-gray-200 text-gray-500 border-t"
@@ -490,7 +490,7 @@ function DataTable(props) {
                           <th
                             key={columnidx}
                             {...column.getHeaderProps(column.getSortByToggleProps())}
-                            className="py-3 px-6"
+                            className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
                             width={column.width === 'auto' ? autoWidth : ''}
                           >
                             <div
@@ -671,7 +671,7 @@ function DataTable(props) {
           </nav>
         </div>
       )}
-    </>
+    </Fade>
   );
 }
 

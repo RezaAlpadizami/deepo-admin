@@ -18,7 +18,7 @@ function Stepper(props) {
               {counter <= 5 && (
                 <div className=" flex">
                   <div className="h-[52px] w-[64px]">
-                    <div className="rounded-full bg-white h-full border border-[2px] border-[#3F73EB] grid place-content-center">
+                    <div className="rounded-full bg-white h-full border border-2 border-[#3F73EB] grid place-content-center">
                       {i.activity_name.toLowerCase() === 'inbound' ? (
                         <ArchiveIcon className="h-8 stroke-[#3F73EB]" />
                       ) : i.activity_name.toLowerCase() === 'relocate - in' ? (

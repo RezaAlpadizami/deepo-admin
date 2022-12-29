@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
 import { Button, Skeleton, Stack, Fade } from '@chakra-ui/react';
 import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
-import { ChevronLeftIcon, ChevronRightIcon, ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/solid';
-
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/outline';
 import Input from './input-component';
 import Select from './select-component';
 import Checkbox from './checkbox-component';
@@ -49,17 +49,18 @@ function DataTable(props) {
   const [autoWidth, setAutoWidth] = useState();
   const [loadingHover, setLoadingHover] = useState(false);
   const [loading, setLoading] = useState(false);
-  const defaultSort = {
+  const [isSort, setIsSort] = useState(false);
+  const [isDesc, setIsDesc] = useState(false);
+  const [defaultSort, setDefaulSort] = useState({
     sort_by: 'id',
     sort_order: 'desc',
-  };
-
+  });
   const [filter, setFilter] = useState([]);
   const [filterData, setFilterData] = useState({
     limit: 10,
     offset: 0,
-    ...defaultSort,
   });
+
   useEffect(() => {
     setLastPage(Math.ceil(totalData / limit));
   }, [totalData, limit]);
@@ -132,12 +133,12 @@ function DataTable(props) {
 
   useEffect(() => {
     getData();
-  }, [filterData]);
+  }, [filterData, defaultSort]);
 
   const getData = () => {
     setLoading(true);
     api
-      .get({ ...filterData })
+      .get({ ...filterData, ...defaultSort })
       .then(res => {
         setLoading(false);
         setDatas(res.data);
@@ -297,10 +298,13 @@ function DataTable(props) {
 
   const onReset = () => {
     reset();
+    setIsSort(false);
+    setIsDesc(false);
     setFilterData({
       limit: 10,
       offset: 0,
-      ...defaultSort,
+      sort_by: 'id',
+      sort_order: 'desc',
     });
   };
   const onSubmit = data => {
@@ -340,13 +344,21 @@ function DataTable(props) {
     });
   };
 
-  const onSortChange = by => {
-    setFilterData(prev => {
-      return {
-        ...prev,
-        sort_order: by.sort_order,
-      };
-    });
+  const onSortChange = () => {
+    if (isSort) {
+      setIsDesc(!isDesc);
+
+      setDefaulSort({
+        sort_by: 'id',
+        sort_order: isDesc ? 'desc' : 'asc',
+      });
+    }
+  };
+  const onChangeHeader = () => {
+    if (isSort && isDesc) {
+      return isDesc ? 'desc' : 'asc';
+    }
+    return '';
   };
 
   return (
@@ -495,29 +507,28 @@ function DataTable(props) {
                         return (
                           <th
                             key={columnidx}
-                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                            {...column.getHeaderProps()}
                             className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
                             width={column.width === 'auto' ? autoWidth : ''}
                           >
                             <div
                               className="flex"
                               onClick={() => {
-                                onSortChange({
-                                  sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
-                                });
+                                if (column.id !== 'selection') {
+                                  setIsSort(true);
+                                  onSortChange();
+                                }
                               }}
                             >
                               {column.render('Header')}
-                              {column.isSorted ? (
-                                <span className="ml-2">
-                                  {column.isSortedDesc === true ? (
-                                    <ArrowSmDownIcon className="ml-2 h-4" />
-                                  ) : (
-                                    <ArrowSmUpIcon className="ml-2 h-4" />
-                                  )}
-                                </span>
+                              {isSort && column.id !== 'selection' ? (
+                                onChangeHeader() === 'desc' && isDesc ? (
+                                  <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                ) : (
+                                  <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                )
                               ) : (
-                                ' '
+                                ''
                               )}
                             </div>
                           </th>

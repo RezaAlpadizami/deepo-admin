@@ -520,16 +520,18 @@ function DataTable(props) {
                                 }
                               }}
                             >
-                              {column.render('Header')}
-                              {isSort && column.id !== 'selection' ? (
-                                onChangeHeader() === 'desc' && isDesc ? (
-                                  <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                              <div>{column.render('Header')}</div>
+                              <div className="my-auto">
+                                {isSort && column.id !== 'selection' ? (
+                                  onChangeHeader() === 'desc' && isDesc ? (
+                                    <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                  ) : (
+                                    <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                  )
                                 ) : (
-                                  <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
-                                )
-                              ) : (
-                                ''
-                              )}
+                                  ''
+                                )}
+                              </div>
                             </div>
                           </th>
                         );

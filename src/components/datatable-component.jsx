@@ -51,6 +51,7 @@ function DataTable(props) {
   const [loading, setLoading] = useState(false);
   const [isSort, setIsSort] = useState(false);
   const [isDesc, setIsDesc] = useState(false);
+
   const [defaultSort, setDefaulSort] = useState({
     sort_by: 'id',
     sort_order: 'desc',
@@ -344,12 +345,12 @@ function DataTable(props) {
     });
   };
 
-  const onSortChange = () => {
+  const onSortChange = column => {
     if (isSort) {
       setIsDesc(!isDesc);
 
       setDefaulSort({
-        sort_by: 'id',
+        sort_by: column.id ? column.id.toLowerCase() : 'id',
         sort_order: isDesc ? 'desc' : 'asc',
       });
     }
@@ -503,39 +504,37 @@ function DataTable(props) {
                 <thead className="text-xs text-black uppercase bg-thead">
                   {headerGroups.map((headerGroup, idxgroup) => (
                     <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column, columnidx) => {
-                        return (
-                          <th
-                            key={columnidx}
-                            {...column.getHeaderProps()}
-                            className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
-                            width={column.width === 'auto' ? autoWidth : ''}
+                      {headerGroup.headers.map((column, columnidx) => (
+                        <th
+                          key={columnidx}
+                          {...column.getHeaderProps()}
+                          className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
+                          width={column.width === 'auto' ? autoWidth : ''}
+                        >
+                          <div
+                            className="flex"
+                            onClick={() => {
+                              if (column.id !== 'selection') {
+                                setIsSort(true);
+                                onSortChange(column);
+                              }
+                            }}
                           >
-                            <div
-                              className="flex"
-                              onClick={() => {
-                                if (column.id !== 'selection') {
-                                  setIsSort(true);
-                                  onSortChange();
-                                }
-                              }}
-                            >
-                              <div>{column.render('Header')}</div>
-                              <div className="my-auto">
-                                {isSort && column.id !== 'selection' ? (
-                                  onChangeHeader() === 'desc' && isDesc ? (
-                                    <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
-                                  ) : (
-                                    <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
-                                  )
+                            <div>{column.render('Header')}</div>
+                            <div className="my-auto">
+                              {isSort && column.id !== 'selection' ? (
+                                onChangeHeader() === 'desc' && isDesc ? (
+                                  <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
                                 ) : (
-                                  ''
-                                )}
-                              </div>
+                                  <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                )
+                              ) : (
+                                ''
+                              )}
                             </div>
-                          </th>
-                        );
-                      })}
+                          </div>
+                        </th>
+                      ))}
                     </tr>
                   ))}
                 </thead>

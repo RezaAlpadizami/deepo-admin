@@ -1,71 +1,60 @@
-import React from 'react';
-import { ProductInfoApi } from '../../../services/api-master';
+import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
+import { ProductApi, CategoryApi } from '../../../services/api-master';
 import Datatable from '../../../components/datatable-component';
 
 function Screen(props) {
   const { route, displayName } = props;
 
+  const [category, setCategory] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    CategoryApi.get()
+      .then(res => {
+        setCategory(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  };
+
   return (
     <div className="">
       <Datatable
-        identifierProperties="product_id"
         filters={[
           {
-            name: 'product_id',
-            label: 'Item Code',
-            col: 2,
-          },
-          {
-            name: 'product_sku',
+            name: 'sku',
             label: 'SKU',
+            max: 15,
             col: 2,
           },
           {
             name: 'product_name',
-            label: 'Name',
+            label: 'Product Name',
             col: 2,
           },
           {
-            name: 'product_category',
+            name: 'category_id',
             label: 'Category',
-            col: 1,
-          },
-          {
-            name: 'qty',
-            label: 'Qty',
-            col: 1,
-          },
-          {
-            name: 'warehouse',
-            label: 'Warehouse',
-            col: 1,
-          },
-          {
-            name: 'rack',
-            label: 'Rack',
-            col: 1,
-          },
-          {
-            name: 'bay',
-            label: 'Bay',
-            col: 1,
-          },
-          {
-            name: 'level',
-            label: 'level',
-            col: 1,
+            type: 'select',
+            data: category?.map(i => {
+              return {
+                value: i.id,
+                label: `${i.code} - ${i.name}`,
+              };
+            }),
+            col: 2,
           },
         ]}
         columns={[
-          { header: 'SKU', value: 'product_sku', copy: true, type: 'link' },
+          { header: 'SKU', value: 'sku', copy: true, type: 'link' },
           { header: 'Name', value: 'product_name', copy: true },
-          { header: 'Category', value: 'category_name', copy: true },
+          { header: 'Category', value: 'category.name', copy: true },
           { header: 'Description', value: 'product_desc', copy: true },
-          { header: 'Qty', value: 'qty', copy: true },
-          { header: 'warehouse', value: 'warehouse_name' },
-          { header: 'rack', value: 'rack' },
-          { header: 'bay', value: 'bay' },
-          { header: 'level', value: 'level' },
         ]}
         toolbar={{
           action: {
@@ -74,7 +63,7 @@ function Screen(props) {
             'save-to-excel': true,
           },
         }}
-        api={ProductInfoApi}
+        api={ProductApi}
         to={route}
         displayName={displayName}
         checkbox

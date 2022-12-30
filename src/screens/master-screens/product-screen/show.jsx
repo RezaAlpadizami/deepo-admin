@@ -28,12 +28,12 @@ function ShowScreen(props) {
   }, []);
 
   return (
-    <div className="">
-      <div className="flex mb-12">
+    <div className="mt-6">
+      <div className="flex mb-6">
         <button type="button">
-          <ChevronLeftIcon className="pointer-events-auto h-10 stroke-2" onClick={() => navigate(-1)} />
+          <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-3xl">{displayName}</h1>
+        <h1 className="font-bold text-xl">{displayName}</h1>
         <div className="flex-1" />
         <div>
           <DeleteButton api={ProductApi} id={id} redirectUrl="master/product" />
@@ -42,17 +42,17 @@ function ShowScreen(props) {
               navigate(`/master/product/${id}/edit`);
               store.setIsLoadEdit(true);
             }}
-            px={8}
-            size="sm"
+            px={12}
             type="submit"
-            className="ml-4 rounded-full outline outline-offset-0 outline-[#232323] bg-[#232323] text-[#fff] font-bold"
+            size="sm"
+            className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
           >
             Edit
           </Button>
         </div>
       </div>
 
-      <div className="grid items-start justify-items-center gap-4 gap-y-12 mb-4 pl-12 grid-cols-2 mt-4">
+      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
         <InputDetail label="SKU" value={capitalize(data?.sku) || '-'} />
         <InputDetail label="Name" value={capitalize(data?.product_name) || '-'} />
         <InputDetail label="Category" value={data?.category_id || '-'} />

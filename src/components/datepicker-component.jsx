@@ -20,7 +20,7 @@ function InputElement(props) {
         isInvalid={errors[name]}
         className="w-full text-sm border-gray-400 py-5 rounded-full px-8"
       />
-      <InputRightElement className="rounded-r-full w-14 bg-[#184D47] h-full">
+      <InputRightElement className="rounded-r-full w-14 bg-primarydeepo h-full">
         <CalendarIcon color="white" className="w-5 h-5 mt-0.5" />
       </InputRightElement>
     </InputGroup>
@@ -60,7 +60,7 @@ function SelectComponent(props) {
         </div>
       </div>
       {errors[name] && (
-        <span className="text-red-700 text-xs ml-1">{errors[name]?.message.replace(name, label.toLowerCase())}</span>
+        <span className="text-red-700 ml-1">{errors[name]?.message.replace(name, label.toLowerCase())}</span>
       )}
     </div>
   );

@@ -14,7 +14,7 @@ export default function BreadcrumbComponent() {
   }, [location.pathname]);
 
   return (
-    <Breadcrumb color="#8e97a7" marginBottom={4} separator=">">
+    <Breadcrumb bg="#e4f0f0" color="#8e97a7" marginBottom={4} separator=">" className="rounded rounded-full px-4">
       {menuTree.map((d, idx) => (
         <BreadcrumbItem className="last:text-black" key={idx}>
           <BreadcrumbLink href={d.route}>{d.displayName}</BreadcrumbLink>

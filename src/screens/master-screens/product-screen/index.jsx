@@ -28,10 +28,11 @@ function Screen(props) {
           {
             name: 'sku',
             label: 'SKU',
+            max: '15',
             col: 2,
           },
           {
-            name: 'name',
+            name: 'product_name',
             label: 'Name',
             col: 2,
           },

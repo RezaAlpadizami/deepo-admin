@@ -7,10 +7,10 @@ import { saveAs } from 'file-saver';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
-import { Button, Skeleton, Stack } from '@chakra-ui/react';
+import { Button, Skeleton, Stack, Fade } from '@chakra-ui/react';
 import { useTable, useRowSelect, usePagination, useSortBy } from 'react-table';
-import { ChevronLeftIcon, ChevronRightIcon, ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/solid';
-
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { ArrowSmUpIcon, ArrowSmDownIcon } from '@heroicons/react/outline';
 import Input from './input-component';
 import Select from './select-component';
 import Checkbox from './checkbox-component';
@@ -45,21 +45,22 @@ function DataTable(props) {
   const [pages, setPages] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [datas, setDatas] = useState([]);
-  const [totalData, setTotalData] = useState([]);
+  const [totalData, setTotalData] = useState(0);
   const [autoWidth, setAutoWidth] = useState();
   const [loadingHover, setLoadingHover] = useState(false);
   const [loading, setLoading] = useState(false);
-  const defaultSort = {
+  const [isSort, setIsSort] = useState(false);
+  const [isDesc, setIsDesc] = useState(false);
+  const [defaultSort, setDefaulSort] = useState({
     sort_by: 'id',
     sort_order: 'desc',
-  };
-
+  });
   const [filter, setFilter] = useState([]);
   const [filterData, setFilterData] = useState({
     limit: 10,
     offset: 0,
-    ...defaultSort,
   });
+
   useEffect(() => {
     setLastPage(Math.ceil(totalData / limit));
   }, [totalData, limit]);
@@ -132,12 +133,12 @@ function DataTable(props) {
 
   useEffect(() => {
     getData();
-  }, [filterData]);
+  }, [filterData, defaultSort]);
 
   const getData = () => {
     setLoading(true);
     api
-      .get({ ...filterData })
+      .get({ ...filterData, ...defaultSort })
       .then(res => {
         setLoading(false);
         setDatas(res.data);
@@ -297,10 +298,13 @@ function DataTable(props) {
 
   const onReset = () => {
     reset();
+    setIsSort(false);
+    setIsDesc(false);
     setFilterData({
       limit: 10,
       offset: 0,
-      ...defaultSort,
+      sort_by: 'id',
+      sort_order: 'desc',
     });
   };
   const onSubmit = data => {
@@ -340,17 +344,25 @@ function DataTable(props) {
     });
   };
 
-  const onSortChange = by => {
-    setFilterData(prev => {
-      return {
-        ...prev,
-        sort_order: by.sort_order,
-      };
-    });
+  const onSortChange = () => {
+    if (isSort) {
+      setIsDesc(!isDesc);
+
+      setDefaulSort({
+        sort_by: 'id',
+        sort_order: isDesc ? 'desc' : 'asc',
+      });
+    }
+  };
+  const onChangeHeader = () => {
+    if (isSort && isDesc) {
+      return isDesc ? 'desc' : 'asc';
+    }
+    return '';
   };
 
   return (
-    <>
+    <Fade in={filters.length > 0}>
       {download && (
         <div style={{ display: 'none' }}>
           <TableComponent
@@ -405,7 +417,13 @@ function DataTable(props) {
                     } else {
                       return (
                         <div className={item.col ? `col-span-${item.col}` : ''} key={`component${idx}`}>
-                          <Input name={item.name} label={item.label} register={register} control={control} />
+                          <Input
+                            name={item.name}
+                            label={item.label}
+                            maxLength={item.max}
+                            register={register}
+                            control={control}
+                          />
                         </div>
                       );
                     }
@@ -477,8 +495,11 @@ function DataTable(props) {
               !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
             } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
           >
-            <div className="scrollbar-x-auto ">
-              <table {...getTableProps()} className="table-auto w-full text-sm text-left text-gray-500 border-t">
+            <div className="scrollbar-x-auto">
+              <table
+                {...getTableProps()}
+                className="table-auto w-full text-sm text-left border border-gray-200 text-gray-500 border-t"
+              >
                 <thead className="text-xs text-black uppercase bg-thead">
                   {headerGroups.map((headerGroup, idxgroup) => (
                     <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
@@ -486,30 +507,31 @@ function DataTable(props) {
                         return (
                           <th
                             key={columnidx}
-                            {...column.getHeaderProps(column.getSortByToggleProps())}
-                            className="py-3 px-6"
+                            {...column.getHeaderProps()}
+                            className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
                             width={column.width === 'auto' ? autoWidth : ''}
                           >
                             <div
                               className="flex"
                               onClick={() => {
-                                onSortChange({
-                                  sort_order: column.isSorted ? (column.isSortedDesc ? 'desc' : 'asc') : 'desc',
-                                });
+                                if (column.id !== 'selection') {
+                                  setIsSort(true);
+                                  onSortChange();
+                                }
                               }}
                             >
-                              {column.render('Header')}
-                              {column.isSorted ? (
-                                <span className="ml-2">
-                                  {column.isSortedDesc === true ? (
-                                    <ArrowSmDownIcon className="ml-2 h-4" />
+                              <div>{column.render('Header')}</div>
+                              <div className="my-auto">
+                                {isSort && column.id !== 'selection' ? (
+                                  onChangeHeader() === 'desc' && isDesc ? (
+                                    <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
                                   ) : (
-                                    <ArrowSmUpIcon className="ml-2 h-4" />
-                                  )}
-                                </span>
-                              ) : (
-                                ' '
-                              )}
+                                    <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                  )
+                                ) : (
+                                  ''
+                                )}
+                              </div>
                             </div>
                           </th>
                         );
@@ -518,7 +540,7 @@ function DataTable(props) {
                   ))}
                 </thead>
 
-                {!loadingHover && (
+                {!loading && (
                   <tbody {...getTableBodyProps()}>
                     {rows.map((row, i) => {
                       prepareRow(row);
@@ -526,7 +548,9 @@ function DataTable(props) {
                         <tr
                           key={i}
                           {...row.getRowProps()}
-                          className={`${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}border-b hover:bg-slate-100`}
+                          className={`${
+                            i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                          } border border-gray-200 hover:bg-slate-100`}
                         >
                           {row.cells.map((cell, idx) => (
                             <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
@@ -666,7 +690,7 @@ function DataTable(props) {
           </nav>
         </div>
       )}
-    </>
+    </Fade>
   );
 }
 

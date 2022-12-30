@@ -27,9 +27,9 @@ function Screen(props) {
       .string()
       .matches(
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-        'Phone number is not valid'
+        'phone number is not valid'
       ),
-    capacity: yup.number().typeError('Must be Number').nullable().required(),
+    capacity: yup.number().typeError('must be number').nullable().required(),
     last_stock_opname: yup.date().nullable().required(),
     location: yup.string().nullable().max(100).required(),
   });
@@ -96,8 +96,8 @@ function Screen(props) {
           <Input name="code" label="Code" register={register} errors={errors} />
           <Input name="address" label="Address" register={register} errors={errors} />
           <Input name="name" label="Name" register={register} errors={errors} />
-          <Input name="phone" label="Phone Number" register={register} errors={errors} />
-          <Input name="capacity" label="Capacity" register={register} errors={errors} />
+          <Input type="number" name="phone" label="Phone Number" register={register} errors={errors} />
+          <Input type="number" name="capacity" label="Capacity" register={register} errors={errors} />
           <DatePicker
             name="last_stock_opname"
             label="Last Stock Opname"

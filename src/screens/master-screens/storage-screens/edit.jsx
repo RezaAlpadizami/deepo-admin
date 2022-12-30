@@ -120,9 +120,9 @@ function Screen(props) {
         </div>
 
         <div className="grid items-start justify-items-center w-[80%] gap-4 gap-y-12 ml-6 mb-4 grid-cols-2 mt-4">
-          <Input name="code" label="Code" register={register} errors={errors} />
-          <Input name="level" label="Level" register={register} errors={errors} />
-          <Input name="rack_number" label="Rack" register={register} errors={errors} />
+          <Input name="code" label="Code" maxLength="7" register={register} errors={errors} />
+          <Input name="level" label="Level" maxLength="1" register={register} errors={errors} />
+          <Input name="rack_number" label="Rack" maxLength="1" register={register} errors={errors} />
           <Select
             name="warehouse_id"
             label="Warehouse"
@@ -136,7 +136,7 @@ function Screen(props) {
             register={register}
             errors={errors}
           />
-          <Input name="bay" label="Bay" register={register} errors={errors} />
+          <Input name="bay" label="Bay" maxLength="2" register={register} errors={errors} />
         </div>
       </form>
       {loading && <LoadingHover visible={loading} />}

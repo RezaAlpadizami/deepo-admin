@@ -30,21 +30,25 @@ function Screen(props) {
           {
             name: 'code',
             label: 'Code',
+            max: '7',
             col: 2,
           },
           {
             name: 'rack_number',
             label: 'Rack',
+            max: '1',
             col: 2,
           },
           {
             name: 'bay',
             label: 'Bay',
+            max: '2',
             col: 2,
           },
           {
             name: 'level',
             label: 'Level',
+            max: '1',
             col: 2,
           },
           {

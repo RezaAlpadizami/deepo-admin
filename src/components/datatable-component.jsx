@@ -47,6 +47,7 @@ function DataTable(props) {
   const [datas, setDatas] = useState([]);
   const [totalData, setTotalData] = useState(0);
   const [autoWidth, setAutoWidth] = useState();
+  const [columnId, setColumnId] = useState('');
   const [loadingHover, setLoadingHover] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isSort, setIsSort] = useState(false);
@@ -346,6 +347,7 @@ function DataTable(props) {
   };
 
   const onSortChange = column => {
+    setColumnId(column.id);
     if (isSort) {
       setIsDesc(!isDesc);
 
@@ -522,7 +524,7 @@ function DataTable(props) {
                           >
                             <div>{column.render('Header')}</div>
                             <div className="my-auto">
-                              {isSort && column.id !== 'selection' ? (
+                              {isSort && column.id === columnId && column.id !== 'selection' ? (
                                 onChangeHeader() === 'desc' && isDesc ? (
                                   <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
                                 ) : (

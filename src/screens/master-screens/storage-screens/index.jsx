@@ -35,7 +35,7 @@ function Screen(props) {
           },
           {
             name: 'rack_number',
-            label: 'Rack',
+            label: 'Rack Number',
             max: '1',
             col: 2,
           },

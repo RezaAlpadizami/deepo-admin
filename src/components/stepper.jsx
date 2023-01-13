@@ -53,7 +53,7 @@ export default function ProgressStepBar(props) {
               bay={storage_bay}
               level={storage_level}
               rack={storage_rack}
-              my={1}
+              my={[1, 2, 4]}
               qtyJourney={qty}
               index={index}
             />

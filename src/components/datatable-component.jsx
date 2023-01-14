@@ -316,7 +316,7 @@ function DataTable(props) {
         if (!data[dt]) {
           delete data[dt];
         }
-        if (data[dt] === 'All') {
+        if (data[dt] === '') {
           setFilterData({
             limit: 10,
             offset: 0,
@@ -336,9 +336,8 @@ function DataTable(props) {
         }
       }
     }
-    setFilterData(prev => {
+    setFilterData(() => {
       return {
-        ...prev,
         limit: 10,
         offset: 0,
         ...data,
@@ -510,7 +509,7 @@ function DataTable(props) {
                         <th
                           key={columnidx}
                           {...column.getHeaderProps()}
-                          className={`${columnidx === 0 ? 'px-6' : 'px-3'} py-3 `}
+                          className="px-6 py-3"
                           width={column.width === 'auto' ? autoWidth : ''}
                         >
                           <div

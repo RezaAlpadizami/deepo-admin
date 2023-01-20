@@ -36,7 +36,7 @@ function Screen(props) {
         <button type="button">
           <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold pb-1 text-xl">{displayName}</h1>
+        <h1 className="font-bold pb-1 text-xl max-[640px]:text-xs max-[640px]:mr-2">{displayName}</h1>
         <div className="flex-1" />
         <DeleteButton api={StorageApi} id={id} redirectTo="master/storage" />
         <Button
@@ -52,7 +52,7 @@ function Screen(props) {
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
+      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md max-[640px]:grid-cols-1 max-[640px]:gap-y-8">
         <InputDetail
           value={dataStorageById.code}
           label="Code"

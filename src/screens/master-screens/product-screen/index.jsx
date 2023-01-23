@@ -52,7 +52,15 @@ function Screen(props) {
         columns={[
           { header: 'SKU', value: 'sku', copy: true, type: 'link' },
           { header: 'Name', value: 'product_name', copy: true },
-          { header: 'Category', value: 'category_id', copy: true },
+          {
+            header: 'Category',
+            value: 'category.code',
+            obj: 'category',
+            secondValue: 'name',
+            type: 'multi-value',
+            copy: true,
+          },
+
           { header: 'Product Description', value: 'product_desc', copy: true, width: 'auto' },
         ]}
         toolbar={{

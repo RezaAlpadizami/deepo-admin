@@ -78,6 +78,7 @@ function DataTable(props) {
           width: d.width,
           Cell: props => {
             const { value, row } = props;
+
             if (d.type === 'date') {
               return Moment(value).format('DD MMM YYYY');
             }
@@ -96,6 +97,9 @@ function DataTable(props) {
               setAutoWidth(calculateText(value)[0] / 1.5);
 
               return calculateText(value)[1];
+            }
+            if (d.type === 'multi-value') {
+              return <td>{`${value} - ${row.original[d.obj][d.secondValue]}`}</td>;
             }
 
             return value;
@@ -336,13 +340,11 @@ function DataTable(props) {
         }
       }
     }
-    setFilterData(prev => {
-      return {
-        ...prev,
-        limit: 10,
-        offset: 0,
-        ...data,
-      };
+
+    setFilterData({
+      limit: 10,
+      offset: 0,
+      ...data,
     });
   };
 
@@ -554,7 +556,11 @@ function DataTable(props) {
                           } border border-gray-200 hover:bg-slate-100`}
                         >
                           {row.cells.map((cell, idx) => (
-                            <td key={idx} {...cell.getCellProps()} className="py-2 px-6">
+                            <td
+                              key={idx}
+                              {...cell.getCellProps()}
+                              className={`${cell.column.id === 'selection' ? 'px-6' : 'px-3'} py-2`}
+                            >
                               {cell.render('Cell')}
                             </td>
                           ))}

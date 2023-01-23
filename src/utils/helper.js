@@ -25,3 +25,15 @@ export function calculateText(text) {
 
   return [metrics.width, text];
 }
+export function toCalculate(data, type) {
+  let total = 0;
+  for (let i = 0; i < data.length; i += 1) {
+    total +=
+      typeof data[i][type] === 'string' && data[i][type].length !== 0
+        ? parseFloat(data[i][type])
+        : typeof data[i][type] === 'number'
+        ? data[i][type]
+        : 0;
+  }
+  return total;
+}

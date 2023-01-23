@@ -262,7 +262,7 @@ export default [
     ],
   },
   {
-    displayName: '404',
+    displayName: 'Not Found',
     name: '404',
     role: '',
     showmenu: false,

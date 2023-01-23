@@ -9,7 +9,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 function InputElement(props) {
   const { errors, name, placeholder, isLarge } = props;
-
   return (
     <InputGroup size="sm">
       <Input
@@ -23,7 +22,10 @@ function InputElement(props) {
         isInvalid={errors[name]}
         className="w-full text-sm border-gray-400 py-5 rounded-full px-8"
       />
-      <InputRightElement {...props} className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-full bg-primarydeepo h-full`}>
+      <InputRightElement
+        {...props}
+        className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-full bg-primarydeepo h-full cursor-pointe`}
+      >
         <CalendarIcon color="white" className="w-5 h-5 mt-0.5" />
       </InputRightElement>
     </InputGroup>

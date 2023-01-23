@@ -14,19 +14,19 @@ function Contents(props, { index, ...rest }) {
         <div className="flex gap-x-5">
           <div className="flex flex-col items-center gap-y-2">
             <h4 className="text-gray-400">Rack</h4>
-            <div className="px-6 py-1 bg-gray-200 rounded-full font-bold bg-[#FFF5EB] outline outline-offset-2 outline-[#FFF5EB]">
+            <div className="px-6 py-1 rounded-full font-bold bg-[#FFF5EB] outline outline-offset-2 outline-[#FFF5EB]">
               <Text>{rack}</Text>
             </div>
           </div>
           <div className="flex flex-col items-center gap-y-2">
             <h4 className="text-gray-400">Bay</h4>
-            <div className="px-6 py-1 bg-gray-200 rounded-full font-bold bg-[#DEEDF0] outline outline-offset-2 outline-[#DEEDF0]">
+            <div className="px-6 py-1 rounded-full font-bold bg-[#DEEDF0] outline outline-offset-2 outline-[#DEEDF0]">
               <Text>{bay}</Text>
             </div>
           </div>
           <div className="flex flex-col items-center gap-y-2">
             <h4 className="text-gray-400">Level</h4>
-            <div className="px-6 py-1 bg-gray-200 rounded-full font-bold bg-[#F4C7AB] outline outline-offset-2 outline-[#F4C7AB]">
+            <div className="px-6 py-1 rounded-full font-bold bg-[#F4C7AB] outline outline-offset-2 outline-[#F4C7AB]">
               <Text>{level}</Text>
             </div>
           </div>

@@ -9,7 +9,7 @@ function DeletedList(props) {
 
   return (
     <table className="table-auto w-full">
-      <thead className=" bg-[#d3e8ea] dark:bg-gray-700 dark:text-gray-400">
+      <thead className=" bg-thead">
         <tr>
           {data.map((col, idx) => {
             return (
@@ -26,9 +26,7 @@ function DeletedList(props) {
             {col.cells.map((cell, idx) => (
               <td
                 key={idx}
-                className={`text-base pl-5 border-b hover:bg-slate-100 dark:bg-gray-900 dark:border-gray-700 ${
-                  idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                } `}
+                className={`text-base pl-5 border-b hover:bg-slate-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} `}
               >
                 {typeof cell.value === 'number'
                   ? cell.value

@@ -69,7 +69,14 @@ function Screen(props) {
           { header: 'Rack Number', value: 'rack_number', copy: true },
           { header: 'Bay', value: 'bay', copy: true },
           { header: 'Level', value: 'level', copy: true },
-          { header: 'Warehouse', value: 'warehouse.location', copy: true },
+          {
+            header: 'Warehouse',
+            value: 'warehouse.name',
+            obj: 'warehouse',
+            secondValue: 'location',
+            type: 'multi-value',
+            copy: true,
+          },
         ]}
         toolbar={{
           action: {

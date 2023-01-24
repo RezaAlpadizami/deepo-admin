@@ -6,6 +6,7 @@ import LeftRightIcon from '../assets/images/left-right-arrow.svg';
 
 function Stepper(props) {
   const { data } = props;
+
   let counter = 0;
   return (
     <div className="px-4">
@@ -31,23 +32,23 @@ function Stepper(props) {
                     </div>
                   </div>
                   <div className="w-full">
-                    <div>
-                      <h4 className="text-lg pl-2 font-bold">{i.activity_name}</h4>
-                    </div>
                     <div className="flex">
-                      <div>
-                        <p className="text-[#000] text-sm pl-2">{i.request_number || '-'}</p>
-                      </div>
+                      <h4 className="text-lg pl-1 font-bold">{i.activity_name}</h4>
                       <div className="flex-1" />
-                      <div className="text-sm">{i.date ? Moment(i.date).format('DD MMM YYYY') : null}</div>
+                      <div className="text-sm pr-1 pt-1">{i.date ? Moment(i.date).format('DD MMM YYYY') : null}</div>
+                    </div>
+                    <div>
+                      <div>
+                        <p className="text-[#000] text-sm pl-1">{i.request_number || '-'}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
-              {counter < data.length && (
+              {counter < 5 && (
                 <div className="flex">
                   <div className="pr-6" />
-                  <div className="border-l-2 border-l-[#3F73EB] h-16" />
+                  <div className="border-l-2 border-l-[#3F73EB] h-8" />
                 </div>
               )}
             </>

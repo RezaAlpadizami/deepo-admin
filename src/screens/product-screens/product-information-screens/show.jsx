@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@chakra-ui/react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Button, useMediaQuery } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,9 +7,13 @@ import { ProductApi, ProductInfoApi, ProductJourney } from '../../../services/ap
 import InputDetail from '../../../components/input-detail-component';
 import LoadingComponent from '../../../components/loading-component';
 import Stepper from '../../../components/stepper-component';
+import { toCalculate } from '../../../utils/helper';
+import Context from '../../../context';
 
 function ShowScreen(props) {
   const { displayName } = props;
+  const { store } = useContext(Context);
+  const [isLarge] = useMediaQuery('(min-width: 1224px)');
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState();
@@ -17,6 +21,11 @@ function ShowScreen(props) {
   const [storageDetails, setStorageDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingJourney, setLoadingJourney] = useState(false);
+  const [quantity, setQuantity] = useState();
+
+  useEffect(() => {
+    store.setIsDrawerOpen(isLarge);
+  }, [isLarge, store]);
 
   useEffect(() => {
     setLoading(true);
@@ -35,6 +44,7 @@ function ShowScreen(props) {
       .then(result => {
         if (result[0].status === 'fulfilled' && result[1].status === 'fulfilled' && result[2].status === 'fulfilled') {
           setData(result[2].value);
+
           setDataJourney(
             result[0].value.journey.map(i => {
               return {
@@ -51,23 +61,22 @@ function ShowScreen(props) {
               result[1].value?.product.product_info.map(i => [JSON.stringify(i.warehouse_id), i.warehouse_id])
             ).values(),
           ];
-
           const body = {
             storage_details: filterWarehouseInfo.map(f => {
               return {
                 list: result[1].value.product.product_info
                   .filter(s => s.warehouse_id === f)
-                  .map((i, idx) => {
+                  .map(i => {
                     return {
                       warehouse: i.warehouse_name,
                       warehouse_id: i.warehouse_id,
-                      total_item: idx + 1,
+
                       storage: [
                         {
                           rack: i.rack,
                           bay: i.bay,
                           level: i.level,
-                          total: i.qty || 2,
+                          total: i.qty,
                         },
                       ],
                     };
@@ -75,18 +84,18 @@ function ShowScreen(props) {
               };
             }),
           };
-
           if (body.storage_details.length > 0) {
+            setQuantity(toCalculate(result[1]?.value?.product?.product_info, 'qty') || 0);
+
             setStorageDetails(
-              body.storage_details.map((i, idx) => {
+              body.storage_details.map(i => {
                 return {
                   storage: i.list
-                    .filter(f => f.warehouse_id === filterWarehouseInfo[idx])
+                    // .filter(f => f.warehouse_id === filterWarehouseInfo[idx])
                     .map(m => {
                       return m.storage[0];
                     }),
-                  warehouse: i.list.length > 0 ? i.list[idx]?.warehouse : '',
-                  total: i.list.length > 0 ? i.list[idx]?.total_item : 0,
+                  warehouse: i.list.length > 0 ? i.list[0]?.warehouse : '',
                 };
               })
             );
@@ -109,14 +118,14 @@ function ShowScreen(props) {
 
   return (
     <>
-      <div className="flex mb-12">
+      <div className={`flex ${isLarge ? 'mb-12' : 'mb-6'}`}>
         <button type="button">
           <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-xl">{displayName}</h1>
+        <h1 className={`${isLarge ? 'text-xl' : 'text-lg'} font-bold `}>{displayName}</h1>
         <div className="flex-1" />
       </div>
-      <div className="grid grid-flow-row-dense grid-cols-3">
+      <div className={`${isLarge ? 'grid-cols-3' : 'grid-cols-2'} grid grid-flow-row-dense`}>
         <div className="col-span-2">
           <div className="col-span-2 px-4">
             <strong>Detail Product</strong>
@@ -134,15 +143,19 @@ function ShowScreen(props) {
           <div className="grid grid-row-2">
             <strong>Storage Details</strong>
             <div>
-              <div className="flex bg-white rounded-[30px] drop-shadow-md h-10 mt-2 px-5 py-2">
+              <div
+                className={`flex ${
+                  isLarge ? 'text-md mt-2' : 'text-sm mt-4'
+                } bg-white rounded-[30px] drop-shadow-md h-10 px-5 py-2`}
+              >
                 <p>Total Product</p>
                 <div className="flex-1" />
-                <strong className="mr-5">{123}</strong>
+                <strong className="mr-5">{quantity || '-'}</strong>
               </div>
             </div>
             <div className="h-[300px] pb-4">
               <div
-                className={`bg-white rounded-[30px] drop-shadow-md mt-5 p-5 h-full ${
+                className={`bg-white rounded-[30px] drop-shadow-md mt-5 p-5 h-full w-full ${
                   storageDetails.length > 1 ? 'overflow-y-scroll' : ''
                 }`}
               >
@@ -154,37 +167,43 @@ function ShowScreen(props) {
                       <div className="flex mb-2 mt-2 border-b-gray-200 border-b-2 pb-2" key={idx}>
                         <strong>{i.warehouse}</strong>
                         <div className="flex-1" />
-                        <strong className="mr-5 font-bold">{i.total}</strong>
+                        <strong className="mr-5 font-bold">{toCalculate(i.storage, 'total')}</strong>
                       </div>
                       {i.storage.map((s, sIdx) => {
                         return (
                           <div className="grid grid-cols-6" key={sIdx}>
                             <div className="mb-3">
-                              <p className="mb-2 text-gray-800 px-5">Rack</p>
+                              <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800`}>Rack</p>
                               <span
                                 size="sm"
                                 px={8}
-                                className="ml-4 rounded-full bg-[#288278] outline outline-[#1b5952] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold px-6"
+                                className={`${
+                                  isLarge ? 'ml-4 px-6' : 'px-4'
+                                } rounded-full bg-[#288278] outline outline-[#1b5952] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}
                               >
                                 {s.rack}
                               </span>
                             </div>
                             <div className="mb-3">
-                              <p className="mb-2 text-gray-800 w-20 px-5">Bay</p>
+                              <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800 w-20 px-5`}>Bay</p>
                               <span
                                 size="sm"
                                 px={8}
-                                className="ml-4 rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold px-6"
+                                className={`${
+                                  isLarge ? 'ml-4 px-6' : 'ml-1 px-4'
+                                } rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}
                               >
                                 {s.bay}
                               </span>
                             </div>
                             <div>
-                              <p className="mb-2 text-gray-800 w-20 px-5">Level</p>
+                              <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800 w-20 px-5`}>Level</p>
                               <span
                                 size="sm"
                                 px={8}
-                                className="ml-4 rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold px-6"
+                                className={`${
+                                  isLarge ? ' ml-4 px-6' : 'ml-2 px-4'
+                                } rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}
                               >
                                 {s.level}
                               </span>
@@ -204,7 +223,7 @@ function ShowScreen(props) {
             </div>
           </div>
         </div>
-        <div className="row-span-2 pl-1">
+        <div className={`${isLarge ? 'pl-1' : 'mt-4 ml-6 mx-auto'} row-span-2`}>
           <strong>Product Journey</strong>
           <div className="bg-white rounded-[30px] drop-shadow-md h-[95%] rounded-3xl mt-2 pt-10 pl-3 pr-3">
             <LoadingComponent visible={loadingJourney} />

@@ -56,7 +56,7 @@ function Screen(props) {
 
       <div>
         <h1 className="font-bold text-md">Detail Product</h1>
-        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full drop-shadow-md">
+        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full drop-shadow-md max-[640px]:grid max-[640px]:grid-cols-1 max-[640px]:gap-1 max-[640px]:p-[1.5rem]">
           <div>
             <InputDetail
               value={dataDetailProduct.product_name}
@@ -71,7 +71,7 @@ function Screen(props) {
               customStyleSpan="font-bold text-md"
             />
           </div>
-          <div className="w-[30%]">
+          <div className="w-[30%] max-[640px]:w-full">
             <InputDetail
               value={dataDetailProduct?.category?.name}
               label="Category"
@@ -91,14 +91,14 @@ function Screen(props) {
         <h1 className="font-bold text-md">Product Journey</h1>
         <div
           className={`flex gap-8 mt-6 bg-white rounded-[20px] w-full drop-shadow-md ${
-            dataJourneyById.length === 0 ? 'justify-center py-[9%]' : 'p-10'
+            dataJourneyById.length === 0 ? 'justify-center py-[9%]' : 'p-10 max-[640px]:p-6'
           }`}
         >
           <div className="items-center text-center flex justify-center">
             {dataJourneyById.length === 0 ? (
               <p className="text-xl font-bold">Product Journey is Empty</p>
             ) : (
-              <ProgressStepBar dataApi={dataJourneyById} customStyleRequestNumber="absolute -right-28 top-2" />
+              <ProgressStepBar dataApi={dataJourneyById} />
             )}
           </div>
         </div>

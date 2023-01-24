@@ -37,7 +37,7 @@ function Screen(props) {
         <button type="button">
           <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
         </button>
-        <h1 className="font-bold text-xl">{displayName}</h1>
+        <h1 className="font-bold text-xl max-[640px]:text-xs max-[640px]:mr-2">{displayName}</h1>
         <div className="flex-1" />
         <DeleteButton api={WarehouseApi} id={id} redirectTo="master/warehouse" />
         <Button
@@ -47,13 +47,13 @@ function Screen(props) {
             navigate(`/master/warehouse/${id}/edit`);
           }}
           size="sm"
-          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
+          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4] max-[640px]:ml-2"
         >
           Edit
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
+      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md max-[640px]:grid-cols-1 max-[640px]:gap-y-4">
         <InputDetail
           value={dataWarehouseById.code}
           label="Code"

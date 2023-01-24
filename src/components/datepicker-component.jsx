@@ -28,7 +28,7 @@ function InputElement(props) {
         className="w-full text-sm border-gray-400 py-5 rounded-full px-8"
       />
       <InputRightElement className="rounded-r-full w-14 bg-primarydeepo h-full cursor-pointer" onClick={handleClick}>
-        <CalendarIcon color="white" className="w-5 h-5 mt-0.5" />
+        <CalendarIcon color="white" className="w-5 h-5 mt-0.5 mr-1" />
       </InputRightElement>
     </InputGroup>
   );

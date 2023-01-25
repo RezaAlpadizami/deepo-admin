@@ -154,11 +154,7 @@ function ShowScreen(props) {
               </div>
             </div>
             <div className="h-[300px] pb-4">
-              <div
-                className={`bg-white rounded-[30px] drop-shadow-md mt-5 p-5 h-full w-full ${
-                  storageDetails.length > 1 ? 'overflow-y-scroll' : ''
-                }`}
-              >
+              <div className={`bg-white rounded-[30px] drop-shadow-md mt-5 p-5 h-full w-full overflow-y-auto `}>
                 <strong className="text-gray-400 tracking-wide">Warehouse</strong>
                 <LoadingComponent visible={loading} />
                 {storageDetails.map((i, idx) => {

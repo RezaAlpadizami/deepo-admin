@@ -89,8 +89,13 @@ function Screen(props) {
       </div>
       <div className="mt-8">
         <h1 className="font-bold text-md">Product Journey</h1>
+        <div className="bg-white flex px-2 py-2 mt-4 drop-shadow-sm rounded-[20px]">
+          <p className="px-4 font-bold text-[13px]">Total Product</p>
+          <div className="flex-1" />
+          <p className="font-bold text-sm px-8 max-[640px]:block max-[640px]:text-xs">{dataJourneyById.qty || '-'}</p>
+        </div>
         <div
-          className={`flex gap-8 mt-6 bg-white rounded-[20px] w-full drop-shadow-md ${
+          className={`flex gap-8 mt-2 bg-white rounded-[20px] w-full drop-shadow-md ${
             dataJourneyById.length === 0 ? 'justify-center py-[9%]' : 'p-10 max-[640px]:p-6'
           }`}
         >
@@ -124,7 +129,6 @@ function Screen(props) {
                                   <h2 class="text-gray-400 text-xl max-[640px]:text-xs">Warehouse</h2>
                                   <div class="flex relative font-bold">
                                     <h3 class="text-[16px] max-[640px]:text-xs">${warehouse_name}</h3>
-                                    <p class="font-bold absolute right-0 text-sm max-[640px]:block max-[640px]:text-xs">${dataJourneyById.qty}</p>
                                   </div>
                                   <div class="flex gap-x-5">
                                     <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">

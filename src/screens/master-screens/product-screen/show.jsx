@@ -36,7 +36,7 @@ function ShowScreen(props) {
         <h1 className="font-bold text-xl">{displayName}</h1>
         <div className="flex-1" />
         <div>
-          <DeleteButton api={ProductApi} id={id} redirectUrl="master/product" />
+          <DeleteButton api={ProductApi} id={id} redirectTo="master/product" />
           <Button
             onClick={() => {
               navigate(`/master/product/${id}/edit`);

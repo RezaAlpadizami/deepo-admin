@@ -89,8 +89,13 @@ function Screen(props) {
       </div>
       <div className="mt-8">
         <h1 className="font-bold text-md">Product Journey</h1>
+        <div className="bg-white flex px-2 py-2 mt-4 drop-shadow-sm rounded-[20px]">
+          <p className="px-4 font-bold text-[13px]">Total Product</p>
+          <div className="flex-1" />
+          <p className="font-bold text-sm px-8 max-[640px]:block max-[640px]:text-xs">{dataJourneyById.qty || '-'}</p>
+        </div>
         <div
-          className={`flex gap-8 mt-6 bg-white rounded-[20px] w-full drop-shadow-md ${
+          className={`flex gap-8 mt-2 bg-white rounded-[20px] w-full drop-shadow-md ${
             dataJourneyById.length === 0 ? 'justify-center py-[9%]' : 'p-10 max-[640px]:p-6'
           }`}
         >
@@ -98,7 +103,59 @@ function Screen(props) {
             {dataJourneyById.length === 0 ? (
               <p className="text-xl font-bold">Product Journey is Empty</p>
             ) : (
-              <ProgressStepBar dataApi={dataJourneyById} />
+              <div>
+                {dataJourneyById.journey.map(
+                  (
+                    {
+                      activity_name,
+                      created_at,
+                      request_number,
+                      storage_level,
+                      storage_rack,
+                      storage_bay,
+                      qty,
+                      warehouse_name,
+                    },
+                    index
+                  ) => (
+                    <ProgressStepBar
+                      activity={activity_name}
+                      date={created_at}
+                      requestNumber={request_number}
+                      index={index}
+                      dataApi={dataJourneyById}
+                      contents={`
+                                <div class="flex flex-col text-left gap-y-3 mx-20 ">
+                                  <h2 class="text-gray-400 text-xl max-[640px]:text-xs">Warehouse</h2>
+                                  <div class="flex relative font-bold">
+                                    <h3 class="text-[16px] max-[640px]:text-xs">${warehouse_name}</h3>
+                                  </div>
+                                  <div class="flex gap-x-5">
+                                    <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
+                                      <h4 class="text-gray-400 font-bold">Rack</h4>
+                                      <div class="px-6 py-1 rounded-full font-bold bg-[#FFF5EB] outline outline-offset-2 outline-[#FFF5EB]">
+                                        <Text>${storage_rack}</Text>
+                                      </div>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
+                                      <h4 class="text-gray-400 font-bold">Bay</h4>
+                                      <div class="px-6 py-1 rounded-full font-bold bg-[#DEEDF0] outline outline-offset-2 outline-[#DEEDF0]">
+                                        <Text>${storage_bay}</Text>
+                                      </div>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
+                                      <h4 class="text-gray-400 font-bold">Level</h4>
+                                      <div class="px-6 py-1 rounded-full font-bold bg-[#F4C7AB] outline outline-offset-2 outline-[#F4C7AB]">
+                                        <Text>${storage_level}</Text>
+                                      </div>
+                                    </div>
+                                    <span class="font-bold ml-[6rem] mt-6 text-sm max-[640px]:ml-8 max-[640px]:text-xs">${qty}</span>
+                                  </div>
+                                </div>`}
+                    />
+                  )
+                )}
+              </div>
             )}
           </div>
         </div>

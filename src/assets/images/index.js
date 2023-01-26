@@ -4,5 +4,6 @@ import deleteIcon from './delete-chip-icon.svg';
 import saveExcelIcon from './save-chip-icon.svg';
 import showHideTableIcon from './show-hide-chip-icon.svg';
 import copyClipboardIcon from './copy-clipboard-chip-icon.svg';
+import Chevron from './chevron-icon';
 
-export { copyClipboardIcon, deleteIcon, editIcon, saveExcelIcon, showHideTableIcon, addIcon };
+export { copyClipboardIcon, deleteIcon, editIcon, saveExcelIcon, showHideTableIcon, addIcon, Chevron };

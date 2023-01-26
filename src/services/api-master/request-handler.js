@@ -89,7 +89,7 @@ export default class RequestHandler {
         .then(response => {
           if (response.ok) resolve(response.data);
           else {
-            reject(RequestHandler.defaultErrorResponse(response));
+            reject(response);
           }
         })
         .catch(error => {

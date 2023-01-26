@@ -7,7 +7,6 @@ import './assets/styles/custom.css';
 import Context from './context';
 import RootStore from './store/root-store';
 import reportWebVitals from './reportWebVitals';
-import CustomSteps from './assets/styles/chakra-ui-steps';
 
 const App = React.lazy(() => import('./navigation/main'));
 
@@ -22,11 +21,7 @@ const colors = {
   },
 };
 
-const components = {
-  Steps: CustomSteps,
-};
-
-const theme = extendTheme({ colors, components });
+const theme = extendTheme({ colors });
 
 const store = RootStore.create({ isLogin: false });
 

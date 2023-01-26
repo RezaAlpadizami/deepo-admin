@@ -44,7 +44,7 @@ function Screen(props) {
       })
       .catch(error => {
         setLoading(false);
-        Swal.fire({ text: error?.message, icon: 'error' });
+        Swal.fire({ text: error?.data?.message, icon: 'error' });
       });
   };
 

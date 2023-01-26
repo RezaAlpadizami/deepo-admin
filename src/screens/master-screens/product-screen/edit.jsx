@@ -119,7 +119,7 @@ function Screen(props) {
         </div>
 
         <div className="grid items-start justify-items-center w-[80%] gap-4 gap-y-12 ml-6 mb-4 grid-cols-2 mt-4">
-          <Input name="sku" label="Sku" maxLength="15" register={register} errors={errors} />
+          <Input name="sku" label="Sku" maxLength="15" register={register} errors={errors} disabled />
           <Select
             name="category_id"
             label="Category"

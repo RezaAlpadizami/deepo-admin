@@ -61,7 +61,7 @@ function ProgressStepBar(props) {
           <p className="text-sm text-gray-400">{`${Moment(date).format('DD-MMM-YYYY')}`}</p>
         </div>
         <div className="flex-1" />
-        <p className="text-sm text-gray-400">{requestNumber}</p>
+        <p className="text-sm text-gray-400 mx-6">{requestNumber}</p>
         <Chevron className={`${setRotate} ml-12`} width={10} fill="#DCDCDC" />
       </button>
       <div

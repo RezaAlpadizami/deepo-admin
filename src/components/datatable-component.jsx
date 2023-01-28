@@ -511,8 +511,8 @@ function DataTable(props) {
                         <th
                           key={columnidx}
                           {...column.getHeaderProps()}
-                          className="px-6 py-3"
-                          width={column.width === 'auto' ? autoWidth : ''}
+                          className="px-3 py-3"
+                          width={column.width === 'auto' ? autoWidth : column.width}
                         >
                           <div
                             className="flex"
@@ -558,7 +558,7 @@ function DataTable(props) {
                             <td
                               key={idx}
                               {...cell.getCellProps()}
-                              className={`${cell.column.id === 'selection' ? 'px-6' : 'px-3'} py-2`}
+                              className={`${cell.column.id === 'selection' ? 'px-3' : 'px-3'} py-2`}
                             >
                               {cell.render('Cell')}
                             </td>

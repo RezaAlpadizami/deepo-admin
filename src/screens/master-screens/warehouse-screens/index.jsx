@@ -39,13 +39,13 @@ function Screen(props) {
           },
         ]}
         columns={[
-          { header: 'Code', value: 'code', copy: true, type: 'link' },
-          { header: 'Name', value: 'name', copy: true },
-          { header: 'Location', value: 'location', copy: true },
-          { header: 'Address', value: 'address', copy: true },
-          { header: 'Capacity', value: 'capacity', copy: true },
-          { header: 'Last Stock Opname', value: 'last_stock_opname', copy: true, type: 'date' },
-          { header: 'Warehouse Phone', value: 'phone', copy: true },
+          { header: 'Code', value: 'code', copy: true, type: 'link', width: '10%' },
+          { header: 'Name', value: 'name', copy: true, width: '15%' },
+          { header: 'Location', value: 'location', copy: true, width: '15%' },
+          { header: 'Address', value: 'address', copy: true, width: '15%' },
+          { header: 'Capacity', value: 'capacity', copy: true, width: '15%' },
+          { header: 'Last Stock Opname', value: 'last_stock_opname', copy: true, type: 'date', width: '15%' },
+          { header: 'Warehouse Phone', value: 'phone', copy: true, width: '25%' },
         ]}
         toolbar={{
           action: {

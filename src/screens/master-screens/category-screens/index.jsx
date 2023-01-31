@@ -25,8 +25,8 @@ function Screen(props) {
           },
         ]}
         columns={[
-          { header: 'Code', value: 'code', copy: true, type: 'link' },
-          { header: 'Name', value: 'name', copy: true },
+          { header: 'Code', value: 'code', copy: true, type: 'link', width: '30%' },
+          { header: 'Name', value: 'name', copy: true, width: '50%' },
         ]}
         toolbar={{
           action: {

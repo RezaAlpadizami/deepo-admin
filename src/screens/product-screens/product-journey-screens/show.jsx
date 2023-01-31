@@ -34,6 +34,13 @@ function Screen(props) {
       });
   };
 
+  const getTotalQty = (data, activityName) => {
+    if (Array.isArray(data?.journey)) {
+      return data.journey.filter(i => i.activity_name === activityName).reduce((acc, obj) => acc + obj.qty, 0);
+    }
+    return '-';
+  };
+
   useEffect(() => {
     ProductApi.find(id)
       .then(res => {
@@ -89,10 +96,37 @@ function Screen(props) {
       </div>
       <div className="mt-8">
         <h1 className="font-bold text-md">Product Journey</h1>
-        <div className="bg-white flex px-2 py-2 mt-4 drop-shadow-sm rounded-[20px]">
-          <p className="px-4 font-bold text-[13px]">Total Product</p>
-          <div className="flex-1" />
-          <p className="font-bold text-sm px-8 max-[640px]:block max-[640px]:text-xs">{dataJourneyById.qty || '-'}</p>
+        <div className="bg-white flex flex-col px-2 gap-y-1 py-2 mt-4 drop-shadow-sm rounded-[20px]">
+          {getTotalQty(dataJourneyById, 'INBOUND') > 0 && (
+            <div className="flex">
+              <p className="px-4  text-[13px] text-gray-400">Total INBOUND</p>
+              <div className="flex-1" />
+              <p className="text-sm px-8 max-[640px]:block max-[640px]:text-xs text-gray-30 text-gray-400">
+                {getTotalQty(dataJourneyById, 'INBOUND')}
+              </p>
+            </div>
+          )}
+          {getTotalQty(dataJourneyById, 'OUTBOUND') > 0 && (
+            <div className="flex">
+              <p className="px-4 text-[13px] text-gray-400">Total OUTBOUND</p>
+              <div className="flex-1" />
+              <p className="text-sm px-8 max-[640px]:block max-[640px]:text-xs text-gray-400">
+                {getTotalQty(dataJourneyById, 'OUTBOUND')}
+              </p>
+            </div>
+          )}
+          {dataJourneyById.qty > 0 && (
+            <div>
+              <div className="border border-grey-300 w-full" />
+              <div className="flex">
+                <p className="px-4 font-bold text-[13px]">Total Quantity</p>
+                <div className="flex-1" />
+                <p className="font-bold text-sm px-8 max-[640px]:block max-[640px]:text-xs ">
+                  {dataJourneyById.qty || '-'}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div
           className={`flex gap-8 mt-2 bg-white rounded-[20px] w-full drop-shadow-md ${
@@ -124,8 +158,9 @@ function Screen(props) {
                       requestNumber={request_number}
                       index={index}
                       dataApi={dataJourneyById}
+                      key={index}
                       contents={`
-                                <div class="flex flex-col text-left gap-y-3 mx-20 ">
+                                <div class="flex flex-col text-left gap-y-3 mx-20">
                                   <h2 class="text-gray-400 text-xl max-[640px]:text-xs">Warehouse</h2>
                                   <div class="flex relative font-bold">
                                     <h3 class="text-[16px] max-[640px]:text-xs">${warehouse_name}</h3>

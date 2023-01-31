@@ -76,6 +76,7 @@ function Screen(props) {
             secondValue: 'location',
             type: 'multi-value',
             copy: true,
+            width: '30%',
           },
         ]}
         toolbar={{

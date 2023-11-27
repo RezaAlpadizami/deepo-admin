@@ -7,22 +7,22 @@ function SelectComponent(props) {
   return (
     <div className="flex-auto w-full">
       <div>
-        <label htmlFor={name} className="text-sm font-light text-gray-600 block ml-1">
+        <label htmlFor={name} className="text-sm font-semibold text-gray-600 block ml-1">
           {label}
         </label>
-        <div className="mt-1 flex  shadow-sm">
+        <div className="mt-1 flex shadow-sm">
           <Select
             {...register(name)}
             bg="white"
             size="sm"
             name={name}
             id={name}
-            className="w-full text-sm rounded-full border-gray-400 px-5 py-2.5 h-full"
+            className="w-full text-sm rounded-md border-gray-400 px-5 py-1.5 h-full"
             isDisabled={disabled}
             focusBorderColor="#184D47"
             placeholder={`Select ${placeholder}`}
           >
-            {options.map((el, idx) => (
+            {options?.map((el, idx) => (
               <option key={idx} value={el.value}>
                 {el.label}
               </option>

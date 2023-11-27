@@ -20,13 +20,10 @@ function InputElement(props) {
         focusBorderColor="primarydeepo"
         type="text"
         isInvalid={errors[name]}
-        className="w-full text-sm border-gray-400 py-5 rounded-full px-8"
+        className="w-full text-sm border-gray-400 py-4 rounded-md px-4"
       />
-      <InputRightElement
-        {...props}
-        className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-full bg-primarydeepo h-full cursor-pointe`}
-      >
-        <CalendarIcon color="white" className="w-5 h-5 mt-0.5" />
+      <InputRightElement {...props} className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-md h-full cursor-pointe`}>
+        <CalendarIcon color="black" className="w-5 h-5 mt-0.5" />
       </InputRightElement>
     </InputGroup>
   );
@@ -38,7 +35,7 @@ function SelectComponent(props) {
   return (
     <div className="flex-auto w-full">
       <div>
-        <label htmlFor={name} className="text-sm font-light text-black block ml-1">
+        <label htmlFor={name} className="text-sm font-semibold text-black block ml-1">
           {label}
         </label>
         <div className="mt-1 flex">
@@ -56,7 +53,7 @@ function SelectComponent(props) {
                   onChange={onChange}
                   id={name}
                   customInput={<InputElement errors={errors} placeholder={placeholder} isLarge={isLarge} />}
-                  className="py-6"
+                  className="py-4"
                 />
               );
             }}

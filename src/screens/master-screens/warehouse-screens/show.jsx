@@ -23,7 +23,6 @@ function Screen(props) {
   const getDetailWarehouse = () => {
     WarehouseApi.find(id)
       .then(res => {
-        console.log('res', res);
         setDataWarehouseById(res);
       })
       .catch(error => {

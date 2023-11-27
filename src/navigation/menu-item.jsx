@@ -30,6 +30,13 @@ const ProductInformationShow = React.lazy(() => import('../screens/product-scree
 const ProductJourneyScreens = React.lazy(() => import('../screens/product-screens/product-journey-screens/index'));
 const ProductJourneyShowScreen = React.lazy(() => import('../screens/product-screens/product-journey-screens/show'));
 
+const LabelRegistrationScreen = React.lazy(() =>
+  import('../screens/registration-screens/label-registration-screens/index')
+);
+const LabelCancelRegistrationScreen = React.lazy(() =>
+  import('../screens/registration-screens/cancel-label-registration-screens/index')
+);
+
 export default [
   {
     displayName: 'Home',
@@ -258,6 +265,34 @@ export default [
             component: ProductJourneyShowScreen,
           },
         ],
+      },
+    ],
+  },
+  {
+    displayName: 'Registration',
+    name: 'registration',
+    role: 'registration',
+    showmenu: true,
+    exact: true,
+    route: '/registration/label-registration',
+    routes: [
+      {
+        displayName: 'Label Registration',
+        name: 'registration-label',
+        role: 'registration',
+        showmenu: true,
+        exact: true,
+        route: '/registration/label-registration',
+        component: LabelRegistrationScreen,
+      },
+      {
+        displayName: 'Cancel Label Registration',
+        name: 'registration-cancel-label',
+        role: 'registration',
+        showmenu: true,
+        exact: true,
+        route: '/registration/cancel-label-registration',
+        component: LabelCancelRegistrationScreen,
       },
     ],
   },

@@ -69,6 +69,7 @@ function ProgressStepBar(props) {
         style={{ maxHeight: `${setHeight}` }}
         className="bg-white overflow-hidden transition-all duration-500 ease-in-out"
       >
+        {/* eslint-disable-next-line */}
         <div className="font-medium text-sm px-4 pb-6" dangerouslySetInnerHTML={{ __html: contents }} />
       </div>
     </div>

@@ -16,8 +16,8 @@ function DeleteButton(props) {
       buttonsStyling: false,
       confirmButtonColor: '#EB6058',
       cancelButtonColor: '#FFFFFF',
-      confirmButtonText: `<p class="rounded-full bg-[#184D47]    text-[#fff] px-5 py-2 ml-5 font-bold">Delete</p>`,
-      cancelButtonText: `<p class="rounded-full bg-[#fff] border-2 border-primarydeepo text-primarydeepo px-5 py-2 font-bold">Cancel</p>`,
+      confirmButtonText: `<p class="rounded-md bg-[#50B8C1]    text-[#fff] px-5 py-2 ml-5 font-bold">Delete</p>`,
+      cancelButtonText: `<p class="rounded-md bg-[#fff] border-2 border-[#50B8C1] text-[#50B8C1] px-5 py-2 font-bold">Cancel</p>`,
       reverseButtons: true,
     }).then(status => {
       if (status.isDismissed) return;
@@ -41,7 +41,7 @@ function DeleteButton(props) {
       onClick={deleteData}
       px={8}
       size="sm"
-      className="rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold"
+      className="rounded-md border border-[#50B8C1] bg-[#fff] hover:bg-[#E4E4E4] text-[#50B8C1] font-bold"
     >
       Delete
     </Button>

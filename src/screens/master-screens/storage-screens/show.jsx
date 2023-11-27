@@ -46,7 +46,7 @@ function Screen(props) {
             navigate(`/master/storage/${id}/edit`);
           }}
           size="sm"
-          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
+          className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
         >
           Edit
         </Button>

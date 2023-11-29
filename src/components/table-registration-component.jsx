@@ -1,9 +1,9 @@
 import React from 'react';
-// import LottiesAnimation from '../components/lotties-animation-component';
-// import Loading from '../../../../assets/lotties/Loading.json';
+import LottiesAnimation from './lotties-animation-component';
+import Loading from '../assets/lotties/Loading.json';
 
-function SimpleTable(props) {
-  const { data, isLarge, rfidTable } = props;
+function TableRegistration(props) {
+  const { data, isLarge, rfidTable, loading } = props;
 
   const th = `${isLarge ? 'px-8 text-sm' : 'px-4 text-xs'} text-bold text-[#000] text-center py-1.5 tracking-wide`;
   const td = 'text-[#000] text-center py-1.5 break-words';
@@ -21,21 +21,19 @@ function SimpleTable(props) {
         </thead>
 
         <tbody className="h-16">
-          {/* <Loading visible={loadi
-            ng} isLarge={isLarge} /> */}
-          {/* <LottiesAnimation
+          {/* <Loading visible={loading} isLarge={isLarge} /> */}
+          <LottiesAnimation
             animationsData={Loading}
-            isLarge={isLarge}
             visible={loading}
-            classCustom={`absolute bg-white z-[999] ${
-              isLarge ? 'right-7 left-[52%]' : 'right-8 left-8'
+            classCustom={`absolute z-[999] ${
+              isLarge ? 'right-7 left-[60%] top-[42%]' : 'right-8 left-8'
             } opacity-100 flex flex-col items-center justify-center`}
-          /> */}
-          {data.length > 0 ? (
+          />
+          {data.length > 0 && data[0]?.rfid_number !== '' ? (
             data?.map((d, i) => {
               return (
                 <tr
-                  key={d.product_id}
+                  key={i}
                   className={`${i % 2 ? 'bg-[#f3f4f6]' : 'bg-[#ffff]'} ${
                     d.product_name === undefined ? '[&>*]:text-red-600' : null
                   } [&>*]:text-xs`}
@@ -45,7 +43,9 @@ function SimpleTable(props) {
                   <td className={`${td} w-[60%]`}>
                     {d.product_name === undefined ? '--Not Registered--' : d.product_name}
                   </td>
-                  <td className={`${td} w-[20%]`}>{rfidTable ? String(d.in_stock) : d.qty}</td>
+                  <td className={`${td} w-[20%]`}>
+                    {!rfidTable ? d.qty : d.in_stock === undefined ? String(false) : String(d.in_stock)}
+                  </td>
                 </tr>
               );
             })
@@ -62,4 +62,4 @@ function SimpleTable(props) {
   );
 }
 
-export default SimpleTable;
+export default TableRegistration;

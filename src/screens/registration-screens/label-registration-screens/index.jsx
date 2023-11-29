@@ -8,64 +8,45 @@ import Select from '../../../components/select-component';
 import InputComponent from '../../../components/input-component';
 import DatePicker from '../../../components/datepicker-component';
 import { ProductApi } from '../../../services/api-master';
-import SimpleTable from '../../../components/table-registration-component';
+import TableRegistration from '../../../components/table-registration-component';
+import FilePicker from '../../../components/file-local-picker-component';
+// import Loading from '../../../assets/lotties/Loading.json';
+// import LottiesAnimation from '../../../components/lotties-animation-component';
 
 const dummyProductRegistered = [
   {
     product_id: 12412,
     product_sku: 'ABC1234',
     product_name: 'Batik',
-    qty: 10,
-  },
-  {
-    product_id: 4312,
-    product_sku: 'CBD123',
-    product_name: 'Celana',
-    qty: 10,
-  },
-  {
-    product_id: 3423,
-    product_sku: 'NVAM12',
-    product_name: 'Jaket',
-    qty: 10,
-  },
-  {
-    product_id: 5432,
-    product_sku: 'MVA23',
-    product_name: 'Sempak',
-    qty: 10,
+    qty: 18,
   },
 ];
-const dummyRfidRegister = [
-  {
-    rfid_number: '123wqerfc5nw123',
-    product_id: 9834,
-    product_sku: 'ABC1234',
-    product_name: 'Batik',
-    in_stock: true,
-  },
-  {
-    rfid_number: '122efasdfdfanw123',
-    product_id: undefined,
-    product_sku: undefined,
-    product_name: undefined,
-    in_stock: false,
-  },
-  {
-    rfid_number: '123adfanw1fgq23',
-    product_id: 10394,
-    product_sku: 'NVAM12',
-    product_name: 'Jaket',
-    in_stock: true,
-  },
-  {
-    rfid_number: '123sdffanw0odfd3',
-    product_id: 49821,
-    product_sku: 'MVA23',
-    product_name: 'Sempak',
-    in_stock: true,
-  },
-];
+// const dummyRfidRegister = [
+//   {
+//     rfid_number: '123wqerfc5nw123',
+//     product_id: 9834,
+//     product_sku: 'ABC1234',
+//     product_name: 'Batik',
+//     in_stock: true,
+//   },
+//   {
+//     rfid_number: '122efasdfdfanw123',
+//   },
+//   {
+//     rfid_number: '123adfanw1fgq23',
+//     product_id: 10394,
+//     product_sku: 'NVAM12',
+//     product_name: 'Jaket',
+//     in_stock: true,
+//   },
+//   {
+//     rfid_number: '123sdffanw0odfd3',
+//     product_id: 49821,
+//     product_sku: 'MVA23',
+//     product_name: 'Sempak',
+//     in_stock: true,
+//   },
+// ];
 
 const schemaSubmitRegistration = yup.object().shape({
   product_id: yup.string().nullable().required(),
@@ -78,6 +59,10 @@ function Screen() {
   //   const [error, setErrors] = useState(false);
   //   const [loadingRFID, setLoadingRFID] = useState(false);
   const [isLarge] = useMediaQuery('(min-width: 1150px)');
+  const cachedRfidData = localStorage.getItem('fileContent');
+  const [jsonArray, setJsonArray] = useState([]);
+  const [dummyRfidRegister, setDummyRfidRegister] = useState([]);
+  const [loadingTable, setLoadingTable] = useState(false);
 
   const {
     // handleSubmit,
@@ -88,6 +73,17 @@ function Screen() {
   } = useForm({
     resolver: yupResolver(schemaSubmitRegistration),
   });
+
+  useEffect(() => {
+    if (cachedRfidData !== null) {
+      const lines = cachedRfidData.split('\n');
+      const newJsonArray = lines.map(line => ({ rfid_number: line.trim() })).filter(item => item.rfid_number !== '');
+      setJsonArray(newJsonArray);
+    } else {
+      console.log('No data in localStorage');
+    }
+  }, [cachedRfidData]);
+
   useEffect(() => {
     ProductApi.get()
       .then(res => {
@@ -97,6 +93,23 @@ function Screen() {
         Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
       });
   }, []);
+
+  useEffect(() => {
+    setLoadingTable(true);
+    if (jsonArray.length > 0) {
+      setDummyRfidRegister(jsonArray);
+      setLoadingTable(false);
+    }
+    setLoadingTable(false);
+  }, [jsonArray]);
+
+  const handleFileSelect = fileContent => {
+    // Parse the file content or perform any necessary processing
+    const lines = fileContent.split('\n');
+    const newJsonArray = lines.map(line => ({ rfid_number: line.trim() }));
+    setJsonArray(newJsonArray);
+  };
+
   return (
     <div>
       <div className="px-5">
@@ -109,8 +122,9 @@ function Screen() {
             name="product_id"
             label="Product"
             placeholder="Select Product"
-            options={dataProduct?.map(i => {
+            options={dataProduct?.map((i, index) => {
               return {
+                key: index,
                 value: i.id,
                 label: i.product_name,
               };
@@ -137,7 +151,7 @@ function Screen() {
                 classCustom="h-full z-[999] opacity-100 flex flex-col items-center justify-center"
               /> */}
               {/* {!loadingRequest ?  */}
-              <SimpleTable data={dummyProductRegistered} isLarge={isLarge} />
+              <TableRegistration data={dummyProductRegistered} isLarge={isLarge} />
               {/* //    : null} */}
             </fieldset>
           </div>
@@ -151,15 +165,16 @@ function Screen() {
               <legend className="px-2 sm:text-xl xl:text-xl text-[#1F2937] font-semibold">RFID Detected</legend>
               {/* <LoadingComponent visible={loadingRFID} /> */}
               {/* <LottiesAnimation
-                visible={loadingRFID}
+                visible={loadingTable}
                 animationsData={Loading}
                 classCustom="h-full z-[999] opacity-100 flex flex-col items-center justify-center"
               /> */}
-              {/* {!loadingRFID ? ( */}
-              <SimpleTable
-                //   loading={loadtable}
+              {/* {!loadingTable ? ( */}
+              <TableRegistration
+                loading={loadingTable}
                 data={dummyRfidRegister.map(i => {
                   return {
+                    key: i.product_id,
                     rfid_number: i.rfid_number,
                     product_id: i.product_id,
                     product_name: i.product_name,
@@ -192,7 +207,8 @@ function Screen() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Button
+                  <FilePicker onFileSelect={handleFileSelect} />
+                  {/* <Button
                     _hover={{
                       shadow: 'md',
                       transform: 'translateY(-5px)',
@@ -206,7 +222,7 @@ function Screen() {
                     onClick={() => {}}
                   >
                     Scan
-                  </Button>
+                  </Button> */}
                   <Button
                     _hover={{
                       shadow: 'md',

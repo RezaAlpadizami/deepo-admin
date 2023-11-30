@@ -1,18 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
+import LottiesAnimation from './lotties-animation-component';
+import StopScanAnimation from '../assets/lotties/Stop-scan.json';
 
 function FilePicker({ onFileSelect }) {
   const [selected, setSelected] = useState(null);
   const [pollRate] = useState(1);
   const [intervalId, setIntervalId] = useState(null);
   const lastCachedContent = useRef(null);
-
-  useEffect(() => {
-    if (selected) {
-      startWatching();
-    }
-    return () => stopWatching();
-  }, [selected]);
+  const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
     const cachedContent = localStorage.getItem('fileContent');
@@ -82,7 +78,19 @@ function FilePicker({ onFileSelect }) {
   const stopWatching = () => {
     clearInterval(intervalId);
     setIntervalId(null);
-    setSelected(null);
+  };
+
+  const scanStart = () => {
+    if (selected) {
+      startWatching();
+    }
+    setIsScanning(true);
+  };
+  const scanStop = () => {
+    if (selected) {
+      stopWatching();
+    }
+    setIsScanning(false);
   };
 
   return (
@@ -112,10 +120,10 @@ function FilePicker({ onFileSelect }) {
         type="button"
         size="sm"
         px={12}
-        className="rounded-md border border-[#50B8C1] bg-[#fff] hover:bg-[#E4E4E4] text-[#50B8C1] font-semibold"
-        onClick={stopWatching}
+        className="relative srounded-md border border-[#50B8C1] bg-[#fff] hover:bg-[#E4E4E4] text-[#50B8C1] font-semibold"
+        onClick={isScanning ? scanStop : scanStart}
       >
-        Stop Watching
+        {isScanning ? <LottiesAnimation visible={isScanning} animationsData={StopScanAnimation} width={120} /> : 'Scan'}
       </Button>
     </div>
   );

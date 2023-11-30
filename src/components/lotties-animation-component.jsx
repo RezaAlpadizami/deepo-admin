@@ -2,7 +2,7 @@ import React from 'react';
 import Lottie from 'react-lottie';
 
 function LottiesAnimation(props) {
-  const { animationsData, classCustom, visible = false } = props;
+  const { animationsData, classCustom, visible = false, width, height } = props;
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -16,7 +16,7 @@ function LottiesAnimation(props) {
       // } bg-white z-[999] flex flex-col items-center justify-center`}
       className={classCustom}
     >
-      <Lottie options={defaultOptions} width={400} height={200} />
+      <Lottie options={defaultOptions} width={width} height={height} />
     </div>
   ) : null;
 }

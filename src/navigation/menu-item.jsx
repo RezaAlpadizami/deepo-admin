@@ -30,12 +30,14 @@ const ProductInformationShow = React.lazy(() => import('../screens/product-scree
 const ProductJourneyScreens = React.lazy(() => import('../screens/product-screens/product-journey-screens/index'));
 const ProductJourneyShowScreen = React.lazy(() => import('../screens/product-screens/product-journey-screens/show'));
 
-const LabelRegistrationScreen = React.lazy(() =>
-  import('../screens/registration-screens/label-registration-screens/index')
-);
-const LabelCancelRegistrationScreen = React.lazy(() =>
-  import('../screens/registration-screens/cancel-label-registration-screens/index')
-);
+const RequestScreens = React.lazy(() => import('../screens/request-screens/index'));
+const RequestScreensAdd = React.lazy(() => import('../screens/request-screens/add'));
+const RequestScreenShow = React.lazy(() => import('../screens/request-screens/show'));
+const RequestScreensEdit = React.lazy(() => import('../screens/request-screens/edit'));
+
+// const LabelCancelRegistrationScreen = React.lazy(() =>
+//   import('../screens/registration-screens/cancel-label-registration-screens/index')
+// );
 
 export default [
   {
@@ -46,6 +48,52 @@ export default [
     exact: true,
     route: '/',
     component: Home,
+  },
+  {
+    displayName: 'Request',
+    name: 'request',
+    role: 'request',
+    showmenu: true,
+    exact: true,
+    route: 'request',
+    routes: [
+      {
+        displayName: 'Request',
+        name: 'request-admin',
+        role: 'request',
+        showmenu: true,
+        exact: true,
+        route: 'request',
+        component: RequestScreens,
+      },
+      {
+        displayName: 'Create Request',
+        name: 'request-add-admin',
+        role: 'request',
+        showmenu: false,
+        exact: true,
+        route: 'request/add',
+        component: RequestScreensAdd,
+      },
+      {
+        displayName: 'Detail Request',
+        name: 'request-show-admin',
+        role: 'request',
+        showmenu: false,
+        exact: true,
+        route: 'request/:id/show',
+        component: RequestScreenShow,
+      },
+      {
+        displayName: 'Edit Request',
+        name: 'request-edit-admin',
+        role: 'request',
+        showmenu: false,
+        exact: true,
+        route: 'request/:id/edit',
+        component: RequestScreensEdit,
+      },
+    ],
   },
   {
     displayName: 'Master',
@@ -265,34 +313,6 @@ export default [
             component: ProductJourneyShowScreen,
           },
         ],
-      },
-    ],
-  },
-  {
-    displayName: 'Registration',
-    name: 'registration',
-    role: 'registration',
-    showmenu: true,
-    exact: true,
-    route: '/registration/label-registration',
-    routes: [
-      {
-        displayName: 'Label Registration',
-        name: 'registration-label',
-        role: 'registration',
-        showmenu: true,
-        exact: true,
-        route: '/registration/label-registration',
-        component: LabelRegistrationScreen,
-      },
-      {
-        displayName: 'Cancel Label Registration',
-        name: 'registration-cancel-label',
-        role: 'registration',
-        showmenu: true,
-        exact: true,
-        route: '/registration/cancel-label-registration',
-        component: LabelCancelRegistrationScreen,
       },
     ],
   },

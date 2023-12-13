@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import XLSX from 'xlsx';
 import Moment from 'moment';
@@ -19,6 +19,7 @@ import DatePicker from './datepicker-component';
 import Toolbar from './action-toolbar-component';
 import LoadingHover from './loading-hover-component';
 import { calculateText, hasProperty } from '../utils/helper';
+import Context from '../context';
 
 function DataTable(props) {
   const {
@@ -28,6 +29,7 @@ function DataTable(props) {
     to,
     api,
     checkbox,
+    onActionButton = () => {},
     displayName,
     name,
     filters,
@@ -41,6 +43,8 @@ function DataTable(props) {
     control,
     formState: { errors },
   } = useForm();
+
+  const { activityStore } = useContext(Context);
 
   const [pages, setPages] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -78,7 +82,12 @@ function DataTable(props) {
           width: d.width,
           Cell: props => {
             const { value, row } = props;
-
+            if (
+              (value === null && d.type !== 'action-button-index' && d.type !== 'action-button') ||
+              (value === undefined && d.type !== 'action-button-index' && d.type !== 'action-button')
+            ) {
+              return <span className="">-</span>;
+            }
             if (d.type === 'date') {
               return Moment(value).format('DD MMM YYYY');
             }
@@ -100,6 +109,38 @@ function DataTable(props) {
             }
             if (d.type === 'multi-value') {
               return <td>{`${value} - ${row.original[d.obj][d.secondValue]}`}</td>;
+            }
+            if (d.type === 'action-button' && row?.original?.status.toLowerCase() === 'pending') {
+              return (
+                <Button
+                  className="text-white bg-gradient-to-r from-[#50B8C1] to-[#50B8C1] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#50B8C1] font-medium rounded-md text-xs px-5 py-1.5 text-center mr-2 mb-2"
+                  onClick={() => {
+                    onActionButton(row.original.id, row.original);
+                  }}
+                  type="button"
+                  px={6}
+                  size="xs"
+                >
+                  Process
+                </Button>
+              );
+            }
+            if (d.type === 'action-button-index') {
+              return (
+                <Link
+                  hidden={row.original.status !== 'PENDING'}
+                  type="button"
+                  onClick={() => {
+                    activityStore.setRequestNumber(row.original.id);
+                    activityStore.setActivityName(row.original.activity_name);
+                  }}
+                  to={`/${route(row.original.activity_name)}`}
+                  size="sm"
+                  className="relative border-none font-bold text-[12px] text-[#fff] w-[6rem] h-[1.5rem] leading-[1.5rem] text-center bg-[#50B8C1] rounded-md z-[1] before:absolute before:-top-[5px] before:-right-[5px] before:-left-[5px] before:-bottom-[5px] before:-z-[1] before:bg-gradient-to-r hover:animate-ani hover:before:blur-[10px] before:from-[#50B8C1] before:via-[#50B8C1] before:to-[#50B8C1] before:bg-400% before:rounded-md before:duration-1000 active:bg-gradient-to-r active:from-[#50B8C1] active:via-[#50B8C1] active:to-[#50B8C1] my-2"
+                >
+                  PROCESS
+                </Link>
+              );
             }
 
             return value;
@@ -363,6 +404,21 @@ function DataTable(props) {
       return isDesc ? 'desc' : 'asc';
     }
     return '';
+  };
+
+  const route = name => {
+    let to;
+    switch (name?.toLowerCase()) {
+      case 'inbound':
+        to = 'inbound';
+        break;
+      case 'outbound':
+        to = 'outbound';
+        break;
+      default:
+        break;
+    }
+    return to;
   };
 
   return (

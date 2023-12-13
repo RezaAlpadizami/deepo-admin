@@ -17,12 +17,12 @@ function InputElement(props) {
         size="sm"
         width="auto"
         placeholder={placeholder}
-        focusBorderColor="primarydeepo"
+        focusBorderColor="#184D47"
         type="text"
         isInvalid={errors[name]}
         className="w-full text-sm border-gray-400 py-4 rounded-md px-4"
       />
-      <InputRightElement {...props} className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-md h-full cursor-pointe`}>
+      <InputRightElement {...props} className={`${isLarge ? 'w-14' : ' w-10'}  rounded-r-md h-full cursor-pointer`}>
         <CalendarIcon color="black" className="w-5 h-5 mt-0.5" />
       </InputRightElement>
     </InputGroup>

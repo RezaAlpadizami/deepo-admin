@@ -42,7 +42,7 @@ function Content() {
         {MenuItem.map(item => {
           const comp = [];
           if (item.route && item.component) {
-            if (store.user.hasRole(item.role) || item.role === '') {
+            if (store.user.hasRole(item.role) || item.role === 'home') {
               comp.push(
                 <Route
                   exact={item.exact}

@@ -2,7 +2,9 @@ import React from 'react';
 import { Select } from '@chakra-ui/react';
 
 function SelectComponent(props) {
-  const { name, label, disabled, register, errors, placeholder, options } = props;
+  const { name, label, disabled, register, errors, placeholder, options, isDefaultOption } = props;
+
+  const defaultOption = { label: 'None', value: null };
 
   return (
     <div className="flex-auto w-full">
@@ -22,7 +24,7 @@ function SelectComponent(props) {
             focusBorderColor="#184D47"
             placeholder={`Select ${placeholder}`}
           >
-            {options?.map((el, idx) => (
+            {(isDefaultOption ? [defaultOption, ...options] || [] : options || []).map((el, idx) => (
               <option key={idx} value={el.value}>
                 {el.label}
               </option>

@@ -13,14 +13,7 @@ import FilePicker from '../../../components/file-local-picker-component';
 // import Loading from '../../../assets/lotties/Loading.json';
 // import LottiesAnimation from '../../../components/lotties-animation-component';
 
-const dummyProductRegistered = [
-  {
-    product_id: 12412,
-    product_sku: 'ABC1234',
-    product_name: 'Batik',
-    qty: 18,
-  },
-];
+const dummyProductRegistered = [];
 // const dummyRfidRegister = [
 //   {
 //     rfid_number: '123wqerfc5nw123',
@@ -106,7 +99,8 @@ function Screen() {
   const handleFileSelect = fileContent => {
     // Parse the file content or perform any necessary processing
     const lines = fileContent.split('\n');
-    const newJsonArray = lines.map(line => ({ rfid_number: line.trim() }));
+    console.log('lines', lines);
+    const newJsonArray = lines.map(line => ({ rfid_number: line.trim() })).filter(item => item.rfid_number !== '');
     setJsonArray(newJsonArray);
   };
 
@@ -121,7 +115,7 @@ function Screen() {
           <Select
             name="product_id"
             label="Product"
-            placeholder="Select Product"
+            placeholder="Product"
             options={dataProduct?.map((i, index) => {
               return {
                 key: index,
@@ -131,6 +125,7 @@ function Screen() {
             })}
             register={register}
             errors={errors}
+            isDefaultOptions
           />
         </div>
       </div>
@@ -151,7 +146,7 @@ function Screen() {
                 classCustom="h-full z-[999] opacity-100 flex flex-col items-center justify-center"
               /> */}
               {/* {!loadingRequest ?  */}
-              <TableRegistration data={dummyProductRegistered} isLarge={isLarge} />
+              <TableRegistration data={dummyProductRegistered} isLarge={isLarge} productRegistered />
               {/* //    : null} */}
             </fieldset>
           </div>
@@ -193,7 +188,7 @@ function Screen() {
         <div className="">
           <div className="w-full rounded-md">
             <div className="flex w-full py-2">
-              <div className="grid grid-cols-2 gap-28 sm:space-x-[20%] md:space-x-[60%] xl:space-x-[70%] w-full bg-white px-4 py-6 rounded-md border border-[#C2C2C2]">
+              <div className="grid grid-cols-2 gap-28 sm:space-x-[20%] md:space-x-[60%] xl:space-x-[70%] bg-white px-4 py-6 rounded-md border border-[#C2C2C2]">
                 <div className="flex flex-col">
                   <div className="flex">
                     <div className="max-sm:text-xs xl:text-lg w-1/2 flex-1">Total Product Registered</div>

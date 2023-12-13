@@ -56,7 +56,7 @@ function SidebarComponent() {
                   </li>
                   {d.routes?.length > 0 && (
                     <ul
-                      className={`transition-all ease-in-out duration-300 bg-red-200 overflow-hidden ${
+                      className={`transition-all ease-in-out duration-300 overflow-hidden ${
                         findTree([d], location).length > 0 ? 'max-h-96' : 'max-h-0'
                       }`}
                     >

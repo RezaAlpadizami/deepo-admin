@@ -3,7 +3,7 @@ import LottiesAnimation from './lotties-animation-component';
 import Loading from '../assets/lotties/Loading.json';
 
 function TableRegistration(props) {
-  const { data, isLarge, rfidTable, loading } = props;
+  const { data, isLarge, rfidTable, loading, productRegistered } = props;
 
   const th = `${isLarge ? 'px-8 text-sm' : 'px-4 text-xs'} text-bold text-[#000] text-center py-1.5 tracking-wide`;
   const td = 'text-[#000] text-center py-1.5 break-words';
@@ -52,7 +52,7 @@ function TableRegistration(props) {
           ) : (
             <tr>
               <td colSpan={4} className="text-center bg-[#fff] py-1.5 text-[#868689] tracking-wide">
-                No data available
+                {`No ${productRegistered ? 'registered products' : 'data available'}`}
               </td>
             </tr>
           )}

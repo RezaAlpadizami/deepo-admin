@@ -52,7 +52,7 @@ function ShowScreen(props) {
         </div>
       </div>
 
-      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
+      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px]">
         <InputDetail label="SKU" value={capitalize(data?.sku) || '-'} />
         <InputDetail label="Name" value={capitalize(data?.product_name) || '-'} />
         <InputDetail label="Category" value={data?.category_id || '-'} />

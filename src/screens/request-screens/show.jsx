@@ -9,7 +9,7 @@ import { Text } from '@chakra-ui/react';
 import { ArrowNarrowLeftIcon } from '@heroicons/react/solid';
 
 import Context from '../../context';
-import { thousandSeparator } from '../../utils/helper.js';
+import { thousandSeparator } from '../../utils/helper';
 import { RequestApi } from '../../services/api-transit';
 import TextArea from '../../components/textarea-component';
 import InputDetail from '../../components/input-detail-component';

@@ -80,11 +80,6 @@ function ActionToolbar(props) {
           +Add
         </Button>
       )}
-      {onDownload && (
-        <Button size="sm" className={button} onClick={onDownload}>
-          Save
-        </Button>
-      )}
       {onEdit && (
         <Button
           size="sm"
@@ -92,7 +87,7 @@ function ActionToolbar(props) {
           onClick={() => navigate(`${navTo?.path}/${selectedData?.find(i => i).original.id}/edit`)}
           isDisabled={selectedData.length !== 1}
         >
-          Update
+          Edit
         </Button>
       )}
       {onDelete && (
@@ -101,15 +96,20 @@ function ActionToolbar(props) {
         </Button>
       )}
 
+      {onDownload && (
+        <Button size="sm" className={button} onClick={onDownload}>
+          Save to Excel
+        </Button>
+      )}
       {copyClipboard && (
         <Button size="sm" className={button} onClick={onCopy} isDisabled={selectedData.length === 0}>
-          Copy
+          Copy to Clipboard
         </Button>
       )}
       {onShowHideColumn && (
         <>
           <Button size="sm" className={button} onClick={() => setShowHide(!showHide)}>
-            Show / Hide
+            Show / Hide Column
           </Button>
           <ShowHide
             getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}

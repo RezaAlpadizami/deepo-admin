@@ -6,10 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import Context from '../../../context';
-import { CategoryApi } from '../../../services/api-master';
+import { UomApi } from '../../../services/api-master';
 import InputDetail from '../../../components/input-detail-component';
 import LoadingHover from '../../../components/loading-hover-component';
 import DeleteButton from '../../../components/delete-button-component';
+import { capitalize } from '../../../utils/helper';
 
 function Screen(props) {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function Screen(props) {
   const { store } = useContext(Context);
 
   const [loading, setLoading] = useState(false);
-  const [dataCategoryById, setDataCategoryById] = useState([]);
+  const [dataUomById, setDataUomById] = useState([]);
 
   useEffect(() => {
     getDetailCategory();
@@ -26,10 +27,10 @@ function Screen(props) {
 
   const getDetailCategory = () => {
     setLoading(true);
-    CategoryApi.find(id)
+    UomApi.find(id)
       .then(res => {
         setLoading(false);
-        setDataCategoryById(res);
+        setDataUomById(res);
       })
       .catch(error => {
         setLoading(false);
@@ -45,10 +46,10 @@ function Screen(props) {
         </button>
         <h1 className="font-bold text-xl max-[640px]:text-xs max-[640px]:mr-2">{displayName}</h1>
         <div className="flex-1" />
-        <DeleteButton api={CategoryApi} id={id} redirectTo="master/category" />
+        <DeleteButton api={UomApi} id={id} redirectTo="master/unit-of-measurement" />
         <Button
           onClick={() => {
-            navigate(`/master/category/${id}/edit`);
+            navigate(`/master/unit-of-measurement/${id}/edit`);
             store.setIsLoadEdit(true);
           }}
           px={8}
@@ -62,17 +63,18 @@ function Screen(props) {
 
       <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2py-8 px-8 rounded-[30px]">
         <InputDetail
-          value={dataCategoryById.code}
+          value={dataUomById.code || '-'}
           label="Code"
           customStyleLabel="text-md"
           customStyleSpan="text-md font-bold"
         />
         <InputDetail
-          value={dataCategoryById.name}
-          label="Category"
+          value={dataUomById.name || '-'}
+          label="Name"
           customStyleLabel="text-md"
           customStyleSpan="text-md font-bold"
         />
+        <InputDetail label="Description" value={capitalize(dataUomById?.description) || '-'} />
       </div>
       {loading && <LoadingHover visible={loading} />}
     </div>

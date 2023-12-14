@@ -52,7 +52,7 @@ function Screen(props) {
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md max-[640px]:grid-cols-1 max-[640px]:gap-y-8">
+      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px] max-[640px]:grid-cols-1 max-[640px]:gap-y-8">
         <InputDetail
           value={dataStorageById.code}
           label="Code"

@@ -11,7 +11,7 @@ import { Button, Text } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Input from '../../components/input-component';
-import { thousandSeparator } from '../../utils/helper.js';
+import { thousandSeparator } from '../../utils/helper';
 import Select from '../../components/select-component';
 import { ProductApi } from '../../services/api-master';
 import { RequestApi } from '../../services/api-transit';

@@ -650,6 +650,13 @@ function DataTable(props) {
               </div>
             </div>
 
+            {!loading && data.length <= 0 && (
+              <div className="grid place-content-center text-center h-[250px]">
+                <p className="font-bold text-xl">No data {displayName}</p>
+                <p className="font-medium">Please first add {displayName}</p>
+              </div>
+            )}
+
             <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
               <span className="text-sm font-normal text-gray-500 ">
                 {totalData <= 0 ? null : (
@@ -716,7 +723,7 @@ function DataTable(props) {
                           onClick={() => changePage(i + p)}
                           className={`${
                             pages === i + p ? 'bg-[#50B8C1] text-white' : 'bg-[#F3F3F3]'
-                          } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-[#50B8C1] hover:text-white disabled:text-white`}
+                          } py-2 px-3 mx-0.5 leading-tight text-black bg-[#50B8C1] rounded-lg hover:bg-[#50B8C1] hover:text-white disabled:text-white`}
                         >
                           {i + p}
                         </button>

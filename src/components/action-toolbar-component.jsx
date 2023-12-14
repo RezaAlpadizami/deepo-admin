@@ -126,7 +126,7 @@ function ActionToolbar(props) {
         >
           <div className="border shadow-lg modal-container bg-white w-[80%] mx-auto rounded-xl z-50 overflow-y-auto py-4 px-2">
             <div className="modal-content py-4 text-left px-6">
-              <div className="flex justify-between items-center pb-3">
+              <div className="flex justify-between items-center py-4">
                 <p className={`${isLarge ? 'text-md' : 'text-sm'} font-bold`}>Are you sure to delete this data ?</p>
                 <div className="flex-1" />
                 <Button
@@ -137,11 +137,11 @@ function ActionToolbar(props) {
                     transitionTimingFunction: 'ease-in-out',
                   }}
                   type="button"
-                  size={`${isLarge ? 'sm' : 'xs'} `}
+                  size={`${isLarge ? 'md' : 'xs'} `}
                   px={isLarge ? 8 : 4}
                   className={`${
                     isLarge ? '' : 'text-sm'
-                  } rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold`}
+                  } rounded-md border border-[#757575] bg-[#fff] hover:bg-[#E4E4E4] text-[#757575] font-bold py-1`}
                   onClick={() => setOnOpen(!onOpen)}
                 >
                   Cancel
@@ -158,7 +158,7 @@ function ActionToolbar(props) {
                   px={isLarge ? 8 : 4}
                   className={`${
                     isLarge ? '' : 'text-sm'
-                  } ml-4 rounded-full bg-[#eb6058] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] hover:bg-[#b74b44] font-bold`}
+                  } ml-4 rounded-md bg-[#E32C2C] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] hover:bg-[#b74b44] py-1 font-bold`}
                   onClick={() => {
                     onDelete();
                     setOnOpen(!onOpen);

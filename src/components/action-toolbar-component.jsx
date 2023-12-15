@@ -32,8 +32,6 @@ function ActionToolbar(props) {
   const [showHide, setShowHide] = useState(false);
   const toast = useToast();
 
-  console.log('navTo', navTo);
-
   const onCopy = () => {
     let text = '';
     copyItem.forEach(val => {

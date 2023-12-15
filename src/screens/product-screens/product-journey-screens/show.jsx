@@ -63,7 +63,7 @@ function Screen(props) {
 
       <div>
         <h1 className="font-bold text-md">Detail Product</h1>
-        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full drop-shadow-md max-[640px]:grid max-[640px]:grid-cols-1 max-[640px]:gap-1 max-[640px]:p-[1.5rem]">
+        <div className="flex gap-32 p-10 mt-6  rounded-[20px] w-full max-[640px]:grid max-[640px]:grid-cols-1 max-[640px]:gap-1 max-[640px]:p-[1.5rem]">
           <div>
             <InputDetail
               value={dataDetailProduct.product_name}

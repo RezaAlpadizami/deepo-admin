@@ -174,6 +174,7 @@ function Screen() {
                     })}
                     register={register}
                     errors={errors}
+                    placeholder="Activity"
                   />
                 </div>
                 <div className="w-full">
@@ -211,6 +212,7 @@ function Screen() {
                       register={registerProd}
                       control={controlProd}
                       errors={errorsProd}
+                      placeholder="Product"
                     />
                   </div>
                   <div className="">

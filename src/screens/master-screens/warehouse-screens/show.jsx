@@ -23,7 +23,6 @@ function Screen(props) {
   const getDetailWarehouse = () => {
     WarehouseApi.find(id)
       .then(res => {
-        console.log('res', res);
         setDataWarehouseById(res);
       })
       .catch(error => {
@@ -47,13 +46,13 @@ function Screen(props) {
             navigate(`/master/warehouse/${id}/edit`);
           }}
           size="sm"
-          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4] max-[640px]:ml-2"
+          className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4] max-[640px]:ml-2"
         >
           Edit
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md max-[640px]:grid-cols-1 max-[640px]:gap-y-4">
+      <div className="grid items-start justify-items-center w-md gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px] max-[640px]:grid-cols-1 max-[640px]:gap-y-4">
         <InputDetail
           value={dataWarehouseById.code}
           label="Code"
@@ -61,7 +60,7 @@ function Screen(props) {
           customStyleSpan="text-md font-bold"
         />
         <InputDetail
-          value={dataWarehouseById.address}
+          value={dataWarehouseById.address || '-'}
           label="Address"
           customStyleLabel="text-md"
           customStyleSpan="text-md font-bold"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import XLSX from 'xlsx';
 import Moment from 'moment';
@@ -19,6 +19,7 @@ import DatePicker from './datepicker-component';
 import Toolbar from './action-toolbar-component';
 import LoadingHover from './loading-hover-component';
 import { calculateText, hasProperty } from '../utils/helper';
+import Context from '../context';
 
 function DataTable(props) {
   const {
@@ -28,6 +29,7 @@ function DataTable(props) {
     to,
     api,
     checkbox,
+    onActionButton = () => {},
     displayName,
     name,
     filters,
@@ -41,6 +43,8 @@ function DataTable(props) {
     control,
     formState: { errors },
   } = useForm();
+
+  const { activityStore } = useContext(Context);
 
   const [pages, setPages] = useState(1);
   const [lastPage, setLastPage] = useState(1);
@@ -78,7 +82,12 @@ function DataTable(props) {
           width: d.width,
           Cell: props => {
             const { value, row } = props;
-
+            if (
+              (value === null && d.type !== 'action-button-index' && d.type !== 'action-button') ||
+              (value === undefined && d.type !== 'action-button-index' && d.type !== 'action-button')
+            ) {
+              return <span className="">-</span>;
+            }
             if (d.type === 'date') {
               return Moment(value).format('DD MMM YYYY');
             }
@@ -100,6 +109,38 @@ function DataTable(props) {
             }
             if (d.type === 'multi-value') {
               return <td>{`${value} - ${row.original[d.obj][d.secondValue]}`}</td>;
+            }
+            if (d.type === 'action-button' && row?.original?.status.toLowerCase() === 'pending') {
+              return (
+                <Button
+                  className="text-white bg-gradient-to-r from-[#50B8C1] to-[#50B8C1] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#50B8C1] font-medium rounded-md text-xs px-5 py-1.5 text-center mr-2 mb-2"
+                  onClick={() => {
+                    onActionButton(row.original.id, row.original);
+                  }}
+                  type="button"
+                  px={6}
+                  size="xs"
+                >
+                  Process
+                </Button>
+              );
+            }
+            if (d.type === 'action-button-index') {
+              return (
+                <Link
+                  hidden={row.original.status !== 'PENDING'}
+                  type="button"
+                  onClick={() => {
+                    activityStore.setRequestNumber(row.original.id);
+                    activityStore.setActivityName(row.original.activity_name);
+                  }}
+                  to={`/${route(row.original.activity_name)}`}
+                  size="sm"
+                  className="relative border-none font-bold text-[12px] text-[#fff] w-[6rem] h-[1.5rem] leading-[1.5rem] text-center bg-[#50B8C1] rounded-md z-[1] before:absolute before:-top-[5px] before:-right-[5px] before:-left-[5px] before:-bottom-[5px] before:-z-[1] before:bg-gradient-to-r hover:animate-ani hover:before:blur-[10px] before:from-[#50B8C1] before:via-[#50B8C1] before:to-[#50B8C1] before:bg-400% before:rounded-md before:duration-1000 active:bg-gradient-to-r active:from-[#50B8C1] active:via-[#50B8C1] active:to-[#50B8C1] my-2"
+                >
+                  PROCESS
+                </Link>
+              );
             }
 
             return value;
@@ -365,6 +406,21 @@ function DataTable(props) {
     return '';
   };
 
+  const route = name => {
+    let to;
+    switch (name?.toLowerCase()) {
+      case 'inbound':
+        to = 'inbound';
+        break;
+      case 'outbound':
+        to = 'outbound';
+        break;
+      default:
+        break;
+    }
+    return to;
+  };
+
   return (
     <Fade in={filters.length > 0}>
       {download && (
@@ -446,7 +502,7 @@ function DataTable(props) {
                     type="button"
                     size="sm"
                     px={8}
-                    className="rounded-full border border-primarydeepo bg-[#fff] hover:bg-[#E4E4E4] text-[#184D47] font-bold"
+                    className="rounded-md border border-[#50B8C1] bg-[#fff] hover:bg-[#E4E4E4] text-[#50B8C1] font-semibold"
                     onClick={() => onReset()}
                   >
                     Reset
@@ -461,7 +517,7 @@ function DataTable(props) {
                     type="submit"
                     size="sm"
                     px={8}
-                    className="ml-4 rounded-full bg-primarydeepo drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold"
+                    className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-semibold"
                     onClick={handleSubmit(onSubmit)}
                   >
                     Filter
@@ -472,230 +528,245 @@ function DataTable(props) {
           </div>
         </div>
       )}
-      {renderToolbar() && filter.length !== 0 && (
-        <Toolbar
-          selectedData={selectedFlatRows}
-          defaultShow={propsColumn}
-          getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
-          columns={allColumns}
-          navTo={{ path: to, id: selectedFlatRows?.find(i => i)?.original.id }}
-          displayName={displayName}
-          name={name}
-          onAdd={enableAction('add')}
-          onEdit={enableAction('edit')}
-          copyItem={allColumns.filter(i => i.id !== 'selection' && i.isVisible === true)}
-          copyClipboard={enableAction('copy-to-clipboard')}
-          view={enableAction('view')}
-          onDelete={enableAction('delete') && deleteData}
-          onDownload={enableAction('save-to-excel') && download}
-          onShowHideColumn={enableAction('show-hide-column')}
-        />
-      )}
-      {loadingHover && <LoadingHover text="Please Wait..." />}
-      {filter.length !== 0 && (
-        <div className="overflow-x-hidden relative px-6 pb-11 bg-white drop-shadow-md rounded-b-3xl">
-          <div
-            className={`${
-              !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
-            } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
-          >
-            <div className="scrollbar-x-auto">
-              <table
-                {...getTableProps()}
-                className="table-auto w-full text-sm text-left border border-gray-200 text-gray-500 border-t"
-              >
-                <thead className="text-xs text-black uppercase bg-thead">
-                  {headerGroups.map((headerGroup, idxgroup) => (
-                    <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column, columnidx) => (
-                        <th
-                          key={columnidx}
-                          {...column.getHeaderProps()}
-                          className="px-3 py-3"
-                          width={column.width === 'auto' ? autoWidth : column.width}
-                        >
-                          <div
-                            className="flex"
-                            onClick={() => {
-                              if (column.id !== 'selection') {
-                                setIsSort(true);
-                                onSortChange(column);
-                              }
-                            }}
-                          >
-                            <div>{column.render('Header')}</div>
-                            <div className="my-auto">
-                              {isSort && column.id === columnId && column.id !== 'selection' ? (
-                                onChangeHeader() === 'desc' && isDesc ? (
-                                  <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
-                                ) : (
-                                  <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
-                                )
-                              ) : (
-                                ''
-                              )}
-                            </div>
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-
-                {!loading && (
-                  <tbody {...getTableBodyProps()}>
-                    {rows.map((row, i) => {
-                      prepareRow(row);
-                      return (
-                        <tr
-                          key={i}
-                          {...row.getRowProps()}
-                          className={`${
-                            i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                          } border border-gray-200 hover:bg-slate-100`}
-                        >
-                          {row.cells.map((cell, idx) => (
-                            <td
-                              key={idx}
-                              {...cell.getCellProps()}
-                              className={`${cell.column.id === 'selection' ? 'px-3' : 'px-3'} py-2`}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          ))}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                )}
-              </table>
-
-              {loading && (
-                <Stack>
-                  <div className="flex p-3 gap-2">
-                    <Skeleton height="20px" width="5%" />
-                    <Skeleton height="20px" width="95%" />
-                  </div>
-                  <div className="flex p-3 gap-2">
-                    <Skeleton height="20px" width="5%" />
-                    <Skeleton height="20px" width="95%" />
-                  </div>
-                  <div className="flex p-3 gap-2">
-                    <Skeleton height="20px" width="5%" />
-                    <Skeleton height="20px" width="95%" />
-                  </div>
-                  <div className="flex p-3 gap-2">
-                    <Skeleton height="20px" width="5%" />
-                    <Skeleton height="20px" width="95%" />
-                  </div>
-                </Stack>
-              )}
-            </div>
-          </div>
-
-          <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
-            <span className="text-sm font-normal text-gray-500 ">
-              {totalData <= 0 ? null : (
-                <>
-                  Showing <span className="font-semibold text-gray-900 ">{`${limit * (pages - 1) + 1} - `}</span>
-                  <span className="font-semibold text-gray-900">
-                    {pages * limit > totalData ? totalData : pages * limit}
-                  </span>{' '}
-                  of <span className="font-semibold text-gray-900 ">{totalData}</span>
-                </>
-              )}
-            </span>
-            <ul className="inline-flex items-center text-sm -space-x-px py-4">
-              <li>
-                <button
-                  type="button"
-                  disabled={pages === 1}
-                  onClick={() => (pages === 1 ? {} : changePage(pages - 1))}
-                  className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
+      <div className="border border-[#C2C2C2] rounded-md">
+        {renderToolbar() && filter.length !== 0 && (
+          <Toolbar
+            selectedData={selectedFlatRows}
+            defaultShow={propsColumn}
+            getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}
+            columns={allColumns}
+            navTo={{ path: to, id: selectedFlatRows?.find(i => i)?.original.id }}
+            displayName={displayName}
+            name={name}
+            onAdd={enableAction('add')}
+            onEdit={enableAction('edit')}
+            copyItem={allColumns.filter(i => i.id !== 'selection' && i.isVisible === true)}
+            copyClipboard={enableAction('copy-to-clipboard')}
+            view={enableAction('view')}
+            onDelete={enableAction('delete') && deleteData}
+            onDownload={enableAction('save-to-excel') && download}
+            onShowHideColumn={enableAction('show-hide-column')}
+          />
+        )}
+        {loadingHover && <LoadingHover text="Please Wait..." />}
+        {filter.length !== 0 && (
+          <div className="overflow-x-hidden relative px-6 pb-11 drop-shadow-md rounded-b-3xl">
+            <div
+              className={`${
+                !loading && data.length <= 0 ? 'overflow-hide' : 'overflow-x-auto'
+              } w-full bg-white no-scrollbar::-webkit-scrollbar no-scrollbar`}
+            >
+              <div className="scrollbar-x-auto">
+                <table
+                  {...getTableProps()}
+                  className="table-auto w-full text-sm text-left border border-gray-200 text-gray-500 border-t"
                 >
-                  <span className="sr-only">Previous</span>
-                  <ChevronLeftIcon className="w-5 h-5" />
-                </button>
-              </li>
-              {lastPage > 7 && pages >= 4 && (
-                <>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => changePage(1)}
-                      className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 mr-1  hover:bg-gray-700 hover:text-white"
-                    >
-                      1
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      className="py-2 px-3 leading-tight text-black rounded-lg mr-0.5 bg-gray-100 hover:bg-gray-700 hover:text-white"
-                    >
-                      ...
-                    </button>
-                  </li>
-                </>
-              )}
-              {Array(
-                lastPage > 7 && lastPage - pages < 3 ? 5 : lastPage > 7 && pages >= 4 ? 3 : lastPage > 7 ? 5 : lastPage
-              )
-                .fill('')
-                .map((_, i) => {
-                  const p =
-                    lastPage > 7 && lastPage - pages < 3 ? lastPage - 4 : lastPage > 7 && pages >= 4 ? pages - 1 : 1;
-                  return (
-                    <li key={i}>
+                  <thead className="text-xs text-black uppercase bg-thead">
+                    {headerGroups.map((headerGroup, idxgroup) => (
+                      <tr key={idxgroup} {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map((column, columnidx) => (
+                          <th
+                            key={columnidx}
+                            {...column.getHeaderProps()}
+                            className="px-3 py-3"
+                            width={column.width === 'auto' ? autoWidth : column.width}
+                          >
+                            <div
+                              className="flex"
+                              onClick={() => {
+                                if (column.id !== 'selection') {
+                                  setIsSort(true);
+                                  onSortChange(column);
+                                }
+                              }}
+                            >
+                              <div>{column.render('Header')}</div>
+                              <div className="my-auto">
+                                {isSort && column.id === columnId && column.id !== 'selection' ? (
+                                  onChangeHeader() === 'desc' && isDesc ? (
+                                    <ArrowSmUpIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                  ) : (
+                                    <ArrowSmDownIcon className="ml-2 h-4 stroke-[#eb6058]" />
+                                  )
+                                ) : (
+                                  ''
+                                )}
+                              </div>
+                            </div>
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+
+                  {!loading && (
+                    <tbody {...getTableBodyProps()}>
+                      {rows.map((row, i) => {
+                        prepareRow(row);
+                        return (
+                          <tr
+                            key={i}
+                            {...row.getRowProps()}
+                            className={`${
+                              i % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                            } border border-gray-200 hover:bg-slate-100`}
+                          >
+                            {row.cells.map((cell, idx) => (
+                              <td
+                                key={idx}
+                                {...cell.getCellProps()}
+                                className={`${cell.column.id === 'selection' ? 'px-3' : 'px-3'} py-2`}
+                              >
+                                {cell.render('Cell')}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  )}
+                </table>
+
+                {loading && (
+                  <Stack>
+                    <div className="flex p-3 gap-2">
+                      <Skeleton height="20px" width="5%" />
+                      <Skeleton height="20px" width="95%" />
+                    </div>
+                    <div className="flex p-3 gap-2">
+                      <Skeleton height="20px" width="5%" />
+                      <Skeleton height="20px" width="95%" />
+                    </div>
+                    <div className="flex p-3 gap-2">
+                      <Skeleton height="20px" width="5%" />
+                      <Skeleton height="20px" width="95%" />
+                    </div>
+                    <div className="flex p-3 gap-2">
+                      <Skeleton height="20px" width="5%" />
+                      <Skeleton height="20px" width="95%" />
+                    </div>
+                  </Stack>
+                )}
+              </div>
+            </div>
+
+            {!loading && data.length <= 0 && (
+              <div className="grid place-content-center text-center h-[250px]">
+                <p className="font-bold text-xl">No data {displayName}</p>
+                <p className="font-medium">Please first add {displayName}</p>
+              </div>
+            )}
+
+            <nav className="flex justify-between items-center bg-white pl-4" aria-label="Table navigation">
+              <span className="text-sm font-normal text-gray-500 ">
+                {totalData <= 0 ? null : (
+                  <>
+                    Showing <span className="font-semibold text-gray-900 ">{`${limit * (pages - 1) + 1} - `}</span>
+                    <span className="font-semibold text-gray-900">
+                      {pages * limit > totalData ? totalData : pages * limit}
+                    </span>{' '}
+                    of <span className="font-semibold text-gray-900 ">{totalData}</span>
+                  </>
+                )}
+              </span>
+              <ul className="inline-flex items-center text-sm -space-x-px py-4">
+                <li>
+                  <button
+                    type="button"
+                    disabled={pages === 1}
+                    onClick={() => (pages === 1 ? {} : changePage(pages - 1))}
+                    className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    <span className="sr-only">Previous</span>
+                    <ChevronLeftIcon className="w-5 h-5" />
+                  </button>
+                </li>
+                {lastPage > 7 && pages >= 4 && (
+                  <>
+                    <li>
                       <button
                         type="button"
-                        disabled={pages === i + p}
-                        onClick={() => changePage(i + p)}
-                        className={`${
-                          pages === i + p ? 'bg-secondarydeepo text-white' : 'bg-[#F3F3F3]'
-                        } py-2 px-3 mx-0.5 leading-tight text-black bg-gray-100 rounded-lg hover:bg-[#184D47] hover:text-white disabled:text-white`}
+                        onClick={() => changePage(1)}
+                        className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 mr-1  hover:bg-gray-700 hover:text-white"
                       >
-                        {i + p}
+                        1
                       </button>
                     </li>
-                  );
-                })}
-              {lastPage > 7 && lastPage - pages >= 3 && (
-                <>
-                  <li>
-                    <button
-                      type="button"
-                      className="py-2 px-3 mr-1 ml-0.5 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
-                    >
-                      ...
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => changePage(lastPage)}
-                      className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
-                    >
-                      {lastPage}
-                    </button>
-                  </li>
-                </>
-              )}
-              <li>
-                <button
-                  type="button"
-                  disabled={pages === lastPage}
-                  onClick={() => (pages === lastPage ? {} : changePage(pages + 1))}
-                  className="block py-2 px-3 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span className="sr-only">Next</span>
-                  {totalData <= 0 ? null : <ChevronRightIcon className="w-5 h-5" />}
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      )}
+                    <li>
+                      <button
+                        type="button"
+                        className="py-2 px-3 leading-tight text-black rounded-lg mr-0.5 bg-gray-100 hover:bg-gray-700 hover:text-white"
+                      >
+                        ...
+                      </button>
+                    </li>
+                  </>
+                )}
+                {Array(
+                  lastPage > 7 && lastPage - pages < 3
+                    ? 5
+                    : lastPage > 7 && pages >= 4
+                    ? 3
+                    : lastPage > 7
+                    ? 5
+                    : lastPage
+                )
+                  .fill('')
+                  .map((_, i) => {
+                    const p =
+                      lastPage > 7 && lastPage - pages < 3 ? lastPage - 4 : lastPage > 7 && pages >= 4 ? pages - 1 : 1;
+                    return (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          disabled={pages === i + p}
+                          onClick={() => changePage(i + p)}
+                          className={`${
+                            pages === i + p ? 'bg-[#50B8C1] text-white' : 'bg-[#F3F3F3]'
+                          } py-2 px-3 mx-0.5 leading-tight text-black bg-[#50B8C1] rounded-lg hover:bg-[#50B8C1] hover:text-white disabled:text-white`}
+                        >
+                          {i + p}
+                        </button>
+                      </li>
+                    );
+                  })}
+                {lastPage > 7 && lastPage - pages >= 3 && (
+                  <>
+                    <li>
+                      <button
+                        type="button"
+                        className="py-2 px-3 mr-1 ml-0.5 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
+                      >
+                        ...
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => changePage(lastPage)}
+                        className="py-2 px-3 leading-tight text-black rounded-lg bg-gray-100 hover:bg-gray-700 hover:text-white"
+                      >
+                        {lastPage}
+                      </button>
+                    </li>
+                  </>
+                )}
+                <li>
+                  <button
+                    type="button"
+                    disabled={pages === lastPage}
+                    onClick={() => (pages === lastPage ? {} : changePage(pages + 1))}
+                    className="block py-2 px-3 leading-tight text-gray-500 bg-white disabled:text-gray-300 disabled:hover:bg-white hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    <span className="sr-only">Next</span>
+                    {totalData <= 0 ? null : <ChevronRightIcon className="w-5 h-5" />}
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
+      </div>
     </Fade>
   );
 }

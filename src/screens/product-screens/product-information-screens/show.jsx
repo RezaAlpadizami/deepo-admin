@@ -172,7 +172,7 @@ function ShowScreen(props) {
                               <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800`}>Rack</p>
                               <span
                                 size="sm"
-                                px={8}
+                                // px={8}
                                 className={`${
                                   isLarge ? 'ml-4 px-6' : 'px-4'
                                 } rounded-full bg-[#288278] outline outline-[#1b5952] drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}
@@ -184,7 +184,7 @@ function ShowScreen(props) {
                               <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800 w-20 px-5`}>Bay</p>
                               <span
                                 size="sm"
-                                px={8}
+                                // px={8}
                                 className={`${
                                   isLarge ? 'ml-4 px-6' : 'ml-1 px-4'
                                 } rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}
@@ -196,7 +196,7 @@ function ShowScreen(props) {
                               <p className={`${isLarge ? 'px-5' : 'px-1'} mb-2 text-gray-800 w-20 px-5`}>Level</p>
                               <span
                                 size="sm"
-                                px={8}
+                                // px={8}
                                 className={`${
                                   isLarge ? ' ml-4 px-6' : 'ml-2 px-4'
                                 } rounded-full bg-[#288278] outline outline-[#1b5952]  drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold`}

@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { UserCircleIcon } from '@heroicons/react/solid';
 
 import { useMediaQuery } from '@chakra-ui/react';
+import { Link, useLocation } from 'react-router-dom';
+import { ChevronDownIcon, BellIcon, UserIcon } from '@heroicons/react/outline';
+
 import Context from '../context';
+import logo from '../assets/images/logo-app.png';
 import menuItem from '../navigation/menu-item';
-import logo from '../assets/images/logo.svg';
 import { findTree } from '../utils/navigation-utils';
+// import { ReactComponent as Wave } from '../assets/styles/wave.svg';
 import HamburgerMenu from '../assets/images/hamburger-icon.svg';
 
 function Header() {
@@ -15,24 +17,31 @@ function Header() {
   const [isLarge] = useMediaQuery('(min-width: 1224px)');
 
   return (
-    <header className={`${isLarge ? 'p-5' : 'p-2'} flex p-5 border-b bg-[#fff] drop-shadow-sm`}>
+    <header className={`${isLarge ? 'p-4' : 'p-2'} flex p-5 border-b bg-[#fff] drop-shadow-sm`}>
       {isLarge ? (
-        <div className="mx-3 mt-0.5 cursor-pointer" onClick={() => store.toggleDrawer()}>
-          <img src={logo} alt="logo" />
+        <div className="mx-3 cursor-pointer" onClick={() => store.toggleDrawer()}>
+          <img src={logo} alt="logo" width={200} />
         </div>
       ) : (
         <div className="mx-1 h-8 cursor-pointer" onClick={() => store.toggleDrawer()}>
           <img src={HamburgerMenu} alt="hamburger-icon" className="h-8" />
         </div>
       )}
-      <ul className="flex ml-5 flex-auto">
+      <ul className="flex pl-20 gap-8 flex-auto items-center">
         {menuItem
           .filter(item => item.showmenu)
           .map((v, i) => {
             if (v.routes && !isShouldDisplay(v.routes)) return null;
             return (
               <li className="px-2" key={i}>
-                <Link to={v.route} className={findTree([v], location).length > 0 ? 'font-bold text-[#184D47]' : ''}>
+                <Link
+                  to={v.route}
+                  className={
+                    findTree([v], location).length > 0
+                      ? 'text-[#1BB4C0] px-4 py-1 bg-[#E9E9E9] bg-opacity-75 rounded-md'
+                      : ''
+                  }
+                >
                   {v.displayName}
                 </Link>
               </li>
@@ -40,9 +49,13 @@ function Header() {
           })}
       </ul>
       <div className="flex">
-        <UserCircleIcon className="w-6 h-6" />
-        <span className="ml-2">Administrator</span>
+        <div className="flex items-center justify-center mx-4">
+          <BellIcon className="w-5 h-5 mx-4 text-[#757575]" />
+          <UserIcon className="w-5 h-5 text-[#757575]" />
+          <ChevronDownIcon className="w-4 h-4 text-[#757575]" />
+        </div>
       </div>
+      {/* <Wave /> */}
     </header>
   );
 }

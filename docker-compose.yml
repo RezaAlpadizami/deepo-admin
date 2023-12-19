@@ -8,3 +8,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:80
+    environment:
+      - TAG=1
+      - PUBLIC_URL=/
+      - REACT_APP_SOCKET=localhost
+      - REACT_APP_UI_PATH=path-scanner/
+      - REACT_APP_UI_URL_PATH=http://localhost:3001/path-scanners/
+      - REACT_APP_LOCAL_TRANSIT= http://11.11.2.53:1005/api/v1/
+      - REACT_APP_LOCAL_ADMIN= http://11.11.2.53:5001/api/v1/
+      - REACT_APP_SPEC=https://127.0.0.1:4010/
+      - REACT_APP_MASTER=http://52.221.197.46:5000/api/v1/
+      - REACT_APP_TRANSIT=http://52.221.197.46:5001/api/v1/

@@ -17,7 +17,7 @@ function InputComponent(props) {
   return (
     <div className="flex-auto w-full">
       <div>
-        <label htmlFor={name} className="text-sm font-light text-black block ml-1">
+        <label htmlFor={name} className="text-sm font-semibold text-black block ml-1">
           {label}
         </label>
         <div className="mt-1 flex">
@@ -32,8 +32,8 @@ function InputComponent(props) {
             hidden={hidden}
             name={name}
             id={name}
-            focusBorderColor="primarydeepo"
-            className="w-full text-sm rounded-full border-gray-400 px-5 py-5"
+            focusBorderColor="#184D47"
+            className="w-full text-sm rounded-md border-gray-400 px-4 py-4"
             placeholder={placeholder}
           />
         </div>

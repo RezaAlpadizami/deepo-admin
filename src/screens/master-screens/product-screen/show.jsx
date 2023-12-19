@@ -45,14 +45,14 @@ function ShowScreen(props) {
             px={12}
             type="submit"
             size="sm"
-            className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
+            className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
           >
             Edit
           </Button>
         </div>
       </div>
 
-      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md">
+      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px]">
         <InputDetail label="SKU" value={capitalize(data?.sku) || '-'} />
         <InputDetail label="Name" value={capitalize(data?.product_name) || '-'} />
         <InputDetail label="Category" value={data?.category_id || '-'} />

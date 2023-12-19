@@ -46,13 +46,13 @@ function Screen(props) {
             navigate(`/master/storage/${id}/edit`);
           }}
           size="sm"
-          className="ml-4 rounded-full bg-[#184D47] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
+          className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
         >
           Edit
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 bg-white py-8 px-8 rounded-[30px] drop-shadow-md max-[640px]:grid-cols-1 max-[640px]:gap-y-8">
+      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px] max-[640px]:grid-cols-1 max-[640px]:gap-y-8">
         <InputDetail
           value={dataStorageById.code}
           label="Code"

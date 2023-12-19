@@ -24,11 +24,25 @@ const MasterWarehouseAdd = React.lazy(() => import('../screens/master-screens/wa
 const MasterWarehouseShow = React.lazy(() => import('../screens/master-screens/warehouse-screens/show'));
 const MasterWarehouseEdit = React.lazy(() => import('../screens/master-screens/warehouse-screens/edit'));
 
+const UomScreen = React.lazy(() => import('../screens/master-screens/unit-of-measurement-screens/index'));
+const UomAddScreen = React.lazy(() => import('../screens/master-screens/unit-of-measurement-screens/add'));
+const UomShowScreen = React.lazy(() => import('../screens/master-screens/unit-of-measurement-screens/show'));
+const UomEditScreen = React.lazy(() => import('../screens/master-screens/unit-of-measurement-screens/edit'));
+
 const ProductInformation = React.lazy(() => import('../screens/product-screens/product-information-screens/index'));
 const ProductInformationShow = React.lazy(() => import('../screens/product-screens/product-information-screens/show'));
 
 const ProductJourneyScreens = React.lazy(() => import('../screens/product-screens/product-journey-screens/index'));
 const ProductJourneyShowScreen = React.lazy(() => import('../screens/product-screens/product-journey-screens/show'));
+
+const RequestScreens = React.lazy(() => import('../screens/request-screens/index'));
+const RequestScreensAdd = React.lazy(() => import('../screens/request-screens/add'));
+const RequestScreenShow = React.lazy(() => import('../screens/request-screens/show'));
+const RequestScreensEdit = React.lazy(() => import('../screens/request-screens/edit'));
+
+// const LabelCancelRegistrationScreen = React.lazy(() =>
+//   import('../screens/registration-screens/cancel-label-registration-screens/index')
+// );
 
 export default [
   {
@@ -39,6 +53,54 @@ export default [
     exact: true,
     route: '/',
     component: Home,
+  },
+  {
+    displayName: 'Request',
+    name: 'request',
+    role: 'request',
+    showmenu: true,
+    exact: true,
+    route: '/request',
+    routes: [
+      {
+        displayName: 'Request',
+        name: 'request-admin',
+        role: 'request',
+        showmenu: true,
+        exact: true,
+        route: '/request',
+        component: RequestScreens,
+        routes: [
+          {
+            displayName: 'Create Request',
+            name: 'request-admin-add',
+            role: 'request',
+            showmenu: false,
+            exact: true,
+            route: '/request/add',
+            component: RequestScreensAdd,
+          },
+          {
+            displayName: 'Detail Request',
+            name: 'request-admin-show',
+            role: 'request',
+            showmenu: false,
+            exact: true,
+            route: '/request/:id/show',
+            component: RequestScreenShow,
+          },
+          {
+            displayName: 'Edit Request',
+            name: 'request-admin-edit',
+            role: 'request',
+            showmenu: false,
+            exact: true,
+            route: '/request/:id/edit',
+            component: RequestScreensEdit,
+          },
+        ],
+      },
+    ],
   },
   {
     displayName: 'Master',
@@ -204,6 +266,45 @@ export default [
             exact: true,
             route: '/master/category/:id/edit',
             component: CategoryScreenEdit,
+          },
+        ],
+      },
+      {
+        displayName: 'Unit of Measurement',
+        icon: MenuAlt3Icon,
+        name: 'uom',
+        role: 'master',
+        showmenu: true,
+        exact: true,
+        route: '/master/unit-of-measurement',
+        component: UomScreen,
+        routes: [
+          {
+            displayName: 'Add Unit of Measurement',
+            name: 'master-uom-add',
+            role: 'master',
+            showmenu: false,
+            exact: true,
+            route: '/master/unit-of-measurement/add',
+            component: UomAddScreen,
+          },
+          {
+            displayName: 'Detail Unit of Measurement',
+            name: 'master-uom-show',
+            role: 'master',
+            showmenu: false,
+            exact: true,
+            route: '/master/unit-of-measurement/:id/show',
+            component: UomShowScreen,
+          },
+          {
+            displayName: 'Update Unit of Measurement',
+            name: 'master-uom-edit',
+            role: 'master',
+            showmenu: false,
+            exact: true,
+            route: '/master/unit-of-measurement/:id/edit',
+            component: UomEditScreen,
           },
         ],
       },

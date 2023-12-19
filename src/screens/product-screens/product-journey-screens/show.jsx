@@ -63,7 +63,7 @@ function Screen(props) {
 
       <div>
         <h1 className="font-bold text-md">Detail Product</h1>
-        <div className="flex gap-32 p-10 mt-6 bg-white rounded-[20px] w-full drop-shadow-md max-[640px]:grid max-[640px]:grid-cols-1 max-[640px]:gap-1 max-[640px]:p-[1.5rem]">
+        <div className="flex gap-32 p-10 mt-6  rounded-[20px] w-full max-[640px]:grid max-[640px]:grid-cols-1 max-[640px]:gap-1 max-[640px]:p-[1.5rem]">
           <div>
             <InputDetail
               value={dataDetailProduct.product_name}
@@ -141,21 +141,21 @@ function Screen(props) {
                 {dataJourneyById.journey.map(
                   (
                     {
-                      activity_name,
-                      created_at,
-                      request_number,
-                      storage_level,
-                      storage_rack,
-                      storage_bay,
+                      activityName,
+                      createdAt,
+                      requestNumber,
+                      storageLevel,
+                      storageRack,
+                      storageBay,
                       qty,
-                      warehouse_name,
+                      warehouseName,
                     },
                     index
                   ) => (
                     <ProgressStepBar
-                      activity={activity_name}
-                      date={created_at}
-                      requestNumber={request_number}
+                      activity={activityName}
+                      date={createdAt}
+                      requestNumber={requestNumber}
                       index={index}
                       dataApi={dataJourneyById}
                       key={index}
@@ -163,25 +163,25 @@ function Screen(props) {
                                 <div class="flex flex-col text-left gap-y-3 mx-20">
                                   <h2 class="text-gray-400 text-xl max-[640px]:text-xs">Warehouse</h2>
                                   <div class="flex relative font-bold">
-                                    <h3 class="text-[16px] max-[640px]:text-xs">${warehouse_name}</h3>
+                                    <h3 class="text-[16px] max-[640px]:text-xs">${warehouseName}</h3>
                                   </div>
                                   <div class="flex gap-x-5">
                                     <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
                                       <h4 class="text-gray-400 font-bold">Rack</h4>
                                       <div class="px-6 py-1 rounded-full font-bold bg-[#FFF5EB] outline outline-offset-2 outline-[#FFF5EB]">
-                                        <Text>${storage_rack}</Text>
+                                        <Text>${storageRack}</Text>
                                       </div>
                                     </div>
                                     <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
                                       <h4 class="text-gray-400 font-bold">Bay</h4>
                                       <div class="px-6 py-1 rounded-full font-bold bg-[#DEEDF0] outline outline-offset-2 outline-[#DEEDF0]">
-                                        <Text>${storage_bay}</Text>
+                                        <Text>${storageBay}</Text>
                                       </div>
                                     </div>
                                     <div class="flex flex-col items-center gap-y-2 text-sm max-[640px]:text-xs">
                                       <h4 class="text-gray-400 font-bold">Level</h4>
                                       <div class="px-6 py-1 rounded-full font-bold bg-[#F4C7AB] outline outline-offset-2 outline-[#F4C7AB]">
-                                        <Text>${storage_level}</Text>
+                                        <Text>${storageLevel}</Text>
                                       </div>
                                     </div>
                                     <span class="font-bold ml-[6rem] mt-6 text-sm max-[640px]:ml-8 max-[640px]:text-xs">${qty}</span>

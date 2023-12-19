@@ -33,11 +33,11 @@ function ProgressStepBar(props) {
       >
         <div className="h-10 w-10 relative">
           <div className="rounded-full bg-white h-full border-2 border-[#3F73EB] grid place-content-center">
-            {activity.toLowerCase() === 'inbound' ? (
+            {activity?.toLowerCase() === 'inbound' ? (
               <ArchiveIcon className="h-5 stroke-[#3F73EB]" />
-            ) : activity.toLowerCase() === 'relocate - in' ? (
+            ) : activity?.toLowerCase() === 'relocate - in' ? (
               <img className="h-5" style={{ transform: 'scaleX(-1)' }} alt="right" src={LeftRightIcon} />
-            ) : activity.toLowerCase() === 'relocate - out' ? (
+            ) : activity?.toLowerCase() === 'relocate - out' ? (
               <img className="h-5" alt="right" src={RightLeftIcon} />
             ) : (
               <ShoppingCartIcon className="h-5 stroke-[#3F73EB]" />
@@ -69,6 +69,7 @@ function ProgressStepBar(props) {
         style={{ maxHeight: `${setHeight}` }}
         className="bg-white overflow-hidden transition-all duration-500 ease-in-out"
       >
+        {/* eslint-disable-next-line */}
         <div className="font-medium text-sm px-4 pb-6" dangerouslySetInnerHTML={{ __html: contents }} />
       </div>
     </div>

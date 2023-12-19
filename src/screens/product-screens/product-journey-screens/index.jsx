@@ -16,7 +16,7 @@ function Screen(props) {
   const getDataCategory = () => {
     CategoryApi.get()
       .then(res => {
-        setCategoryData(res.data);
+        setCategoryData(res.data.variant_ids);
       })
       .catch(error => {
         Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });

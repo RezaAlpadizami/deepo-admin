@@ -40,6 +40,8 @@ const RequestScreensAdd = React.lazy(() => import('../screens/request-screens/ad
 const RequestScreenShow = React.lazy(() => import('../screens/request-screens/show'));
 const RequestScreensEdit = React.lazy(() => import('../screens/request-screens/edit'));
 
+const PrintLabelScreens = React.lazy(() => import('../screens/print-label-screens/index'));
+
 // const LabelCancelRegistrationScreen = React.lazy(() =>
 //   import('../screens/registration-screens/cancel-label-registration-screens/index')
 // );
@@ -359,6 +361,26 @@ export default [
             component: ProductJourneyShowScreen,
           },
         ],
+      },
+    ],
+  },
+  {
+    displayName: 'Print Label',
+    name: 'print-label',
+    role: 'print-label',
+    showmenu: true,
+    exact: true,
+    route: '/print-label',
+    routes: [
+      {
+        displayName: 'Print Label',
+        icon: HomeIcon,
+        name: 'print-label',
+        role: 'print-label',
+        showmenu: true,
+        exact: true,
+        route: '/print-label',
+        component: PrintLabelScreens,
       },
     ],
   },

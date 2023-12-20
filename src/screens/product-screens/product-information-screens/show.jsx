@@ -23,12 +23,15 @@ function ShowScreen(props) {
   const [loadingJourney, setLoadingJourney] = useState(false);
   const [quantity, setQuantity] = useState();
 
+  console.log('storageDetails', storageDetails);
+  console.log('loading', loading);
+
   useEffect(() => {
     store.setIsDrawerOpen(isLarge);
   }, [isLarge, store]);
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     setLoadingJourney(true);
     Promise.allSettled([
       ProductJourney.find(id).then(res => {
@@ -42,6 +45,9 @@ function ShowScreen(props) {
       }),
     ])
       .then(result => {
+        console.log('result', result);
+        const dataInfo = JSON.parse(result[1].value?.product?.product_info);
+        console.log('dataInfo', dataInfo);
         if (result[0].status === 'fulfilled' && result[1].status === 'fulfilled' && result[2].status === 'fulfilled') {
           setData(result[2].value);
 
@@ -54,17 +60,19 @@ function ShowScreen(props) {
               };
             })
           );
+
           setLoadingJourney(false);
 
           const filterWarehouseInfo = [
-            ...new Map(
-              result[1].value?.product.product_info.map(i => [JSON.stringify(i.warehouse_id), i.warehouse_id])
-            ).values(),
+            ...new Map(dataInfo.map(i => [JSON.stringify(i.warehouse_id), i.warehouse_id])).values(),
           ];
+
+          console.log('filterWarehouse', filterWarehouseInfo);
+
           const body = {
             storage_details: filterWarehouseInfo.map(f => {
               return {
-                list: result[1].value.product.product_info
+                list: result[1].value?.product?.product_info
                   .filter(s => s.warehouse_id === f)
                   .map(i => {
                     return {
@@ -84,6 +92,8 @@ function ShowScreen(props) {
               };
             }),
           };
+
+          console.log('filterWarehouse', body);
           if (body.storage_details.length > 0) {
             setQuantity(toCalculate(result[1]?.value?.product?.product_info, 'qty') || 0);
 
@@ -155,9 +165,33 @@ function ShowScreen(props) {
             </div>
             <div className="h-[300px] pb-4">
               <div className={`bg-white rounded-[30px] drop-shadow-md mt-5 p-5 h-full w-full overflow-y-auto `}>
-                <strong className="text-gray-400 tracking-wide">Warehouse</strong>
+                <strong>Product Journey</strong>
+                <div className="bg-white rounded-[30px] drop-shadow-md h-[95%] mt-2 pt-10 pl-3 pr-3">
+                  <LoadingComponent visible={loadingJourney} />
+                  <Stepper data={dataJourney} />
+                  {dataJourney.length >= 5 && (
+                    <div className="flex justify-center">
+                      <Button
+                        _hover={{
+                          shadow: 'md',
+                          transform: 'translateY(-5px)',
+                          transitionDuration: '0.2s',
+                          transitionTimingFunction: 'ease-in-out',
+                        }}
+                        type="submit"
+                        size="sm"
+                        px={8}
+                        className="ml-4 rounded-full bg-primarydeepo drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold"
+                        onClick={() => navigate(`/product/product-journey/${id}/show`)}
+                      >
+                        More
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                {/* <strong className="text-gray-400 tracking-wide">Warehouse</strong>
                 <LoadingComponent visible={loading} />
-                {storageDetails.map((i, idx) => {
+                {storageDetails?.map((i, idx) => {
                   return (
                     <>
                       <div className="flex mb-2 mt-2 border-b-gray-200 border-b-2 pb-2" key={idx}>
@@ -211,40 +245,15 @@ function ShowScreen(props) {
                             </div>
                           </div>
                         );
-                      })}
-                    </>
-                  );
-                })}
+                      })} */}
+                {/* </> */}
+                {/* ); */}
+                {/* })} */}
               </div>
             </div>
           </div>
         </div>
-        <div className={`${isLarge ? 'pl-1' : 'mt-4 ml-6 mx-auto'} row-span-2`}>
-          <strong>Product Journey</strong>
-          <div className="bg-white rounded-[30px] drop-shadow-md h-[95%] rounded-3xl mt-2 pt-10 pl-3 pr-3">
-            <LoadingComponent visible={loadingJourney} />
-            <Stepper data={dataJourney} />
-            {dataJourney.length >= 5 && (
-              <div className="flex justify-center">
-                <Button
-                  _hover={{
-                    shadow: 'md',
-                    transform: 'translateY(-5px)',
-                    transitionDuration: '0.2s',
-                    transitionTimingFunction: 'ease-in-out',
-                  }}
-                  type="submit"
-                  size="sm"
-                  px={8}
-                  className="ml-4 rounded-full bg-primarydeepo drop-shadow-md text-[#fff] hover:text-[#E4E4E4] font-bold"
-                  onClick={() => navigate(`/product/product-journey/${id}/show`)}
-                >
-                  More
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* <div className={`${isLarge ? 'pl-1' : 'mt-4 ml-6 mx-auto'} row-span-2`}></div> */}
       </div>
     </>
   );

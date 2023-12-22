@@ -35,7 +35,7 @@ function SelectComponent(props) {
   return (
     <div className="flex-auto w-full">
       <div>
-        <label htmlFor={name} className="text-sm font-semibold text-black block ml-1">
+        <label htmlFor={name} className="text-sm font-semibold block ml-1">
           {label}
         </label>
         <div className="mt-1 flex">

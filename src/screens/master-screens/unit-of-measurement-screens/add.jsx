@@ -77,7 +77,7 @@ function Screen(props) {
             </Button>
           </div>
         </div>
-        <div className="grid items-start justify-items-center gap-x-6 pl-6 grid-cols-2">
+        <div className="grid items-start justify-items-center w-[80%] gap-x-6 pl-6 grid-cols-2">
           <Input name="code" label="Code" maxLength="15" register={register} errors={errors} />
           <TextArea name="description" label="Description" register={register} errors={errors} maxLength="255" />
           <Input name="name" label="Unit of Measurement" register={register} errors={errors} />

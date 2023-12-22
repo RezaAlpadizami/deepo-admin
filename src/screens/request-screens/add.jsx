@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
-import { Button, Text } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import Input from '../../components/input-component';
 import { ProductApi } from '../../services/api-master';
-import { thousandSeparator } from '../../utils/helper';
 import Select from '../../components/select-component';
 import { RequestApi } from '../../services/api-transit';
 import TextArea from '../../components/textarea-component';
@@ -19,7 +19,8 @@ import DatePicker from '../../components/datepicker-component';
 import LoadingHover from '../../components/loading-hover-component';
 import Table from '../../components/table-support-component';
 
-function Screen() {
+function Screen(props) {
+  const { displayName } = props;
   const navigate = useNavigate();
 
   const [dataProduct, setDataProduct] = useState([]);
@@ -115,8 +116,6 @@ function Screen() {
       : []
   );
 
-  const getTotalQty = Array.isArray(updateDataAdd) ? updateDataAdd.reduce((acc, item) => acc + item.qty, 0) : null;
-
   const onSubmitRequest = data => {
     setLoading(true);
     RequestApi.store({
@@ -156,12 +155,19 @@ function Screen() {
   return (
     <div>
       <div className="px-5 py-4">
+        <div className="flex mb-6">
+          <button type="button">
+            <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
+          </button>
+          <h1 className="font-bold text-xl">{displayName}</h1>
+          <div className="flex-1" />
+        </div>
         <div className="grid-cols-2 gap-4 flex max-[640px]:flex-col sm:flex-col lg:flex-row">
           <div className="w-full h-full">
             {/* <h5 className="text-gray-400 px-8 mb-1">Request</h5> */}
             <fieldset className="bg-white border border-[#C2C2C2] w-full min-h-[507px] py-12 rounded-md max-[640px]:px-4 max-[640px]:mx-0 sm:px-6 sm:mx-0 lg:mx-4 lg:px-8">
               <legend className="px-2 text-lg text-gray-400">Request</legend>
-              <div className="flex gap-4 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
+              <div className="mb-6 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
                 <div className="w-full">
                   <Select
                     name="activity_name"
@@ -198,7 +204,7 @@ function Screen() {
             <fieldset className="bg-white border border-[#C2C2C2] w-full min-h-[507px] py-12 rounded-md max-[640px]:px-4 max-[640px]:mx-0 sm:px-6 sm:mx-0 lg:mx-4 lg:px-8">
               <legend className="px-2 text-lg text-gray-400">Request Detail</legend>
               <form onSubmit={handleSubmitProd(onAddProdRequestDetail)}>
-                <div className="flex gap-4 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
+                <div className="justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
                   <div className="w-full col-span-2">
                     <Select
                       name="product_id"
@@ -226,61 +232,21 @@ function Screen() {
                 </div>
               </form>
               <div className="border-b border-gray-400 my-6"> </div>
-              {updateDataAdd?.length > 0 && (
-                <Table
-                  // loading={loadtable}
-                  data={updateDataAdd.map(data => {
-                    return {
-                      product_id: data.product_id,
-                      product_name: data.product_name,
-                      product_sku: data.product_sku,
-                      qty: data.qty,
-                    };
-                  })}
-                  register
-                  handleRemove={handleRemove}
-                  // isLarge={isLarge}
-                />
-                // <div>
-                //   {updateDataAdd.map((val, id) => {
-                //     return (
-                //       <div className="flex" key={id}>
-                //         <div className="my-4 mr-4 max-[640px]:mr-0 sm:mr-0 lg:mr-2 flex flex-col justify-center align-middle">
-                //           <Button
-                //             type="button"
-                //             size="sm"
-                //             bgColor="transparent"
-                //             _hover={{
-                //               bgColor: '#EBECF1',
-                //             }}
-                //             onClick={() => handleRemove(val.product_id)}
-                //           >
-                //             <img src={deleteIcon} alt="delete Icon" className="max-[640px]:w-8 max-[640px]:h-8" />
-                //           </Button>
-                //         </div>
-                //         <InputDetail
-                //           value={`SKU: ${val.product_sku}`}
-                //           label={`${val.product_name}`}
-                //           customStyleLabel="font-bold text-md mb-0 max-[640px]:text-xs max-[640px]:w-24 sm:w-24 md:w-full lg:w-24 xl:w-48"
-                //           customStyleSpan="text-md max-[640px]:text-xs sm:text-sm"
-                //         />
-                //         <div className="flex relative gap-20 mt-6">
-                //           <span className="absolute right-24 max-[640px]:right-12">
-                //             <SiExpertsexchange className="w-4 h-4 text-red-200" />
-                //           </span>
-                //           <Text>{thousandSeparator(val.qty)}</Text>
-                //         </div>
-                //       </div>
-                //     );
-                //   })}
-                // </div>
-              )}
 
-              <div className="border-b border-gray-400 my-6"> </div>
-              <div className="flex justify-between font-bold">
-                <Text>Total Product</Text>
-                <Text className={`${getTotalQty < 1 ? 'hidden' : ''}`}>{thousandSeparator(getTotalQty)}</Text>
-              </div>
+              <Table
+                // loading={loadtable}
+                data={updateDataAdd.map(data => {
+                  return {
+                    product_id: data.product_id,
+                    product_name: data.product_name,
+                    product_sku: data.product_sku,
+                    qty: data.qty,
+                  };
+                })}
+                register
+                handleRemove={handleRemove}
+                // isLarge={isLarge}
+              />
             </fieldset>
           </div>
         </div>

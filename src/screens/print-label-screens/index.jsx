@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import * as yup from 'yup';
-// import ReactToPrint from 'react-to-print';
+import ReactToPrint from 'react-to-print';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@chakra-ui/react';
 import { ProductApi } from '../../services/api-master';
@@ -10,10 +10,10 @@ import LottiesAnimation from '../../components/lotties-animation-component';
 import Loading from '../../assets/lotties/Loading.json';
 import Select from '../../components/select-component';
 import Input from '../../components/input-component';
-// import ComponentToPrint from './componentToPrint';
+import ComponentToPrint from './componentToPrint';
 
 const schema = yup.object().shape({
-  product_name: yup.string().nullable().max(100).required(),
+  product: yup.string().nullable().required(),
   copies: yup.string().required(),
 });
 
@@ -48,46 +48,46 @@ function Screen() {
   const onSubmit = value => {
     const data = [...listData];
     for (let index = 0; index < parseInt(value.copies, 10); index += 1) {
-      data.push({ product_name: value.product_name });
+      data.push({ product: value.product });
     }
     setListData(data);
   };
-  // const componentRef = React.useRef(null);
-  // const handleAfterPrint = React.useCallback(() => {
-  //   console.log('`onAfterPrint` called');
-  // }, []);
-  // const handleBeforePrint = React.useCallback(() => {
-  //   console.log('`onBeforePrint` called');
-  // }, []);
-  // const handleOnBeforeGetContent = React.useCallback(() => {
-  //   console.log('`onBeforeGetContent` called');
-  // }, []);
-  // const reactToPrintContent = React.useCallback(() => {
-  //   return componentRef.current;
-  // }, [componentRef.current]);
-  // const reactToPrintTrigger = React.useCallback(() => {
-  //   return (
-  //     <Button
-  //       size="sm"
-  //       px={8}
-  //       type="submit"
-  //       className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
-  //     >
-  //       Print
-  //     </Button>
-  //   );
-  // }, []);
+  const componentRef = React.useRef(null);
+  const handleAfterPrint = React.useCallback(() => {
+    console.log('`onAfterPrint` called');
+  }, []);
+  const handleBeforePrint = React.useCallback(() => {
+    console.log('`onBeforePrint` called');
+  }, []);
+  const handleOnBeforeGetContent = React.useCallback(() => {
+    console.log('`onBeforeGetContent` called');
+  }, []);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+      <Button
+        size="sm"
+        px={8}
+        type="submit"
+        className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
+      >
+        Print
+      </Button>
+    );
+  }, []);
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid items-center justify-items-end gap-4 gap-y-12 ml-6 mb-4 grid-cols-3 mt-4">
           <Select
-            name="product_name"
+            name="product"
             label="Product"
             placeholder="Product"
             options={productData?.map(i => {
               return {
-                value: i.product_name,
+                value: JSON.stringify(i),
                 label: `${i.product_name}`,
               };
             })}
@@ -115,7 +115,8 @@ function Screen() {
                   {`${!isRegister ? 'NO' : ''}`}
                 </th>
                 {/* )} */}
-                <th className={`${th} w-[95%] text-left`}>PRODUCT</th>
+                <th className={`${th} w-[60%] text-left`}>PRODUCT</th>
+                <th className={`${th} w-[35%] text-left`}>SKU</th>
               </tr>
             </thead>
 
@@ -134,8 +135,9 @@ function Screen() {
                 listData?.map((d, i) => {
                   return (
                     <tr key={i} className={i % 2 ? 'bg-[#f3f4f6]' : 'bg-[#ffff]'}>
-                      <td className={`${td} w-[20%] px-4 text-sm text-center`}>{i + 1}</td>
-                      <td className={`${td} w-[60%] px-4 text-sm text-left`}>{d.product_name}</td>
+                      <td className={`${td} px-4 text-sm text-center`}>{i + 1}</td>
+                      <td className={`${td} px-4 text-sm text-left`}>{JSON.parse(d.product).product_name}</td>
+                      <td className={`${td} px-4 text-sm text-left`}>{JSON.parse(d.product).sku}</td>
                     </tr>
                   );
                 })
@@ -151,7 +153,7 @@ function Screen() {
         </div>
       </div>
       <div className="grid justify-end gap-y-12 ml-6 mb-4 mt-4">
-        {/* <ReactToPrint
+        <ReactToPrint
           content={reactToPrintContent}
           documentTitle="AwesomeFileName"
           onAfterPrint={handleAfterPrint}
@@ -159,19 +161,19 @@ function Screen() {
           onBeforePrint={handleBeforePrint}
           removeAfterPrint
           trigger={reactToPrintTrigger}
-        /> */}
-        <Button
+        />
+        {/* <Button
           size="sm"
           px={8}
           type="submit"
           className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
         >
           Print
-        </Button>
+        </Button> */}
       </div>
-      {/* <div style={{ display: 'none' }}>
+      <div style={{ display: 'none' }}>
         <ComponentToPrint ref={componentRef} text={listData} />
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -61,7 +61,7 @@ function Screen(props) {
         </Button>
       </div>
 
-      <div className="grid items-start justify-items-center w-full gap-y-12 grid-cols-2py-8 px-8 rounded-[30px]">
+      <div className="grid items-start justify-items-center gap-y-12 grid-cols-2 py-8 px-8 rounded-[30px]">
         <InputDetail
           value={dataUomById.code || '-'}
           label="Code"
@@ -69,12 +69,17 @@ function Screen(props) {
           customStyleSpan="text-md font-bold"
         />
         <InputDetail
+          label="Description"
+          customStyleLabel="text-md"
+          customStyleSpan="text-md font-bold"
+          value={capitalize(dataUomById?.description) || '-'}
+        />
+        <InputDetail
           value={dataUomById.name || '-'}
           label="Name"
           customStyleLabel="text-md"
           customStyleSpan="text-md font-bold"
         />
-        <InputDetail label="Description" value={capitalize(dataUomById?.description) || '-'} />
       </div>
       {loading && <LoadingHover visible={loading} />}
     </div>

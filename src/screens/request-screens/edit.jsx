@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { Button, Text } from '@chakra-ui/react';
 // import { SiExpertsexchange } from 'react-icons/si';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import Input from '../../components/input-component';
 import { thousandSeparator } from '../../utils/helper';
@@ -22,7 +23,8 @@ import DatePicker from '../../components/datepicker-component';
 import LoadingHover from '../../components/loading-hover-component';
 import Table from '../../components/table-support-component';
 
-function Screen() {
+function Screen(props) {
+  const { displayName } = props;
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -246,13 +248,20 @@ function Screen() {
 
   return (
     <div>
-      <div className="p-5 py-12">
+      <div className="p-5 py-2">
+        <div className="flex mb-6">
+          <button type="button">
+            <ChevronLeftIcon className="pointer-events-auto h-6 stroke-2" onClick={() => navigate(-1)} />
+          </button>
+          <h1 className="font-bold text-xl">{displayName}</h1>
+          <div className="flex-1" />
+        </div>
         <div className="grid-cols-2 gap-4 flex max-[640px]:flex-col sm:flex-col lg:flex-row">
           <div className="w-full h-full">
             {/* <h6 className="text-gray-400 px-8 mb-1">Edit Request</h6> */}
             <fieldset className="bg-white border border-[#C2C2C2] w-full min-h-[507px] px-8 py-12 rounded-3xl mx-4 max-[640px]:px-4 max-[640px]:mx-0 sm:px-6 sm:mx-0 lg:mx-4 lg:px-8">
               <legend className="px-2 text-lg text-gray-400">Edit Request </legend>
-              <div className="flex gap-4 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
+              <div className="gap-4 mb-6 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
                 <div className="w-full">
                   <Select
                     name="activity_name"
@@ -290,7 +299,7 @@ function Screen() {
             <fieldset className="bg-white border border-[#C2C2C2]  w-full min-h-[507px] px-8 py-12 rounded-3xl mx-4 max-[640px]:px-4 max-[640px]:mx-0 sm:px-6 sm:mx-0 lg:mx-4 lg:px-8">
               <legend className="px-2 text-lg text-gray-400 max-[640px]:text-[20px]">Edit Request Detail</legend>
               <form onSubmit={handleSubmitProd(onAddProdRequestDetail)}>
-                <div className="flex gap-4 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
+                <div className="gap-4 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
                   <div className="w-full col-span-2">
                     <Select
                       name="product_id"
@@ -365,10 +374,14 @@ function Screen() {
                 // isLarge={isLarge}
               />
 
-              <div className="border-b border-gray-300 my-6"> </div>
-              <div className="flex justify-between font-bold">
-                <Text>Total Product</Text>
-                <Text className={`${getTotalQty < 1 ? 'hidden' : ''}`}>{thousandSeparator(getTotalQty)}</Text>
+              <div className="flex justify-end">
+                <div className="border-b w-[55%] border-gray-300 mb-3" />
+              </div>
+              <div className="flex justify-end gap-[28%] mr-5 font-bold">
+                <Text className="font-normal text-sm">Total Product</Text>
+                <Text className={`${getTotalQty < 1 ? 'hidden' : 'font-normal text-sm'}`}>
+                  {thousandSeparator(getTotalQty)}
+                </Text>
               </div>
             </fieldset>
           </div>

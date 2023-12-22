@@ -23,7 +23,7 @@ function InputComponent(props) {
         <div className="mt-1 flex">
           <Input
             {...register(name)}
-            bg="white"
+            bg={`${disabled ? '#DCDCDC' : 'white'}`}
             size="sm"
             width="auto"
             type={type}

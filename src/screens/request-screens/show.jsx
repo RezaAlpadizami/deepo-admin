@@ -160,14 +160,17 @@ function Screen() {
                       qty: data.qty,
                     };
                   })}
-                  register
                   // isLarge={isLarge}
                 />
               </div>
-              <div className="border-b border-gray-400 my-6"> </div>
-              <div className="flex justify-between font-bold">
-                <Text>Total Product</Text>
-                <Text>{thousandSeparator(totalQty)}</Text>
+              <div className="flex justify-end">
+                <div className="border-b w-[55%] border-gray-300 mb-3" />
+              </div>
+              <div className="flex justify-end gap-[28%] mr-5 font-bold">
+                <Text className="font-normal text-sm">Total Product</Text>
+                <Text className={`${totalQty < 1 ? 'hidden' : 'font-normal text-sm'}`}>
+                  {thousandSeparator(totalQty)}
+                </Text>
               </div>
             </fieldset>
           </div>

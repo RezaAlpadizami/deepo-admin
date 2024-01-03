@@ -6,7 +6,7 @@ import showHideTableIcon from './show-hide-chip-icon.svg';
 import copyClipboardIcon from './copy-clipboard-chip-icon.svg';
 import Chevron from './chevron-icon';
 import UserIcon from './user-icon.svg';
-import logoApp from './logo-app.png';
+import logoApp from './logitrac-logo.png';
 
 export {
   copyClipboardIcon,

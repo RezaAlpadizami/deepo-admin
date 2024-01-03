@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { ProductApi, CategoryApi } from '../../../services/api-master';
+import { ProductInfoApi, CategoryApi } from '../../../services/api-master';
 import Datatable from '../../../components/datatable-component';
 
 function Screen(props) {
@@ -51,7 +51,7 @@ function Screen(props) {
           },
         ]}
         columns={[
-          { header: 'SKU', value: 'sku', copy: true, type: 'link' },
+          { header: 'SKU', value: 'product_sku', copy: true, type: 'link' },
           { header: 'Name', value: 'product_name', copy: true },
           {
             header: 'Category',
@@ -62,6 +62,7 @@ function Screen(props) {
             copy: true,
           },
           { header: 'Description', value: 'product_desc', copy: true, width: '30%' },
+          { header: 'Total Qty', value: 'qty', copy: true },
         ]}
         toolbar={{
           action: {
@@ -70,7 +71,7 @@ function Screen(props) {
             'save-to-excel': true,
           },
         }}
-        api={ProductApi}
+        api={ProductInfoApi}
         to={route}
         displayName={displayName}
         checkbox

@@ -60,7 +60,7 @@ function Screen(props) {
             type: 'multi-value',
             copy: true,
           },
-
+          { header: 'UoM', value: 'qty_uom', copy: true },
           { header: 'Product Description', value: 'product_desc', copy: true, width: '30%' },
         ]}
         toolbar={{

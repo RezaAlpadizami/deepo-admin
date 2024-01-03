@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import LoadingHover from '../../../components/loading-hover-component';
 import TextArea from '../../../components/textarea-component';
-import { ProductApi, CategoryApi } from '../../../services/api-master';
+import { ProductApi, CategoryApi, UomApi } from '../../../services/api-master';
 import Select from '../../../components/select-component';
 import Input from '../../../components/input-component';
 
@@ -18,6 +18,7 @@ const schema = yup.object().shape({
   product_name: yup.string().nullable().max(100).required(),
   category_id: yup.string().nullable().required(),
   product_desc: yup.string().max(255),
+  uom_id: yup.string().nullable().required(),
 });
 
 function Screen(props) {
@@ -35,7 +36,9 @@ function Screen(props) {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [categoryData, setCategoryData] = useState([]);
+  const [uomData, setUomData] = useState([]);
   const [categoryId, setCategoryId] = useState();
+  const [uomId, setUomId] = useState();
 
   useEffect(() => {
     setLoading(true);
@@ -45,6 +48,7 @@ function Screen(props) {
         setValue('product_name', res.product_name);
         setValue('product_desc', res.product_desc);
         setCategoryId(res.category_id);
+        setUomId(res.uom_id);
         setLoading(false);
       })
       .catch(error => {
@@ -69,6 +73,21 @@ function Screen(props) {
         Swal.fire({ text: error?.message || error?.data.title, icon: 'error' });
       });
   }, [categoryId]);
+  useEffect(() => {
+    UomApi.get()
+      .then(res => {
+        if (uomId) {
+          setValue('uom_id', uomId, {
+            value: uomId,
+            label: `${res.data?.find(i => i.id === uomId)?.code} - ${res.data?.find(i => i.id === uomId)?.name}`,
+          });
+        }
+        setUomData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.data.title, icon: 'error' });
+      });
+  }, [uomData]);
 
   const onSubmit = data => {
     setLoading(true);
@@ -77,6 +96,7 @@ function Screen(props) {
       sku: data.sku,
       category_id: Number(data.category_id),
       product_desc: data.product_desc,
+      uom_id: data.uom_id,
     })
       .then(() => {
         setLoading(false);
@@ -134,6 +154,19 @@ function Screen(props) {
           />
           <Input name="product_name" label="Name" register={register} errors={errors} />
           <TextArea name="product_desc" label="Description" maxLength="255" register={register} errors={errors} />
+          <Select
+            name="uom_id"
+            label="Unit of Measurement"
+            placeholder="UoM"
+            options={uomData?.map(i => {
+              return {
+                value: i?.id,
+                label: `${i.code} - ${i.name}`,
+              };
+            })}
+            register={register}
+            errors={errors}
+          />
         </div>
       </form>
       {loading && <LoadingHover fixed />}

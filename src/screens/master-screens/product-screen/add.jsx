@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import LoadingHover from '../../../components/loading-hover-component';
 import TextArea from '../../../components/textarea-component';
-import { ProductApi, CategoryApi } from '../../../services/api-master';
+import { ProductApi, CategoryApi, UomApi } from '../../../services/api-master';
 import Select from '../../../components/select-component';
 import Input from '../../../components/input-component';
 
@@ -17,6 +17,7 @@ const schema = yup.object().shape({
   product_name: yup.string().nullable().max(100).required(),
   category_id: yup.string().nullable().required(),
   product_desc: yup.string().max(255),
+  uom_id: yup.string().nullable().required(),
 });
 
 function Screen(props) {
@@ -32,12 +33,23 @@ function Screen(props) {
 
   const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState([]);
+  const [uomData, setUomData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     CategoryApi.get()
       .then(res => {
         setCategoryData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  }, []);
+
+  useEffect(() => {
+    UomApi.get()
+      .then(res => {
+        setUomData(res.data);
       })
       .catch(error => {
         Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
@@ -51,6 +63,7 @@ function Screen(props) {
       product_name: data.product_name,
       category_id: Number(data.category_id),
       product_desc: data.product_desc,
+      uom_id: data.uom_id,
     })
       .then(() => {
         setLoading(false);
@@ -106,8 +119,22 @@ function Screen(props) {
             register={register}
             errors={errors}
           />
+
           <Input name="product_name" label="Name" register={register} errors={errors} />
           <TextArea name="product_desc" label="Description" register={register} errors={errors} maxLength="255" />
+          <Select
+            name="uom_id"
+            label="Unit of Measurement"
+            placeholder="Select UoM"
+            options={uomData?.map(i => {
+              return {
+                value: i?.id,
+                label: `${i.code} - ${i.name}`,
+              };
+            })}
+            register={register}
+            errors={errors}
+          />
         </div>
       </form>
       {loading && <LoadingHover fixed />}

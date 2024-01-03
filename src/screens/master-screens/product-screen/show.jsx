@@ -57,6 +57,7 @@ function ShowScreen(props) {
         <InputDetail label="Name" value={capitalize(data?.product_name) || '-'} />
         <InputDetail label="Category" value={data?.category_id || '-'} />
         <InputDetail label="Description" value={capitalize(data?.product_desc) || '-'} />
+        <InputDetail label="Unit of Measurement" value={capitalize(data?.qty_uom) || '-'} />
       </div>
     </div>
   );

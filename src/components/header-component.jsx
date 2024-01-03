@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon, BellIcon, UserIcon } from '@heroicons/react/outline';
 
 import Context from '../context';
-import logo from '../assets/images/logo-app.png';
+import logo from '../assets/images/logitrac-logo.png';
 import menuItem from '../navigation/menu-item';
 import { findTree } from '../utils/navigation-utils';
 // import { ReactComponent as Wave } from '../assets/styles/wave.svg';

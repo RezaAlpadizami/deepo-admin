@@ -59,6 +59,7 @@ function Screen(props) {
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaSubmitRequest),
@@ -67,6 +68,10 @@ function Screen(props) {
   useEffect(() => {
     getData();
   }, [dataAdd]);
+
+  useEffect(() => {
+    setValue('activity_date', new Date());
+  }, [setValue]);
 
   const getData = () => {
     ProductApi.get()

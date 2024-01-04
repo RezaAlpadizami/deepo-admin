@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 
 import Input from '../../components/input-component';
-import { ProductApi } from '../../services/api-master';
+import { ProductApi, WarehouseApi } from '../../services/api-master';
 import Select from '../../components/select-component';
 import { RequestApi } from '../../services/api-transit';
 import TextArea from '../../components/textarea-component';
@@ -26,13 +26,9 @@ function Screen(props) {
   const [dataProduct, setDataProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   const [dataAdd, setDataAdd] = useState([]);
+  const [warehouseData, setWarhouseData] = useState([]);
 
-  const activityProduct = [
-    { activity_name: 'INBOUND' },
-    { activity_name: 'OUTBOUND' },
-    { activity_name: 'RELOCATE-IN' },
-    { activity_name: 'RELOCATE-OUT' },
-  ];
+  const activityProduct = [{ activity_name: 'INBOUND' }, { activity_name: 'OUTBOUND' }];
 
   const schemaAddProduct = yup.object().shape({
     product_id: yup.string().nullable().required(),
@@ -43,6 +39,7 @@ function Screen(props) {
     activity_name: yup.string().nullable().required(),
     activity_date: yup.date().nullable().required(),
     notes: yup.string().nullable().max(255).required(),
+    warehouse_id: yup.string().nullable().required(),
   });
 
   const {
@@ -64,6 +61,16 @@ function Screen(props) {
   } = useForm({
     resolver: yupResolver(schemaSubmitRequest),
   });
+
+  useEffect(() => {
+    WarehouseApi.get()
+      .then(res => {
+        setWarhouseData(res.data);
+      })
+      .catch(error => {
+        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+      });
+  }, []);
 
   useEffect(() => {
     getData();
@@ -124,8 +131,8 @@ function Screen(props) {
   const onSubmitRequest = data => {
     setLoading(true);
     RequestApi.store({
-      request_by: 'testing',
-      warehouse_id: Number(2),
+      request_by: 'User',
+      warehouse_id: data.warehouse_id,
       notes: data.notes,
       activity_date: data.activity_date,
       activity_name: data.activity_name,
@@ -174,6 +181,19 @@ function Screen(props) {
               <legend className="px-2 text-lg text-gray-400">Request</legend>
               <div className="mb-6 justify-center max-[640px]:flex-col sm:flex-col lg:flex-row">
                 <div className="w-full">
+                  <Select
+                    name="warehouse_id"
+                    label="Warehouse"
+                    placeholder="Warehouse"
+                    options={warehouseData?.map(i => {
+                      return {
+                        value: i.id,
+                        label: `${i.name} ${i.location}`,
+                      };
+                    })}
+                    register={register}
+                    errors={errors}
+                  />
                   <Select
                     name="activity_name"
                     label="Activity"

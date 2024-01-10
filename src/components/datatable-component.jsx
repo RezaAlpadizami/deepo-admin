@@ -34,6 +34,8 @@ function DataTable(props) {
     name,
     filters,
     identifierProperties = 'id',
+    identifierProps = 'product_id',
+    info,
   } = props;
 
   const {
@@ -82,6 +84,7 @@ function DataTable(props) {
           width: d.width,
           Cell: props => {
             const { value, row } = props;
+            console.log('row', row);
             if (
               (value === null && d.type !== 'action-button-index' && d.type !== 'action-button') ||
               (value === undefined && d.type !== 'action-button-index' && d.type !== 'action-button')
@@ -96,7 +99,7 @@ function DataTable(props) {
                 <Link
                   type="button"
                   className="mr-4 text-blue-500"
-                  to={`${to}/${row.original[identifierProperties]}/show`}
+                  to={`${to}/${row.original[info ? identifierProps : identifierProperties]}/show`}
                 >
                   {value}
                 </Link>

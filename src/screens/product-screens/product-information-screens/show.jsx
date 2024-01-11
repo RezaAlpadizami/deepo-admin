@@ -3,15 +3,15 @@ import { useMediaQuery } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { ProductApi, ProductInfoApi, ProductJourney, WarehouseApi } from '../../../services/api-master';
+// import { useForm } from 'react-hook-form';
+import { ProductApi, ProductInfoApi, ProductJourney } from '../../../services/api-master';
 import InputDetail from '../../../components/input-detail-component';
 import LoadingComponent from '../../../components/loading-component';
 // import Stepper from '../../../components/stepper-component';
 import { toCalculate } from '../../../utils/helper';
 import Context from '../../../context';
 import ProgressStepBar from '../../../components/stepper';
-import Select from '../../../components/select-component';
+// import Select from '../../../components/select-component';
 
 function ShowScreen(props) {
   const { displayName } = props;
@@ -25,26 +25,26 @@ function ShowScreen(props) {
   const [loading, setLoading] = useState(false);
   const [loadingJourney, setLoadingJourney] = useState(false);
   const [quantity, setQuantity] = useState();
-  const [warehouseData, setWarhouseData] = useState([]);
+  // const [warehouseData, setWarhouseData] = useState([]);
 
-  const {
-    register,
-    formState: { errors },
-  } = useForm();
+  // const {
+  //   register,
+  //   formState: { errors },
+  // } = useForm();
 
   useEffect(() => {
     store.setIsDrawerOpen(isLarge);
   }, [isLarge, store]);
 
-  useEffect(() => {
-    WarehouseApi.get()
-      .then(res => {
-        setWarhouseData(res.data);
-      })
-      .catch(error => {
-        Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
-      });
-  }, []);
+  // useEffect(() => {
+  //   WarehouseApi.get()
+  //     .then(res => {
+  //       setWarhouseData(res.data);
+  //     })
+  //     .catch(error => {
+  //       Swal.fire({ text: error?.message || error?.originalError, icon: 'error' });
+  //     });
+  // }, []);
 
   useEffect(() => {
     // setLoading(true);
@@ -214,7 +214,7 @@ function ShowScreen(props) {
           <fieldset className="bg-white border border-[#C2C2C2] w-full py-4 rounded-md max-[640px]:px-4 max-[640px]:mx-0 sm:px-6 sm:mx-0 lg:mx-4 lg:px-8">
             <legend className="px-2 text-lg text-black font-semibold">Warehouse</legend>
             <LoadingComponent visible={loading} />
-            <Select
+            {/* <Select
               name="warehouse_id"
               label="Warehouse"
               placeholder="Warehouse"
@@ -226,7 +226,7 @@ function ShowScreen(props) {
               })}
               register={register}
               errors={errors}
-            />
+            /> */}
             {storageDetails?.map((i, idx) => {
               return (
                 <>

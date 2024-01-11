@@ -152,7 +152,18 @@ function Screen() {
           </table>
         </div>
       </div>
-      <div className="grid justify-end gap-y-12 ml-6 mb-4 mt-4">
+      <div className="flex justify-end gap-y-12 ml-6 mb-4 mt-4">
+        <Button
+          size="sm"
+          px={8}
+          type="submit"
+          className="rounded-md border border-[#50B8C1] bg-[#fff] hover:bg-[#E4E4E4] text-[#50B8C1] font-semibold"
+          onClick={() => {
+            setListData([]);
+          }}
+        >
+          Reset
+        </Button>
         <ReactToPrint
           content={reactToPrintContent}
           documentTitle="AwesomeFileName"
@@ -162,14 +173,6 @@ function Screen() {
           removeAfterPrint
           trigger={reactToPrintTrigger}
         />
-        {/* <Button
-          size="sm"
-          px={8}
-          type="submit"
-          className="ml-4 rounded-md bg-[#50B8C1] drop-shadow-md text-[#fff] font-bold hover:text-[#E4E4E4]"
-        >
-          Print
-        </Button> */}
       </div>
       <div style={{ display: 'none' }}>
         <ComponentToPrint ref={componentRef} text={listData} />

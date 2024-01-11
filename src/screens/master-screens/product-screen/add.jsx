@@ -13,7 +13,7 @@ import Select from '../../../components/select-component';
 import Input from '../../../components/input-component';
 
 const schema = yup.object().shape({
-  sku: yup.string().max(15).required(),
+  sku: yup.string().max(7).required(),
   product_name: yup.string().nullable().max(100).required(),
   category_id: yup.string().nullable().required(),
   product_desc: yup.string().max(255),
